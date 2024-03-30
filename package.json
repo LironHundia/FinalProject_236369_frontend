@@ -1,5 +1,5 @@
 {
-  "name": "workshop-3-2024-frontend",
+  "name": "final-project-236369",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,9 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.14",
     "axios": "^1.6.8",
+    "mui": "^0.0.1",
+    "node-sass": "^9.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sass": "^1.72.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.64",

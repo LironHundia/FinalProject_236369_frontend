@@ -1,4 +1,5 @@
-import { APIStatus, BackendServer } from "../types";
+import { APIStatus } from "../types";
+import { BackendServer } from "../consts";
 import axios, {AxiosError} from "axios";
 
 

@@ -1,0 +1,46 @@
+.chooseTicketAmountContainer
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    .chooseTicketAmountButtons
+    {
+        display: flex;
+        flex-direction: column;
+        
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        margin-left: 0rem;
+        padding: 0.5rem;
+
+        .amount-button
+        {
+            font-size: 1.2em;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 50px;
+            padding: 0.05rem 0.1rem;
+            margin-bottom: 0.1rem;
+            margin-top: 0.1rem;
+            cursor: pointer;
+        }
+        .amount-button:hover
+        {
+            background-color: #e9ecef;
+        }
+    }
+
+    .chosenAmount
+    {
+        display: flex;
+        font-size: 2.5em;
+        justify-content: center;
+        margin: 0 1rem;
+        width: 50px;
+        text-decoration: underline; // Add this line
+    }
+
+}

@@ -1,0 +1,43 @@
+.subTitel {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    margin-left: 0rem;
+}
+
+.eventSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: max-content;
+    min-width: 80%;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+
+    .eventDetails
+    {
+        width: 1300px;
+        max-width: 80%;
+    }
+
+    .ticketsDetails
+    {
+        margin-top: 1rem;
+        width: 1300px;
+        max-width: 80%;
+    }
+
+    .commentSection {
+        width: 1300px;
+        max-width: 80%;
+    }
+}
+
+.eventPageSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 20px;
+}

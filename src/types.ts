@@ -13,5 +13,46 @@ export interface PageProps {
     navigateToRouteBackoffice(): void;
 }
 
-//export const BackendServer = 'http://localhost:3002';
-export const BackendServer = 'https://finalproject-backend-userserver.onrender.com/';
+//TODO
+export interface UserPageProps {
+    navigateToCatalogPage(): void;
+    navigateToEventPage(): void;
+    navigateToPaymentPage(): void;
+    navigateToUserSpace(): void;
+}
+
+export interface CommentProps {
+    eventId: string;
+    author: string;
+    comment: string;
+    date: string;
+    className?: string;
+  }
+
+export interface TicketStruct {
+    type: string;
+    price: number;
+    initial_quantity: number;
+    available_quantity: number;
+}
+
+export interface TicketToPurchase {
+    type: string;
+    total_price: number;
+    quantity: number;
+    eventId: string;
+}
+
+export interface Event {
+    _id: string;
+    name: string;
+    category: string;
+    description: string;
+    organizer: String,
+    start_date: string;
+    end_date: string;
+    total_available_tickets: number;
+    tickets: TicketStruct[];
+    image_url?: string;
+    location?: string;
+}

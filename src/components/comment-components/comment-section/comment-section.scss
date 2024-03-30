@@ -1,0 +1,37 @@
+.commentPageNavigation {
+    opacity: 1;
+    cursor: default;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+
+    &:disabled:hover {
+        background-color: #007bff; /* Blue color for button */
+    }
+
+    margin-left: 5px;
+}
+
+.commentsContainer {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    height: max-content;
+    min-width: 60%;
+    width: max-content;
+    max-width: 100%;
+    flex-direction: column;
+    align-items:flex-start;
+    justify-content: center;
+}
+
+.navigationButtons
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

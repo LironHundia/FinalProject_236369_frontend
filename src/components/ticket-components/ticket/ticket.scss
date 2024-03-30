@@ -1,0 +1,72 @@
+.ticketDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+
+    .header
+    {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 10px;
+
+        .ticketPrice {
+            font-size: 1.0em;
+        }
+
+        .quantity {
+            font-size: 1.0em;
+        }
+    }
+    .chooseTickets {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 5px;
+
+        .chooseTicketAmount {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+
+            .buyNowButton
+            {
+                margin-top: 5px;
+                margin-bottom: 5px;
+                width: 80px;
+                padding: 0.2em;
+                background-color: #ffffff;
+                border: 0.2em solid #cfe0f2;
+                border-radius: 0.5em;
+            }
+            .buyNowButton:hover
+            {
+                font-weight: bold;
+                background-color: #f8f9fa;
+                border-color: #b3d2f3;
+            }
+        }
+
+        .totalPrice {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+    }
+}
+
+.ticketType {
+    font-size: 1.7em;
+    font-weight: bold;
+    margin: 20px
+}

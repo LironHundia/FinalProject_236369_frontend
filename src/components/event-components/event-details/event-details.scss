@@ -1,0 +1,101 @@
+.eventContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 10px auto;
+    padding: 20px;
+    width: 1000px;
+    //width: 80%;
+    //min-width: 900px;
+    //max-width: 1500px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+
+    .eventTitle {
+        font-size: 2.0rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .eventDetailsContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: space-around;
+        width: 100%;
+        margin-bottom: 10px;
+
+        .eventBody {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            width: 50%;
+
+            .eventTime_place {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                margin-bottom: 5px;
+
+                .eventInfo {
+                    font-size: 1.3rem;
+                    margin-bottom: 5px;
+                    color: #333;
+                }
+
+                .bold {
+                    font-weight: bold;
+                    font-size: 1.6rem;
+                }
+            }
+
+            .eventTickets {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+
+                .eventInfo_price {
+                    font-size: 1.6rem;
+                    color: #333;
+                    font-weight: bold;
+                }
+
+                .eventInfo_quantity {
+                    font-size: 1.8rem;
+                    color: #333;
+                    font-weight: bold;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+    .eventDescription {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+    }
+}
+
+.eventImage {
+    object-fit: contain;
+    /* Maintain aspect ratio and fit within the frame */
+    object-position: center;
+
+    width: 380px;
+    /* Set the desired width of the frame */
+    height: 260px;
+    /* Set the desired height of the frame */
+    overflow: hidden;
+    /* Ensure the content is within the circular frame */
+    position: relative;
+    /* Add position: relative to establish a positioning context for the pseudo-element */
+    border-radius: 20px;
+    /*Create a circular shape for the border*/
+    background-color: rgb(236, 232, 233);
+    margin: 5px;
+}
