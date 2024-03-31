@@ -9,7 +9,7 @@ import { TicketsSection } from '../../ticket-components/tickets-section/tickets-
 import { EventDetails } from '../../event-components/event-details/event-details';
 import './event-page.scss';
 
-export const EventPage: React.FC<Event> = (event) => {
+export const EventPage: React.FC = () => {
     const userContext = React.useContext(UserContext);
     
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -35,17 +35,17 @@ export const EventPage: React.FC<Event> = (event) => {
         <Box className='eventPageSection'>
             <Box className="eventSection">
                 <Box className="eventDetails">
-                    {event && <EventDetails event={event} route="user" />}
+                    {event && <EventDetails event={userContext?.userEvent!} route="user" />}
                     {!event && isLoading && <Loader/>}
                 </Box>
                 <Box className="ticketsDetails">
                     <h2 className="subTitel">Buy Tickets:</h2>
-                    {event && <TicketsSection tickets={event.tickets} eventId={event._id} route="user" setChosenTicket={setChosenTicket} />}
+                    {event && <TicketsSection tickets={userContext?.userEvent!.tickets!} eventId={userContext?.userEvent!._id!} route="user" setChosenTicket={setChosenTicket} />}
                     {!event && isLoading && <Loader/>}
                 </Box>
                 <Box className="commentSection">
                     <h2 className="subTitel">Comments:</h2>
-                    <CommentSection eventId={event._id} />
+                    <CommentSection eventId={userContext?.userEvent!._id!} />
                 </Box>
             </Box>
         </Box>

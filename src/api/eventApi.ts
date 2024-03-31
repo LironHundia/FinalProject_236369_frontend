@@ -1,6 +1,7 @@
 import { APIStatus, CommentProps, Event, TicketToPurchase } from "../types";
 import { BackendServer } from "../consts";
 import axios, {AxiosError} from "axios";
+import { dateAndTimeToString } from "../utilities";
 
 
 interface QueryParams {
@@ -34,6 +35,19 @@ export const EventApi = {
             const response = await axios.get(BackendServer.concat('api/event/').concat(eventId)
             ,{ withCredentials: true});
             return response.data;
+        } catch (e) {
+            throw handleError(e);
+        }
+    },
+    updateEventDate: async (eventId: string, newStartDate: Date, newEndDate: Date): Promise<APIStatus> => {
+        const startDate = dateAndTimeToString(newStartDate);
+        const endDate = dateAndTimeToString(newEndDate);
+        console.log(startDate);
+        try {
+            await axios.put(BackendServer.concat('api/event/').concat(eventId)
+            ,{start_date: startDate, end_date: endDate}
+            ,{ withCredentials: true});
+            return APIStatus.Success;
         } catch (e) {
             throw handleError(e);
         }

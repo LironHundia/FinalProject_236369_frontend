@@ -9,19 +9,22 @@ import { UserSpace } from './user-space/user-space';
 import { Typography } from '@mui/material';
 
 interface UserContext {
+  setUserPage: (value: 'catalog' | 'eventPage' | 'payment' | 'userSpace') => void;
+  userEvent: Event | null;
+  setUserEvent: (value: Event | null) => void;
   reservation: TicketToPurchase | null;
   setReservation: (value: TicketToPurchase | null) => void;
 }
 
-export const UserContext = React.createContext<UserContext | null > (null)
+export const UserContext = React.createContext<UserContext | null>(null)
 
 export const UserRoute: React.FC<PageProps> = ({ navigateToLoginPage }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment' | 'userSpace'>('eventPage');
+  const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment' | 'userSpace'>('catalog');
   const [reservation, setReservation] = useState<TicketToPurchase | null>(null);
-  const [tempEvent, setEvent] = useState<Event | null>(null);
+  const [userEvent, setUserEvent] = useState<Event | null>(null);
 
   const onLogout = async () => {
     setIsLoading(true);
@@ -34,47 +37,47 @@ export const UserRoute: React.FC<PageProps> = ({ navigateToLoginPage }) => {
     setErrorMessage('Failed to logout, please try again');
   }
 
-  const eventId = "6601f7238776db7c7a23974e";
-    // TODO: Temp code - will get this data from catalog page
-    React.useEffect(() => {
-        const fetchEvent = async () => {
-            setIsLoading(true);
-            try {
-                const res = await EventApi.getEventById(eventId);
-                setEvent(res as Event);
-            } catch (e) {
-                setErrorMessage('Failed to load event in ROUTE-USER, please try again');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchEvent();
-    }, [eventId]);
+  // Load teams from localStorage or fetch new event
+  React.useEffect(() => {
+    const storedCurrUserEvent = localStorage.getItem('userEvent');
+
+    if (storedCurrUserEvent != null && userPage !== 'catalog') {
+      setUserEvent(JSON.parse(storedCurrUserEvent));
+    } else {
+      setUserEvent(null);
+    }
+  }, [userPage]);
+
+  // Save event to localStorage whenever it changes
+  React.useEffect(() => {
+    localStorage.setItem('userEvent', JSON.stringify(userEvent));
+  }, [userEvent]);
 
   if (userPage === 'catalog') {
     return (
+      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation: reservation, setReservation: setReservation }}>
       <Catalog />
+      </UserContext.Provider>
     )
   }
   if (userPage === 'eventPage') {
-    //TODO: delete the tempEvent and the checks of if it's not null :)
     return (
-      <UserContext.Provider value={{ reservation: reservation, setReservation: setReservation }}>
-        {tempEvent!==null && <EventPage {...tempEvent} />}
-        {tempEvent===null && <Typography variant="h2" color="error">{errorMessage}</Typography>}
+      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation: reservation, setReservation: setReservation }}>
+        {userEvent !== null && <EventPage/>}
+        {userEvent === null && <Typography variant="h2" color="error">{"ERROR: " + errorMessage}</Typography>}
         {isLoading && <h2>Loading event in route-user...</h2>}
       </UserContext.Provider>
     )
   }
   if (userPage === 'payment') {
     return (
-      <UserContext.Provider value={{reservation: reservation, setReservation: setReservation}}>
-        <Payment/>
-      </UserContext.Provider> 
+      <UserContext.Provider value={{setUserPage, userEvent, setUserEvent, reservation: reservation, setReservation: setReservation }}>
+        <Payment />
+      </UserContext.Provider>
     )
   }
-//userSpace
-return (
-  <UserSpace />
-)
+  //userSpace
+  return (
+    <UserSpace />
+  )
 };

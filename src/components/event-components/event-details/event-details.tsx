@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography, TextField } from '@mui/material';
 import { Event } from '../../../types';
+import { UpdateEventTime } from '../date-event-form/date-event-form';
 import { EventApi } from '../../../api/eventApi';
 import { defaultEventImage } from '../../../consts';
 import { dateToString, timeToString } from '../../../utilities';
@@ -16,11 +17,14 @@ export const EventDetails: React.FC<EventProps> = ({ event, route }) => {
     const [commentCount, setCommentCount] = React.useState<number>(0);
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [errorMessage, setErrorMessage] = React.useState<string>('');
+    const [updateEvent, setUpdateEvent] = React.useState<boolean>(false);
 
     const { _id, name, category, description, organizer, location, total_available_tickets, start_date, end_date, image_url } = event;
 
     const image = image_url ? image_url : defaultEventImage;
     const eventLocation = location ? location : "not specified";
+
+    const timeNow = new Date();
 
     const startDate = new Date(start_date);
     const formattedStartDate = dateToString(startDate);
@@ -29,7 +33,6 @@ export const EventDetails: React.FC<EventProps> = ({ event, route }) => {
     const endDate = new Date(end_date);
     const formattedEndDate = dateToString(endDate);
     const formattedEndTime = timeToString(endDate);
-
 
     React.useEffect(() => {
         const fetchEvent = async () => {
@@ -74,6 +77,11 @@ export const EventDetails: React.FC<EventProps> = ({ event, route }) => {
             <Box>
                 <Typography className="eventDescription">{description}</Typography>
             </Box>
+            {route === "backoffice" &&
+                <Button variant="contained" color="primary"
+                    disabled={startDate < timeNow || endDate < timeNow}
+                    onClick={() => setUpdateEvent(!updateEvent)}> Update Event</Button>}
+            {updateEvent && <UpdateEventTime startDate={startDate} endDate={endDate} />}
         </Box>
     );
 };
