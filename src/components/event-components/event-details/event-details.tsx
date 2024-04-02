@@ -1,25 +1,27 @@
 import React from 'react';
-import { Box, Button, Typography, TextField } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { Event } from '../../../types';
 import { UpdateEventTime } from '../date-event-form/date-event-form';
 import { EventApi } from '../../../api/eventApi';
-import { defaultEventImage } from '../../../consts';
+import defaultEventImage from '../../../additionals/image-not-found.jpg';
 import { dateToString, timeToString } from '../../../utilities';
+import { GeneralContext } from '../../main/main-page';
 import { Loader } from '../../loader/loader';
 import './event-details.scss';
 
 export interface EventProps {
     event: Event;
-    route: "user" | "backoffice";
 }
 
-export const EventDetails: React.FC<EventProps> = ({ event, route }) => {
+export const EventDetails: React.FC<EventProps> = ({ event }) => {
+    const generalContext = React.useContext(GeneralContext);
+    
     const [commentCount, setCommentCount] = React.useState<number>(0);
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [errorMessage, setErrorMessage] = React.useState<string>('');
     const [updateEvent, setUpdateEvent] = React.useState<boolean>(false);
 
-    const { _id, name, category, description, organizer, location, total_available_tickets, start_date, end_date, image_url } = event;
+    const { _id, name, category, description, location, total_available_tickets, start_date, end_date, image_url } = event;
 
     const image = image_url ? image_url : defaultEventImage;
     const eventLocation = location ? location : "not specified";
@@ -45,7 +47,7 @@ export const EventDetails: React.FC<EventProps> = ({ event, route }) => {
                 setIsLoading(false);
             }
         }
-        if (route === "backoffice") {
+        if (generalContext?.route! === "backoffice") {
             fetchEvent();
         }
     }, [event]);
@@ -69,15 +71,15 @@ export const EventDetails: React.FC<EventProps> = ({ event, route }) => {
                         <Typography className="eventInfo_quantity">{total_available_tickets} tickets left!</Typography>
                     </Box>
 
-                    {route === "backoffice" && !isLoading && !errorMessage &&
+                    {generalContext?.route! === "backoffice" && !isLoading && !errorMessage &&
                         <Typography className="eventInfo_comments">Comments: {commentCount}</Typography>}
-                    {route === "backoffice" && isLoading && <Loader />}
+                    {generalContext?.route! === "backoffice" && isLoading && <Loader />}
                 </Box>
             </Box>
             <Box>
                 <Typography className="eventDescription">{description}</Typography>
             </Box>
-            {route === "backoffice" &&
+            {generalContext?.route! === "backoffice" &&
                 <Button variant="contained" color="primary"
                     disabled={startDate < timeNow || endDate < timeNow}
                     onClick={() => setUpdateEvent(!updateEvent)}> Update Event</Button>}

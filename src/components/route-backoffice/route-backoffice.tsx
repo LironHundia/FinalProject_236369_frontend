@@ -1,39 +1,48 @@
 import React, { useState } from 'react';
 import { AuthApi } from '../../api/authApi';
-import { APIStatus, PageProps } from '../../types';
-import {BOCatalog} from '../route-backoffice/BO-catalog/BO-catalog';
-import {BOEventPage} from '../route-backoffice/BO-event-page/BO-event-page';
-import {BOCreateEvent} from '../route-backoffice/BO-create-event/BO-create-event';
+import { APIStatus, BackofficePageProps, PageProps } from '../../types';
+import { BOCatalog } from '../route-backoffice/BO-catalog/BO-catalog';
+import { BOEventPage } from '../route-backoffice/BO-event-page/BO-event-page';
+import { BOCreateEvent } from '../route-backoffice/BO-create-event/BO-create-event';
+import { Event } from '../../types';
+import { Typography } from '@mui/material';
 
-export const BackofficeRoute: React.FC<PageProps> = ({navigateToLoginPage}) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+interface BackofficeContext {
+  setBackofficePage: (value: 'catalog' | 'eventPage' | 'createEvent') => void;
+  backofficeEvent: Event | null;
+  setBackofficeEvent: (value: Event | null) => void;
+}
 
-  const [backofficePage, setBackofficePage] = useState<'catalog'|'eventPage'|'createEvent'>('catalog');
+export const BOContext = React.createContext<BackofficeContext | null>(null)
 
-  const onLogout = async () => {
-    setIsLoading(true);
-    const res = await AuthApi.logout();
-    setIsLoading(false);
-    if(res === APIStatus.Success) {
-        navigateToLoginPage();
-        return;
-    }
-    setErrorMessage('Failed to logout, please try again');
+export const BackofficeRoute: React.FC = () => {
+  const [backofficeEvent, setBackofficeEvent] = useState<Event | null>(null);
+  const [backofficePage, setBackofficePage] = useState<'catalog' | 'eventPage' | 'createEvent'>('catalog');
+
+  const backofficePageProps: BackofficePageProps = {
+    navigateToBOCatalogPage: () => setBackofficePage('catalog'),
+    navigateToBOEventPage: () => setBackofficePage('eventPage'),
+    navigateToBOCreateEventPage: () => setBackofficePage('createEvent'),
   }
 
-  if(backofficePage === 'catalog') {
+  if (backofficePage === 'catalog') {
     return (
-      <BOCatalog/>
+      <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent }}>
+        <BOCatalog {...backofficePageProps}/>
+      </BOContext.Provider>
     )
   }
-  if(backofficePage === 'eventPage') {
+  if (backofficePage === 'eventPage') {
     return (
-      <BOEventPage/>
+      <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent }}>
+        <BOEventPage {...backofficePageProps}/>
+      </BOContext.Provider>
     )
   }
   //createEvent
   return (
-      <BOCreateEvent/>
-    )
+    <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent }}>
+      <BOCreateEvent />
+    </BOContext.Provider>
+  )
 };

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { EventApi } from '../../../api/eventApi';
-import { Event } from '../../../types';
+import {UserPageProps, Event } from '../../../types';
 import { UserContext } from '../route-user';
 import { Button } from '@mui/material';
 
-export const Catalog: React.FC = () => {
+export const Catalog: React.FC<UserPageProps> = (userPageProps) => {
 
     const userContext = React.useContext(UserContext);
 
@@ -32,18 +32,13 @@ export const Catalog: React.FC = () => {
     }, [eventId]);
     //////////////////////////////////////////////////////////////////////
 
-    React.useEffect(() => {
-        if (userContext?.userEvent !== null) {
-            userContext?.setUserPage('eventPage');
-        }
-    }, [userContext?.userEvent]);
-
-    const onChooseEvent = (index: number) => {
+    const onChooseEvent = async (index: number) => {
         if (catalogEvent.length === 0) {
             setErrorMessage('event not loaded yet in ROUTE-USER, please try again');
             return;
         }
-        userContext?.setUserEvent(catalogEvent[index]);
+        await userContext?.setUserEvent(catalogEvent[index]);
+        userPageProps.navigateToEventPage();
     }
 
     return (

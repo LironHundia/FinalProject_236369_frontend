@@ -54,8 +54,17 @@ export const EventApi = {
     },
     secureTickets: async (reservation: TicketToPurchase): Promise<APIStatus> => {
         try {
-            await axios.post(BackendServer.concat('/api/user/secure'), 
+            await axios.post(BackendServer.concat('api/user/secure'), 
             { reservation },{ withCredentials: true});
+            return APIStatus.Success;
+        } catch (e) {
+            throw handleError(e);
+        }
+    },
+    addNewComment: async (eventId: String, comment: string): Promise<APIStatus> => {
+        try {
+            await axios.post(BackendServer.concat('api/comment'), 
+            { eventId, comment },{ withCredentials: true});
             return APIStatus.Success;
         } catch (e) {
             throw handleError(e);

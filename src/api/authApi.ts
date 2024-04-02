@@ -48,6 +48,15 @@ export const AuthApi = {
             throw handleError(e);
         }
     },
+    getUserPermission: async (): Promise<string | APIStatus> => {
+        try {
+            const response = await axios.get(BackendServer.concat('api/permission'), 
+            { withCredentials: true});
+            return response.data.permission;
+        } catch (e) {
+            throw handleError(e);
+        }
+    },
 };
 
 const handleError = async (e: unknown): Promise<APIStatus> => {

@@ -1,53 +1,75 @@
 import React, { useState } from 'react';
-import './main-page.css'; 
+import './main-page.css';
 import { AuthApi } from '../../api/authApi';
 import { APIStatus, PageProps } from '../../types';
 import { useEffect } from 'react';
 import { UserRoute } from '../route-user/route-user';
 import { BackofficeRoute } from '../route-backoffice/route-backoffice';
 
+interface GeneralContext {
+  route: 'user' | 'backoffice';
+  setRoute: (route: 'user' | 'backoffice') => void;
+  username: string;
+  setUsername: (username: string) => void;
+  userPermission: 'A' | 'M' | 'W';
+  onLogout: () => void;
+}
+
+export const GeneralContext = React.createContext<GeneralContext | null>(null);
+
 export const MainPage: React.FC<PageProps> = (pageProps) => {
   const [username, setUsername] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [userPermission, setUserPermission] = useState<'A'|'M'|'W'>('W');
 
-  const [currentRoute, setCurrentRoute] = useState<'user'|'backoffice'>('user');
+  const [currentRoute, setCurrentRoute] = useState<'user' | 'backoffice'>('user');
 
   useEffect(() => {
     const fetchUsername = async () => {
-      setIsLoading(true);
       try {
         const res = await AuthApi.getUserName();
         setUsername(res as string);
+
       } catch (error) {
-        setErrorMessage('Failed to fetch username');
         pageProps.navigateToLoginPage();
       }
-      setIsLoading(false);
     };
-  
+
     fetchUsername();
   }, []);
 
+  useEffect(() => {
+    const fetchUserPermission = async () => {
+      try {
+        const permission = await AuthApi.getUserPermission();
+        setUserPermission(permission as 'A' | 'M' | 'W');
+      }
+      catch (e) {
+        pageProps.navigateToLoginPage();}
+    };
+
+    fetchUserPermission();
+  }, [currentRoute]);
+
 
   const onLogout = async () => {
-    setIsLoading(true);
     const res = await AuthApi.logout();
-    setIsLoading(false);
-    if(res === APIStatus.Success) {
+    if (res === APIStatus.Success) {
       pageProps.navigateToLoginPage();
-        return;
+      return;
     }
-    setErrorMessage('Failed to logout, please try again');
   }
 
-  if(currentRoute === 'user') {
+  if (currentRoute === 'user') {
     return (
-      <UserRoute {...pageProps}/>
+      <GeneralContext.Provider value={{ route: currentRoute, setRoute: setCurrentRoute, username, setUsername, userPermission, onLogout }}>
+        <UserRoute/>
+      </GeneralContext.Provider>
     )
   }
-  
+
   return (
-      <BackofficeRoute {...pageProps}/>
-    )
+    <GeneralContext.Provider value={{ route: currentRoute, setRoute: setCurrentRoute, username, setUsername, userPermission, onLogout }}>
+      <BackofficeRoute/>
+    </GeneralContext.Provider>
+  )
 };

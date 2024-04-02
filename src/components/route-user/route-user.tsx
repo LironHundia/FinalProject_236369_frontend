@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { AuthApi } from '../../api/authApi';
-import { EventApi } from '../../api/eventApi';
-import { APIStatus, PageProps, Event, TicketToPurchase } from '../../types';
+import { UserPageProps, Event, TicketToPurchase } from '../../types';
 import { Catalog } from './catalog/catalog';
+import { Loader } from '../loader/loader';
 import { EventPage } from './event-page/event-page';
 import { Payment } from './payment/payment';
 import { UserSpace } from './user-space/user-space';
@@ -14,27 +13,25 @@ interface UserContext {
   setUserEvent: (value: Event | null) => void;
   reservation: TicketToPurchase | null;
   setReservation: (value: TicketToPurchase | null) => void;
+  nextEvent: Event | null;
 }
 
 export const UserContext = React.createContext<UserContext | null>(null)
 
-export const UserRoute: React.FC<PageProps> = ({ navigateToLoginPage }) => {
+export const UserRoute: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment' | 'userSpace'>('catalog');
   const [reservation, setReservation] = useState<TicketToPurchase | null>(null);
   const [userEvent, setUserEvent] = useState<Event | null>(null);
+  const [nextEvent, setNextEvent] = useState<Event | null>(null);
 
-  const onLogout = async () => {
-    setIsLoading(true);
-    const res = await AuthApi.logout();
-    setIsLoading(false);
-    if (res === APIStatus.Success) {
-      navigateToLoginPage();
-      return;
-    }
-    setErrorMessage('Failed to logout, please try again');
+  const userPageProps: UserPageProps = {
+    navigateToCatalogPage: () => setUserPage('catalog'),
+    navigateToEventPage: () => setUserPage('eventPage'),
+    navigateToPaymentPage: () => setUserPage('payment'),
+    navigateToUserSpace: () => setUserPage('userSpace'),
   }
 
   // Load teams from localStorage or fetch new event
@@ -55,23 +52,23 @@ export const UserRoute: React.FC<PageProps> = ({ navigateToLoginPage }) => {
 
   if (userPage === 'catalog') {
     return (
-      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation: reservation, setReservation: setReservation }}>
-      <Catalog />
+      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
+      <Catalog {...userPageProps}/>
       </UserContext.Provider>
     )
   }
   if (userPage === 'eventPage') {
     return (
-      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation: reservation, setReservation: setReservation }}>
-        {userEvent !== null && <EventPage/>}
-        {userEvent === null && <Typography variant="h2" color="error">{"ERROR: " + errorMessage}</Typography>}
+      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent}}>
+        {userEvent !== null && <EventPage {...userPageProps}/>}
+        {userEvent === null && <Loader/>}
         {isLoading && <h2>Loading event in route-user...</h2>}
       </UserContext.Provider>
     )
   }
   if (userPage === 'payment') {
     return (
-      <UserContext.Provider value={{setUserPage, userEvent, setUserEvent, reservation: reservation, setReservation: setReservation }}>
+      <UserContext.Provider value={{setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
         <Payment />
       </UserContext.Provider>
     )

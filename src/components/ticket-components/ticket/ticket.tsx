@@ -2,18 +2,19 @@ import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { TicketStruct, TicketToPurchase } from '../../../types';
 import { TicketSelector } from '../ticket-amount-selector/ticket-amount-selector';
+import { GeneralContext } from '../../main/main-page';
 import './ticket.scss';
 
 export interface TicketProps {
     ticket: TicketStruct;
     eventId: string;
-    route: "user" | "backoffice";
     setChosenTicket?: (value: TicketToPurchase | null) => void;
 }
 
-export const Ticket: React.FC<TicketProps> = ({ ticket, eventId, route, setChosenTicket }) => {
-    const [chosenTicketAmount, setChosenTicketAmount] = React.useState<number>(1);
+export const Ticket: React.FC<TicketProps> = ({ ticket, eventId, setChosenTicket }) => {
+    const generalContext = React.useContext(GeneralContext);
 
+    const [chosenTicketAmount, setChosenTicketAmount] = React.useState<number>(1);
     const { type, price, initial_quantity, available_quantity } = ticket;
 
     const handleBuyNow = () => {
@@ -27,10 +28,10 @@ export const Ticket: React.FC<TicketProps> = ({ ticket, eventId, route, setChose
             <Box className="header">
                 <h3 className="ticketType">{type} Seats</h3>
                 <Box className="ticketPrice">Price: {price}$</Box>
-                {route === "user" && <Box className="quantity">{available_quantity} tickets left!</Box>}
-                {route === "backoffice" && <Box className="quantity">{available_quantity}/{initial_quantity}</Box>}
+                {generalContext?.route === "user" && <Box className="quantity">{available_quantity} tickets left!</Box>}
+                {generalContext?.route === "backoffice" && <Box className="quantity_backoffice">{available_quantity}/{initial_quantity}</Box>}
             </Box>
-            {route === "user" &&
+            {generalContext?.route === "user" &&
                 <Box className="chooseTickets">
                     <Box className="chooseTicketAmount">
                         <TicketSelector availableAmount={available_quantity} chosenTicketAmount={chosenTicketAmount} setChosenTicketAmount={setChosenTicketAmount} />
