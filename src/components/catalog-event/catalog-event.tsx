@@ -15,7 +15,7 @@ function totalQuantity(arr: Array<{ name: string, price: number, quantity: numbe
     return arr.reduce((total, item) => total + item.quantity, 0);
   }
 
-export const CatalogEvent = ({ event }) => {
+export const CatalogEvent = ({ event, isManager }: { event: any, isManager: boolean }) => {
   return (
   <Card className="card" onClick={() => { /* handle click event here */ }}>
       <CardMedia
@@ -34,9 +34,11 @@ export const CatalogEvent = ({ event }) => {
         <Typography variant="body2" color="text.secondary">
           {event.category}
         </Typography>
+        {!isManager && (
         <Typography variant="body2" color="text.secondary">
          from {findMinPrice(event.tickets)}$
         </Typography>
+        )}
         <Typography variant="body2" color="text.secondary">
           {totalQuantity(event.tickets)} Tickets available
         </Typography>
