@@ -16,7 +16,7 @@ export const Catalog: React.FC<UserPageProps> = (userPageProps) => {
     // Rest of the code...
     // TODO: Temp code - will get this data from catalog page
     //////////////////////////////////////////////////////////////////////
-    const eventId = "6601f7238776db7c7a23974e";
+    /*const eventId = "6601f7238776db7c7a23974e";
     React.useEffect(() => {
         const fetchEvent = async () => {
             try {
@@ -29,7 +29,7 @@ export const Catalog: React.FC<UserPageProps> = (userPageProps) => {
             }
         };
         fetchEvent();
-    }, [eventId]);
+    }, [eventId]);*/
     //////////////////////////////////////////////////////////////////////
 
     const onChooseEvent = async (index: number) => {
