@@ -61,11 +61,11 @@ export interface Event {
     name: string;
     category: string;
     description: string;
-    organizer: String,
     start_date: string;
     end_date: string;
     total_available_tickets: number;
     tickets: TicketStruct[];
     image_url?: string;
     location?: string;
+    lowestPrice?: number;
 }

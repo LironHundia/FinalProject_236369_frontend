@@ -32,6 +32,22 @@ export const Catalog: React.FC<UserPageProps> = (userPageProps) => {
     }, [eventId]);*/
     //////////////////////////////////////////////////////////////////////
 
+    React.useEffect(() => {
+        const fetchEvent = async () => {
+            try {
+                const res = await EventApi.getAvailableEvents();
+                console.log(res);
+                //setCatalogEvent();
+            } catch (e) {
+                console.log(e);
+                setErrorMessage('Failed to load event in ROUTE-USER, please try again');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchEvent();
+    }, [catalogEvent]);
+
     const onChooseEvent = async (index: number) => {
         if (catalogEvent.length === 0) {
             setErrorMessage('event not loaded yet in ROUTE-USER, please try again');

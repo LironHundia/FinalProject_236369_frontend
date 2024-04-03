@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import {formatDate} from '../../../utilities';
+import {formatDate} from '../../utilities';
 import './catalog-event.css';
 
 function findMinPrice(arr: Array<{ name: string, price: number, quantity: number }>) {

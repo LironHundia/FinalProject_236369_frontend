@@ -10,6 +10,16 @@ interface QueryParams {
 }
 
 export const EventApi = {
+    getAvailableEvents: async (limit?: number, page?: number): Promise<Event[]> => {
+        try {
+            // TODO: make a request to the server to login
+            const response = await axios.get(BackendServer.concat('api/event')
+            ,{ withCredentials: true});
+            return response.data;
+        } catch (e) {
+            throw handleError(e);
+        }
+    },
     getEventComments: async ({ eventId, page }: QueryParams): Promise<CommentProps[]> => {
         try {
             // TODO: make a request to the server to login
