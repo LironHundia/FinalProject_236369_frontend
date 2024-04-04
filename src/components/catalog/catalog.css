@@ -1,0 +1,12 @@
+.catalog {
+    margin: 200px 50px;
+
+  }
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px 40px;
+  }
+
+

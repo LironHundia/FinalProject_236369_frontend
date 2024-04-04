@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserPageProps, Event, TicketToPurchase } from '../../types';
-import { Catalog } from './catalog/catalog';
+import { Catalog } from '../catalog/catalog';
 import { Loader } from '../loader/loader';
 import { EventPage } from './event-page/event-page';
 import { Payment } from './payment/payment';
@@ -53,7 +53,7 @@ export const UserRoute: React.FC = () => {
   if (userPage === 'catalog') {
     return (
       <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
-      <Catalog {...userPageProps}/>
+      <Catalog isManager={false} />
       </UserContext.Provider>
     )
   }
