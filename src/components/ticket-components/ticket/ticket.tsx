@@ -15,11 +15,11 @@ export const Ticket: React.FC<TicketProps> = ({ ticket, eventId, setChosenTicket
     const generalContext = React.useContext(GeneralContext);
 
     const [chosenTicketAmount, setChosenTicketAmount] = React.useState<number>(1);
-    const { type, price, initial_quantity, available_quantity } = ticket;
+    const { type, price, initialQuantity, availableQuantity } = ticket;
 
     const handleBuyNow = () => {
         if (setChosenTicket) {
-            setChosenTicket({ type, total_price: chosenTicketAmount * price, quantity: chosenTicketAmount, eventId });
+            setChosenTicket({ type, totalPrice: chosenTicketAmount * price, quantity: chosenTicketAmount, eventId });
         }
     }
 
@@ -28,13 +28,13 @@ export const Ticket: React.FC<TicketProps> = ({ ticket, eventId, setChosenTicket
             <Box className="header">
                 <h3 className="ticketType">{type} Seats</h3>
                 <Box className="ticketPrice">Price: {price}$</Box>
-                {generalContext?.route === "user" && <Box className="quantity">{available_quantity} tickets left!</Box>}
-                {generalContext?.route === "backoffice" && <Box className="quantity_backoffice">{available_quantity}/{initial_quantity}</Box>}
+                {generalContext?.route === "user" && <Box className="quantity">{availableQuantity} tickets left!</Box>}
+                {generalContext?.route === "backoffice" && <Box className="quantity_backoffice">{availableQuantity}/{initialQuantity}</Box>}
             </Box>
             {generalContext?.route === "user" &&
                 <Box className="chooseTickets">
                     <Box className="chooseTicketAmount">
-                        <TicketSelector availableAmount={available_quantity} chosenTicketAmount={chosenTicketAmount} setChosenTicketAmount={setChosenTicketAmount} />
+                        <TicketSelector availableAmount={availableQuantity} chosenTicketAmount={chosenTicketAmount} setChosenTicketAmount={setChosenTicketAmount} />
                         <Button className="buyNowButton" onClick={handleBuyNow}>Buy Now!</Button>
                     </Box>
                     <Typography className="totalPrice">Total Price: {chosenTicketAmount * price}$</Typography>

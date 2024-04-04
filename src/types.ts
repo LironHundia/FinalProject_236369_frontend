@@ -45,13 +45,13 @@ export interface CommentProps {
 export interface TicketStruct {
     type: string;
     price: number;
-    initial_quantity: number;
-    available_quantity: number;
+    initialQuantity: number;
+    availableQuantity: number;
 }
 
 export interface TicketToPurchase {
     type: string;
-    total_price: number;
+    totalPrice: number;
     quantity: number;
     eventId: string;
 }
@@ -61,11 +61,11 @@ export interface Event {
     name: string;
     category: string;
     description: string;
-    start_date: string;
-    end_date: string;
-    total_available_tickets: number;
+    startDate: string;
+    endDate: string;
+    totalAvailableTickets: number;
     tickets: TicketStruct[];
-    image_url?: string;
+    imageUrl?: string;
     location?: string;
     lowestPrice?: number;
 }

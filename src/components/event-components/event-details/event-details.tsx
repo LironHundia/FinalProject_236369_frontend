@@ -21,20 +21,20 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
     const [errorMessage, setErrorMessage] = React.useState<string>('');
     const [updateEvent, setUpdateEvent] = React.useState<boolean>(false);
 
-    const { _id, name, category, description, location, total_available_tickets, start_date, end_date, image_url } = event;
+    const { _id, name, category, description, location, totalAvailableTickets, startDate, endDate, imageUrl, lowestPrice } = event;
 
-    const image = image_url ? image_url : defaultEventImage;
+    const image = imageUrl ? imageUrl : defaultEventImage;
     const eventLocation = location ? location : "not specified";
 
     const timeNow = new Date();
 
-    const startDate = new Date(start_date);
-    const formattedStartDate = dateToString(startDate);
-    const formattedStartTime = timeToString(startDate);
+    const showStartDate = new Date(startDate);
+    const formattedStartDate = dateToString(showStartDate);
+    const formattedStartTime = timeToString(showStartDate);
 
-    const endDate = new Date(end_date);
-    const formattedEndDate = dateToString(endDate);
-    const formattedEndTime = timeToString(endDate);
+    const showEndDate = new Date(endDate);
+    const formattedEndDate = dateToString(showEndDate);
+    const formattedEndTime = timeToString(showEndDate);
 
     React.useEffect(() => {
         const fetchEvent = async () => {
@@ -67,8 +67,8 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
                         <Typography className="eventInfo">Location: {eventLocation}</Typography>
                     </Box>
                     <Box className="eventTickets">
-                        <Typography className="eventInfo_price">From *TODO* $</Typography>
-                        <Typography className="eventInfo_quantity">{total_available_tickets} tickets left!</Typography>
+                        <Typography className="eventInfo_price">From {lowestPrice}$</Typography>
+                        <Typography className="eventInfo_quantity">{totalAvailableTickets} tickets left!</Typography>
                     </Box>
 
                     {generalContext?.route! === "backoffice" && !isLoading && !errorMessage &&
@@ -81,9 +81,9 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
             </Box>
             {generalContext?.route! === "backoffice" &&
                 <Button variant="contained" color="primary"
-                    disabled={startDate < timeNow || endDate < timeNow}
+                    disabled={showStartDate < timeNow || showEndDate < timeNow}
                     onClick={() => setUpdateEvent(!updateEvent)}> Update Event</Button>}
-            {updateEvent && <UpdateEventTime startDate={startDate} endDate={endDate} />}
+            {updateEvent && <UpdateEventTime startDate={showStartDate} endDate={showEndDate} />}
         </Box>
     );
 };
