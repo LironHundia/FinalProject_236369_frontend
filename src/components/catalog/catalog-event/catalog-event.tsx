@@ -15,9 +15,10 @@ import './catalog-event.css';
 interface CatalogEventProps {
   className?: string;
   event: Event;
+  navigateToEventPage: () => void;
 }
 
-export const CatalogEvent = ({ className, event }: CatalogEventProps) => {
+export const CatalogEvent: React.FC<CatalogEventProps> = ({ className, event, navigateToEventPage }) => {
   const userContext = React.useContext(UserContext);
   const BOcontext = React.useContext(BOContext);
   const generalContext = React.useContext(GeneralContext);
@@ -27,11 +28,11 @@ export const CatalogEvent = ({ className, event }: CatalogEventProps) => {
     try {
       if (isManager) {
         await BOcontext?.setBackofficeEvent(event);
-        BOcontext?.setBackofficePage('eventPage');
+        navigateToEventPage();
       }
       else {
         await userContext?.setUserEvent(event);
-        userContext?.setUserPage('eventPage');
+        navigateToEventPage();
       }
     }
     catch (e) {
@@ -72,5 +73,3 @@ export const CatalogEvent = ({ className, event }: CatalogEventProps) => {
     </div>
   );
 };
-
-export default CatalogEvent;

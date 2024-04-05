@@ -31,14 +31,14 @@ export const BackofficeRoute: React.FC = () => {
 
   const backofficePageProps: BackofficePageProps = {
     navigateToBOCatalogPage: () => setBackofficePage('catalog'),
-    navigateToBOEventPage: () => setBackofficePage('eventPage'),
+    navigateToBOEventPage: () => {setBackofficePage('eventPage'); window.scrollTo(0, 0);},
     navigateToBOCreateEventPage: () => setBackofficePage('createEvent'),
   }
 
   if (backofficePage === 'catalog') {
     return (
       <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent }}>
-        <Catalog navigateToCatalogPage={backofficePageProps.navigateToBOCatalogPage}/>
+        <Catalog navigateToCatalogPage={backofficePageProps.navigateToBOCatalogPage} navigateToEventPage={backofficePageProps.navigateToBOEventPage}/>
       </BOContext.Provider>
     )
   }

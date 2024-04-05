@@ -40,7 +40,7 @@ export const UserRoute: React.FC = () => {
 
   const userPageProps: UserPageProps = {
     navigateToCatalogPage: () => setUserPage('catalog'),
-    navigateToEventPage: () => setUserPage('eventPage'),
+    navigateToEventPage: () => {setUserPage('eventPage'); window.scrollTo(0, 0);},
     navigateToPaymentPage: () => setUserPage('payment'),
     navigateToUserSpace: () => setUserPage('userSpace'),
   }
@@ -64,7 +64,7 @@ export const UserRoute: React.FC = () => {
   if (userPage === 'catalog') {
     return (
       <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
-      <Catalog navigateToCatalogPage={userPageProps.navigateToCatalogPage} />
+      <Catalog navigateToCatalogPage={userPageProps.navigateToCatalogPage}  navigateToEventPage={userPageProps.navigateToEventPage} />
       </UserContext.Provider>
     )
   }

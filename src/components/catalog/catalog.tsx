@@ -10,9 +10,10 @@ import './catalog.css';
 
 interface CatalogProps {
   navigateToCatalogPage: () => void;
+  navigateToEventPage: () => void;
 }
 
-export const Catalog: React.FC<CatalogProps> = ({navigateToCatalogPage}) => {
+export const Catalog: React.FC<CatalogProps> = (navigate) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = React.useState(1);
@@ -62,7 +63,7 @@ export const Catalog: React.FC<CatalogProps> = ({navigateToCatalogPage}) => {
   return (
     //TODO: centre the bar
         <div className="page">
-        <UserBar onGoBack={navigateToCatalogPage}/>
+        <UserBar onGoBack={navigate.navigateToCatalogPage}/>
         <div className="catalog">
         <InfiniteScroll
         dataLength={events.length}
@@ -76,7 +77,7 @@ export const Catalog: React.FC<CatalogProps> = ({navigateToCatalogPage}) => {
         }
         className="events-grid">
         {events.map((event, index) => (
-        <CatalogEvent key={index + 1} event={event} />
+        <CatalogEvent key={index + 1} event={event} navigateToEventPage={navigate.navigateToEventPage} />
         ))}
       </InfiniteScroll>
       </div>

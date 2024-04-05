@@ -65,6 +65,7 @@ export const MainPage: React.FC<PageProps> = (pageProps) => {
     const res = await AuthApi.logout();
     if (res === APIStatus.Success) {
       pageProps.navigateToLoginPage();
+      sessionStorage.clear();
       return;
     }
   }
