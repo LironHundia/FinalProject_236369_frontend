@@ -53,7 +53,7 @@ export const UserRoute: React.FC = () => {
   if (userPage === 'catalog') {
     return (
       <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
-      <Catalog isManager={false} />
+      <Catalog navigateToCatalogPage={userPageProps.navigateToCatalogPage} />
       </UserContext.Provider>
     )
   }

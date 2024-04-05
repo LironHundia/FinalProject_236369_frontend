@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { AuthApi } from '../../api/authApi';
 import { APIStatus, BackofficePageProps, PageProps } from '../../types';
-import { BOCatalog } from '../route-backoffice/BO-catalog/BO-catalog';
 import { BOEventPage } from '../route-backoffice/BO-event-page/BO-event-page';
 import { BOCreateEvent } from '../route-backoffice/BO-create-event/BO-create-event';
+import { Catalog } from '../catalog/catalog';
 import { Event } from '../../types';
 import { Typography } from '@mui/material';
 
@@ -28,7 +28,7 @@ export const BackofficeRoute: React.FC = () => {
   if (backofficePage === 'catalog') {
     return (
       <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent }}>
-        <BOCatalog {...backofficePageProps}/>
+        <Catalog navigateToCatalogPage={backofficePageProps.navigateToBOCatalogPage}/>
       </BOContext.Provider>
     )
   }

@@ -5,31 +5,40 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Event } from '../../../types';
 import { UserContext } from '../../route-user/route-user';
+import { GeneralContext } from '../../main/main-page';
+import defaultEventImage from '../../../additionals/image-not-found.jpg';
 import {formatDate} from '../../../utilities';
+
 import './catalog-event.css';
 
 interface CatalogEventProps {
   className?: string;
   event: Event;
-  isManager: boolean;
 }
 
 
-export const CatalogEvent = ({ className, event, isManager  }: CatalogEventProps) => {
+export const CatalogEvent = ({ className, event  }: CatalogEventProps) => {
   const userContext = React.useContext(UserContext);
+  const generalContext = React.useContext(GeneralContext);
+  const isManager = generalContext?.route == 'backoffice' ? true : false;
    
-  const handleClick= async () => {
+  const handleClick= async () => { 
+    if (isManager){}
+    //TODO: Implement manager event page
+    else{
     await userContext?.setUserEvent(event);
     userContext?.setUserPage('eventPage');
+    }
   }
-  
+  const image = event.imageUrl ? event.imageUrl : defaultEventImage;
+
   return (
     <div className={className}>
   <Card className="card" onClick= { handleClick }>
       <CardMedia
         component="img"
         height="140"
-        image={event.imageUrl} 
+        image={image} 
         alt={event.name}
       />
       <CardContent>

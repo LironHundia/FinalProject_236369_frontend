@@ -20,6 +20,17 @@ export const EventApi = {
             throw handleError(e);
         }
     },
+
+    getAllEvents: async (limit?: number, page?: number): Promise<Event[]> => {
+        try {
+            const response = await axios.get(BackendServer.concat('api/event/all'), 
+            { params: {limit,page},
+            withCredentials: true });
+            return response.data;
+        } catch (e) {
+            throw handleError(e);
+        }
+    },
     getEventComments: async ({ eventId, page }: QueryParams): Promise<CommentProps[]> => {
         try {
             // TODO: make a request to the server to login
