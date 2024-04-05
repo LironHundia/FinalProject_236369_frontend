@@ -22,10 +22,21 @@ export const UserRoute: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment' | 'userSpace'>('catalog');
+  //const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment' | 'userSpace'>('catalog');
   const [reservation, setReservation] = useState<TicketToPurchase | null>(null);
   const [userEvent, setUserEvent] = useState<Event | null>(null);
   const [nextEvent, setNextEvent] = useState<Event | null>(null);
+
+  const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment' | 'userSpace'>(() => {
+    // Get the current page from session storage when the component is mounted
+    const savedUserpage = sessionStorage.getItem('currentUserpage');
+    return savedUserpage ? JSON.parse(savedUserpage) : 'catalog';
+  });
+  
+  React.useEffect(() => {
+    // Save the current page to session storage whenever it changes
+    sessionStorage.setItem('currentUserpage', JSON.stringify(userPage));
+  }, [userPage]);
 
   const userPageProps: UserPageProps = {
     navigateToCatalogPage: () => setUserPage('catalog'),

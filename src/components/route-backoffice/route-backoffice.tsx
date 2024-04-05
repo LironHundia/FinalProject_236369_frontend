@@ -17,7 +17,17 @@ export const BOContext = React.createContext<BackofficeContext | null>(null)
 
 export const BackofficeRoute: React.FC = () => {
   const [backofficeEvent, setBackofficeEvent] = useState<Event | null>(null);
-  const [backofficePage, setBackofficePage] = useState<'catalog' | 'eventPage' | 'createEvent'>('catalog');
+  //const [backofficePage, setBackofficePage] = useState<'catalog' | 'eventPage' | 'createEvent'>('catalog');
+  const [backofficePage, setBackofficePage] = useState<'catalog' | 'eventPage' | 'createEvent'>(() => {
+    // Get the current page from session storage when the component is mounted
+    const savedBOpage = sessionStorage.getItem('currentBOpage');
+    return savedBOpage ? JSON.parse(savedBOpage) : 'catalog';
+  });
+  
+  React.useEffect(() => {
+    // Save the current page to session storage whenever it changes
+    sessionStorage.setItem('currentBOpage', JSON.stringify(backofficePage));
+  }, [backofficePage]);
 
   const backofficePageProps: BackofficePageProps = {
     navigateToBOCatalogPage: () => setBackofficePage('catalog'),

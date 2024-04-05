@@ -21,7 +21,17 @@ export const MainPage: React.FC<PageProps> = (pageProps) => {
   const [username, setUsername] = useState<string>('');
   const [userPermission, setUserPermission] = useState<'A'|'M'|'W'>('W');
 
-  const [currentRoute, setCurrentRoute] = useState<'user' | 'backoffice'>('user');
+  //const [currentRoute, setCurrentRoute] = useState<'user' | 'backoffice'>('user');
+  const [currentRoute, setCurrentRoute] = useState<'user' | 'backoffice'>(() => {
+    // Get the current page from session storage when the component is mounted
+    const savedRoute = sessionStorage.getItem('currentRoute');
+    return savedRoute ? JSON.parse(savedRoute) : 'user';
+  });
+  
+  useEffect(() => {
+    // Save the current page to session storage whenever it changes
+    sessionStorage.setItem('currentRoute', JSON.stringify(currentRoute));
+  }, [currentRoute]);
 
   useEffect(() => {
     const fetchUsername = async () => {
