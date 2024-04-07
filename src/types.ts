@@ -69,3 +69,6 @@ export interface Event {
     location?: string;
     lowestPrice?: number;
 }
+
+
+export const categories = ['Charity Event', 'Concert', 'Conference', 'Convention', 'Exhibition', 'Festival', 'Product Launch', 'Sport Event'];

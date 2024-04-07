@@ -17,7 +17,7 @@ export const BOContext = React.createContext<BackofficeContext | null>(null)
 
 export const BackofficeRoute: React.FC = () => {
   const [backofficeEvent, setBackofficeEvent] = useState<Event | null>(null);
-  const [backofficePage, setBackofficePage] = useState<'catalog' | 'eventPage' | 'createEvent'>('catalog');
+  const [backofficePage, setBackofficePage] = useState<'catalog' | 'eventPage' | 'createEvent'>('createEvent');
 
   const backofficePageProps: BackofficePageProps = {
     navigateToBOCatalogPage: () => setBackofficePage('catalog'),
@@ -42,7 +42,7 @@ export const BackofficeRoute: React.FC = () => {
   //createEvent
   return (
     <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent }}>
-      <BOCreateEvent />
+      <BOCreateEvent navigateToBOCatalogPage={backofficePageProps.navigateToBOCatalogPage}/>
     </BOContext.Provider>
   )
 };

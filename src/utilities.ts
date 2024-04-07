@@ -1,4 +1,5 @@
 import * as constants from './consts';
+import { Event, TicketStruct } from './types';
 
 export function dateToString(date: Date): string {
     return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
@@ -29,4 +30,65 @@ export function formatDate(date: Date) {
     const year = date.getFullYear();
   
     return day + "." + month + "." + year;
+}
+
+
+
+
+const dateCheck = (startDate: string, endDate: string) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    alert('End date must be after start date');
+    return end > start;
+  }
+
+  const ticketsValidation = (tickets: TicketStruct[]): boolean => {
+    const illegalTickets = tickets
+        .map((ticket, index) => ({ ...ticket, index }))
+        .filter(ticket => ticket.type === '' || ticket.price <= 0 || ticket.initialQuantity <= 0);
+
+    if (illegalTickets.length > 0) {
+        const illegalIndexes = illegalTickets.map(ticket => ticket.index);
+        alert(`Illegal tickets found at indexes: ${illegalIndexes.join(', ')}`);
+        return false;
+    }
+    return true;
+};
+
+const sameType = (tickets: TicketStruct[]): boolean => {
+    const duplicateIndexes: number[] = [];
+
+    tickets.forEach((ticket, index) => {
+        if (tickets.slice(index + 1).some(t => t.type === ticket.type)) {
+            duplicateIndexes.push(index);
+        }
+    });
+
+    if (duplicateIndexes.length > 0) {
+        alert(`Duplicate types found at indexes: ${duplicateIndexes.join(', ')}`);
+        return false;
+    }
+    return true;
+};
+
+
+  const ticketsCheck = (tickets: TicketStruct[]): boolean => {
+    if (!ticketsValidation(tickets)){
+      return false;
+    }
+    if (!sameType(tickets)) {
+        return false;
+    }
+    return true;
+
+};
+
+export function createValidation(event: Event) : boolean {
+    if (!dateCheck(event.startDate, event.endDate)) 
+        return false;
+    if (!ticketsCheck(event.tickets))
+        return false;
+
+
+    return true;
 }
