@@ -20,6 +20,8 @@ export const Catalog: React.FC<CatalogProps> = ({navigateToCatalogPage}) => {
   const generalContext = React.useContext(GeneralContext);
   const isManager = generalContext?.route == 'backoffice' ? true : false;
 
+
+  //TODO: how many events to fetch at a time?
   const fetchMoreEvents = async (): Promise<void> => {
         let data:Event[] = [];
         try {
@@ -38,6 +40,7 @@ export const Catalog: React.FC<CatalogProps> = ({navigateToCatalogPage}) => {
         }
     };
 
+  
     useEffect(() => {
         const fetchInitialEvents = async () => {
           let data:Event[] = [];
@@ -49,6 +52,7 @@ export const Catalog: React.FC<CatalogProps> = ({navigateToCatalogPage}) => {
               if ( data.length === 0) {
                   setHasMore(false);
               }
+            //TODO: Delete the multiplier
             const result = data.flatMap(element => Array(4).fill(element));
             setEvents(result);
           } catch (error) {
@@ -60,9 +64,10 @@ export const Catalog: React.FC<CatalogProps> = ({navigateToCatalogPage}) => {
       }, []);
 
   return (
-    //TODO: centre the bar
         <div className="page">
+        <div className="user-bar">
         <UserBar onGoBack={navigateToCatalogPage}/>
+        </div>
         <div className="catalog">
         <InfiniteScroll
         dataLength={events.length}
