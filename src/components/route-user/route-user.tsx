@@ -22,30 +22,41 @@ export const UserRoute: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  //const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment' | 'userSpace'>('catalog');
-  const [reservation, setReservation] = useState<TicketToPurchase | null>(null);
-  const [userEvent, setUserEvent] = useState<Event | null>(null);
+  /////////////////////////////// Reservation /////////////////////////////////
+  const [reservation, setReservation] = useState<TicketToPurchase | null>(()=> {
+    // Get the current page from session storage when the component is mounted
+    const savedReservation = sessionStorage.getItem('currentReservation');
+    return savedReservation ? JSON.parse(savedReservation) : null;
+  });
+
+  React.useEffect(() => {
+    // Save the current page to session storage whenever it changes
+    sessionStorage.setItem('currentReservation', JSON.stringify(reservation));
+  }, [reservation]);
+  //////////////////////////// End Reservation ////////////////////////////////
+
+  ////////////////////////////// Next Event //////////////////////////////////
   const [nextEvent, setNextEvent] = useState<Event | null>(null);
 
+  //////////////////////////// End Next Event ////////////////////////////////
+
+  /////////////////////////////// User Page ///////////////////////////////////
   const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment' | 'userSpace'>(() => {
     // Get the current page from session storage when the component is mounted
     const savedUserpage = sessionStorage.getItem('currentUserpage');
     return savedUserpage ? JSON.parse(savedUserpage) : 'catalog';
   });
-  
+
   React.useEffect(() => {
     // Save the current page to session storage whenever it changes
     sessionStorage.setItem('currentUserpage', JSON.stringify(userPage));
   }, [userPage]);
+  //////////////////////////// End User Page ////////////////////////////////
 
-  const userPageProps: UserPageProps = {
-    navigateToCatalogPage: () => setUserPage('catalog'),
-    navigateToEventPage: () => {setUserPage('eventPage'); window.scrollTo(0, 0);},
-    navigateToPaymentPage: () => setUserPage('payment'),
-    navigateToUserSpace: () => setUserPage('userSpace'),
-  }
+  ///////////////////////////// User Event ///////////////////////////////////
+  const [userEvent, setUserEvent] = useState<Event | null>(null);
 
-  // Load teams from localStorage or fetch new event
+  // Load event from localStorage or fetch new event
   React.useEffect(() => {
     const storedCurrUserEvent = localStorage.getItem('userEvent');
 
@@ -60,27 +71,40 @@ export const UserRoute: React.FC = () => {
   React.useEffect(() => {
     localStorage.setItem('userEvent', JSON.stringify(userEvent));
   }, [userEvent]);
+  //////////////////////////// End User Event ////////////////////////////////
+
+  /* User Page navigation */
+  const userPageProps: UserPageProps = {
+    navigateToCatalogPage: () => setUserPage('catalog'),
+    navigateToEventPage: () => { setUserPage('eventPage'); window.scrollTo(0, 0); },
+    navigateToPaymentPage: () => setUserPage('payment'),
+    navigateToUserSpace: () => setUserPage('userSpace'),
+  }
+
+  console.log('userPage:', userPage)
+  console.log('userEvent:', userEvent)
 
   if (userPage === 'catalog') {
     return (
       <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
-      <Catalog navigateToCatalogPage={userPageProps.navigateToCatalogPage}  navigateToEventPage={userPageProps.navigateToEventPage} />
+        <Catalog navigateToCatalogPage={userPageProps.navigateToCatalogPage} navigateToEventPage={userPageProps.navigateToEventPage} />
       </UserContext.Provider>
     )
   }
   if (userPage === 'eventPage') {
     return (
-      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent}}>
-        {userEvent !== null && <EventPage {...userPageProps}/>}
-        {userEvent === null && <Loader/>}
+      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
+        {userEvent !== null && <EventPage {...userPageProps} />}
+        {userEvent === null && <Loader />}
         {isLoading && <h2>Loading event in route-user...</h2>}
       </UserContext.Provider>
     )
   }
   if (userPage === 'payment') {
     return (
-      <UserContext.Provider value={{setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
-        <Payment />
+      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
+        {userEvent !== null &&<Payment {...userPageProps} />}
+        {userEvent === null && <Loader />}
       </UserContext.Provider>
     )
   }

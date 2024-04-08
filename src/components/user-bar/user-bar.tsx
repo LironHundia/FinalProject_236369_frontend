@@ -19,7 +19,7 @@ import * as constants from '../../consts';
 import './user-bar.scss';
 
 interface UserBarProps {
-    onGoBack: () => void;
+    onGoBack?: () => void;
 }
 
 export const UserBar: React.FC<UserBarProps> = ({onGoBack}) => {
@@ -53,7 +53,7 @@ export const UserBar: React.FC<UserBarProps> = ({onGoBack}) => {
                     <Typography sx={{ ml: 1, fontSize: '1.2em', color: 'gray' }}>{generalContext?.username}</Typography>
                 </Box>
                 {generalContext?.route === "user" && userContext?.nextEvent &&
-                    <Typography sx={{ minWidth: 100 }}>Next Event: {userContext?.nextEvent.name} ({userContext?.nextEvent.start_date})</Typography>}
+                    <Typography sx={{ minWidth: 100 }}>Next Event: {userContext?.nextEvent.name} ({userContext?.nextEvent.startDate})</Typography>}
                 {generalContext?.route === "backoffice" &&
                     <Button
                         variant='contained'
@@ -63,7 +63,8 @@ export const UserBar: React.FC<UserBarProps> = ({onGoBack}) => {
                 }
                 <Button
                     startIcon={<ArrowBack />}
-                    onClick={()=>onGoBack()}
+                    onClick={()=>onGoBack!()}
+                    disabled={onGoBack === undefined}
                 > Go Back
                 </Button>
             </Box>

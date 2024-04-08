@@ -17,9 +17,9 @@ export const Ticket: React.FC<TicketProps> = ({ ticket, eventId, setChosenTicket
     const [chosenTicketAmount, setChosenTicketAmount] = React.useState<number>(1);
     const { type, price, initialQuantity, availableQuantity } = ticket;
 
-    const handleBuyNow = () => {
+    const handleBuyNow = async () => {
         if (setChosenTicket) {
-            setChosenTicket({ type, totalPrice: chosenTicketAmount * price, quantity: chosenTicketAmount, eventId });
+            await setChosenTicket({ type, totalPrice: chosenTicketAmount * price, quantity: chosenTicketAmount, eventId });
         }
     }
 

@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
+import { PaymentForm } from '../../payment/pament-form/payment-form';
+import { PaymentDetails } from '../../payment/payment-details/payment-details';
+import { UserBar } from '../../user-bar/user-bar';
+import { UserPageProps } from '../../../types';
+import './payment.scss';
+import Box from '@mui/material/Box';
 
-export const Payment: React.FC = () => {
+export const Payment: React.FC<UserPageProps> = (navigation) => {
 
     //userSpace
     return (
-        <div>
-            <h1>Payment</h1>
-        </div>
+        <Box>
+            <Box className='payment-page'>
+                <UserBar />
+                <Box className='payment-container'>
+                    <PaymentForm />
+                    <PaymentDetails />
+                </Box>
+            </Box>
+        </Box>
     )
 };
