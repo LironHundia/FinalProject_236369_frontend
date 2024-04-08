@@ -15,7 +15,7 @@ export const PaymentDetails: React.FC = () => {
             </Typography>
 
             <Typography className="payment-details-field" gutterBottom>
-                {userContext?.reservation!.quantity} x {userContext?.reservation!.type} Seats
+                {userContext?.reservation!.quantity} x {userContext?.reservation!.ticketType} Seats
             </Typography>
 
             <Typography className="payment-details-field" gutterBottom>

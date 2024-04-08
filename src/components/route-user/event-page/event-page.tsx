@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { EventApi } from '../../../api/eventApi';
-import { UserPageProps, TicketToPurchase } from '../../../types';
+import { UserPageProps, TicketToPurchase, APIStatus } from '../../../types';
 import { CommentSection } from '../../comment-components/comment-section/comment-section';
 import { UserContext } from '../route-user';
 import { Box } from '@mui/material';
@@ -20,13 +20,17 @@ export const EventPage: React.FC<UserPageProps> = (navigation) => {
     React.useEffect(() => {
         const secureTickets = async () => {
             try {
-                //const res = await EventApi.secureTickets(chosenTicket);
+                const res = await EventApi.secureTickets(chosenTicket!);
                 //TODO: set 2 min timer
-                userContext?.setReservation(chosenTicket);
+                await userContext?.setReservation(chosenTicket);
                 navigation.navigateToPaymentPage();
             }
             catch (e) {
+                if(e as APIStatus === APIStatus.BadRequest) {
+                    setErrorMessage('Bad order: Not enough tickets available in this category');
+                }
                 setErrorMessage('Failed to secure tickets, please try again');
+
             }
         }
         //need to create purchase request, secure tickets and navigate to payment page

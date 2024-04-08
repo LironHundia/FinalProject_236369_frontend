@@ -25,8 +25,8 @@ export const TicketSelector: React.FC<TicketSelectorProps> = ({ availableAmount,
     return (
         <Box className="chooseTicketAmountContainer">
             <Box className="chooseTicketAmountButtons">
-                <Button className="amount-button" onClick={incrementTickets} disabled={chosenTicketAmount === availableAmount}>+</Button>
-                <Button className="amount-button" onClick={decrementTickets} disabled={chosenTicketAmount === 1}>-</Button>
+                <Button className="amount-button" onClick={incrementTickets} disabled={chosenTicketAmount === availableAmount || availableAmount===0}>+</Button>
+                <Button className="amount-button" onClick={decrementTickets} disabled={chosenTicketAmount === 1 || availableAmount===0}>-</Button>
             </Box>
             <Box className="chosenAmount">{chosenTicketAmount}</Box>
         </Box>

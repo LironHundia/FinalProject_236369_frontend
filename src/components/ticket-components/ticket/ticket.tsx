@@ -3,6 +3,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { TicketStruct, TicketToPurchase } from '../../../types';
 import { TicketSelector } from '../ticket-amount-selector/ticket-amount-selector';
 import { GeneralContext } from '../../main/main-page';
+import SoldOutImg from '../../../additionals/SoldOut_red.png';
 import './ticket.scss';
 
 export interface TicketProps {
@@ -19,7 +20,7 @@ export const Ticket: React.FC<TicketProps> = ({ ticket, eventId, setChosenTicket
 
     const handleBuyNow = async () => {
         if (setChosenTicket) {
-            await setChosenTicket({ type, totalPrice: chosenTicketAmount * price, quantity: chosenTicketAmount, eventId });
+            await setChosenTicket({ ticketType: type, totalPrice: chosenTicketAmount * price, quantity: chosenTicketAmount, eventId });
         }
     }
 
@@ -35,9 +36,10 @@ export const Ticket: React.FC<TicketProps> = ({ ticket, eventId, setChosenTicket
                 <Box className="chooseTickets">
                     <Box className="chooseTicketAmount">
                         <TicketSelector availableAmount={availableQuantity} chosenTicketAmount={chosenTicketAmount} setChosenTicketAmount={setChosenTicketAmount} />
-                        <Button className="buyNowButton" onClick={handleBuyNow}>Buy Now!</Button>
+                        <Button className="buyNowButton" onClick={handleBuyNow} disabled={availableQuantity===0}>Buy Now!</Button>
                     </Box>
-                    <Typography className="totalPrice">Total Price: {chosenTicketAmount * price}$</Typography>
+                    {availableQuantity === 0 && <img className="soldOutImg" src={SoldOutImg} alt="Sold Out" />}
+                    {availableQuantity > 0 && <Typography className="totalPrice">Total Price: {chosenTicketAmount * price}$</Typography>}
                 </Box>
             }
         </Box>

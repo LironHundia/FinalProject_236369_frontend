@@ -50,10 +50,21 @@ export interface TicketStruct {
 }
 
 export interface TicketToPurchase {
-    type: string;
+    ticketType: string;
     totalPrice: number;
     quantity: number;
     eventId: string;
+}
+
+export interface PaymentReq {
+    eventId: string;
+    ticketType: string;
+    quantity: number;
+    cc: string;
+    holder: string;
+    cvv: string;
+    exp: string;    
+    charge: number;
 }
 
 export interface Event {

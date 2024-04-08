@@ -80,8 +80,6 @@ export const UserRoute: React.FC = () => {
     navigateToUserSpace: () => setUserPage('userSpace'),
   }
 
-  console.log('userPage:', userPage)
-  console.log('userEvent:', userEvent)
 
   if (userPage === 'catalog') {
     return (
