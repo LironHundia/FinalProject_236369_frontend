@@ -8,25 +8,20 @@ export const PaymentDetails: React.FC = () => {
     const userContext = React.useContext(UserContext);
 
     return (
-        <Box className="payment-summary">
-            <Typography className="payment-summary-header" gutterBottom>
-                Order Summary:
+        <Box className="payment-details-container">
+
+            <Typography className="payment-details-field" gutterBottom>
+                {userContext?.userEvent!.name}
             </Typography>
-            <Box className="payment-summary-container">
 
-                <Typography className="payment-summary-field" gutterBottom>
-                    {userContext?.userEvent!.name}
-                </Typography>
+            <Typography className="payment-details-field" gutterBottom>
+                {userContext?.reservation!.quantity} x {userContext?.reservation!.type} Seats
+            </Typography>
 
-                <Typography className="payment-summary-field" gutterBottom>
-                    {userContext?.reservation!.quantity} x {userContext?.reservation!.type} Seats
-                </Typography>
+            <Typography className="payment-details-field" gutterBottom>
+                Total: {userContext?.reservation!.totalPrice}$
+            </Typography>
 
-                <Typography className="payment-summary-field" gutterBottom>
-                    Total: {userContext?.reservation!.totalPrice} $
-                </Typography>
-
-            </Box>
         </Box>
     );
 }

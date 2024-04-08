@@ -5,7 +5,6 @@ import { Loader } from '../loader/loader';
 import { EventPage } from './event-page/event-page';
 import { Payment } from './payment/payment';
 import { UserSpace } from './user-space/user-space';
-import { Typography } from '@mui/material';
 
 interface UserContext {
   setUserPage: (value: 'catalog' | 'eventPage' | 'payment' | 'userSpace') => void;

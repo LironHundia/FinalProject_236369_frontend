@@ -69,3 +69,10 @@ export interface Event {
     location?: string;
     lowestPrice?: number;
 }
+
+export interface PaymentFormError {
+    cardHolder: string;
+    cardNumber: string;
+    expDate: string;
+    cvv: string;
+}

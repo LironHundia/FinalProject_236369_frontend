@@ -1,4 +1,5 @@
 import * as constants from './consts';
+import { PaymentFormError } from './types';
 
 export function dateToString(date: Date): string {
     return `${String(date.getUTCDate()).padStart(2, '0')}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${date.getUTCFullYear()}`;
@@ -29,4 +30,44 @@ export function formatDate(date: Date) {
     const year = date.getFullYear();
   
     return day + "." + month + "." + year;
+}
+
+export function validatePaymentForm(cardHolder: string, cardNumber: string, expDate: string, cvv: string) : PaymentFormError
+{
+    const newErrors: PaymentFormError = {
+        cardHolder: '',
+        cardNumber: '',
+        expDate: '',
+        cvv: ''
+    };
+
+    // Validate card holder name (letters only)
+    if (!/^[a-zA-Z\s]+$/.test(cardHolder)) {
+        newErrors.cardHolder = 'Card holder name must contain letters only';
+    }
+
+    // Validate card number (exactly 16 digits)
+    if (!/^\d{16}$/.test(cardNumber)) {
+        newErrors.cardNumber = 'Card number must be exactly 16 digits';
+    }
+
+    // Validate expiration date (format MM/YY and later than today)
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expDate)) {
+        newErrors.expDate = 'Expiration date must be in the format MM/YY, with valid MM';
+    }
+    else {
+        const currentDate = new Date();
+        const [month, year] = expDate.split('/');
+        const expDateObj = new Date(+`20${year}`, parseInt(month) - 1); // Subtract 1 from month (zero-based)
+        if (expDateObj <= currentDate) {
+            newErrors.expDate = 'Expiration date must be later than today';
+        }
+    }
+
+    // Validate CVV (3 digits)
+    if (!/^\d{3}$/.test(cvv)) {
+        newErrors.cvv = 'CVV must be 3 digits';
+    }
+
+    return newErrors;
 }
