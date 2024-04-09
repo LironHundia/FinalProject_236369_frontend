@@ -124,6 +124,9 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
         <Box mb={2}><TextField name="endDate" value={formData.endDate} onChange={handleTextChange} label="End Date" type="datetime-local" required fullWidth InputLabelProps={{ shrink: true }} /></Box>
         </Grid>
         </Grid>
+        <Box display="flex" justifyContent="center" mt={2}>
+          <Button type="submit" variant="contained" color="primary">Publish Event</Button>
+        </Box>
         </form>
         <div className='tickets'>
         {formData.tickets.map((ticket, i) => (
@@ -133,9 +136,8 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
         <Box className="total"  mt={2}>
           Total Tickets: {formData.totalAvailableTickets ? formData.totalAvailableTickets.toLocaleString() : '0'}
         </Box>
-        <Box display="flex" justifyContent="center" mt={2}>
-          <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>Publish Event</Button>
-        </Box>
+        
+       
     </Container>
 
     </div>

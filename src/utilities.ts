@@ -111,5 +111,5 @@ export function createValidation(event: CreatedEvent) : boolean {
     if (!ticketsCheck(event.tickets))
         check = false;
 
-    return true;
+    return check;
 }
