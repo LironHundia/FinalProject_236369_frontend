@@ -27,7 +27,7 @@ export const Ticket: React.FC<TicketProps> = ({ ticket, eventId, setChosenTicket
     return (
         <Box className="ticketDetailsContainer">
             <Box className="header">
-                <h3 className="ticketType">{type} Seats</h3>
+                <h3 className="ticketType_eventPate">{type} Seats</h3>
                 <Box className="ticketPrice">Price: {price}$</Box>
                 {generalContext?.route === "user" && <Box className="quantity">{availableQuantity} tickets left!</Box>}
                 {generalContext?.route === "backoffice" && <Box className="quantity_backoffice">{availableQuantity}/{initialQuantity}</Box>}
