@@ -11,6 +11,7 @@ interface BackofficeContext {
   setBackofficePage: (value: 'catalog' | 'eventPage' | 'createEvent') => void;
   backofficeEvent: Event | null;
   setBackofficeEvent: (value: Event | null) => void;
+  navigateToBOCreateEventPage: () => void;
 }
 
 export const BOContext = React.createContext<BackofficeContext | null>(null)
@@ -37,21 +38,21 @@ export const BackofficeRoute: React.FC = () => {
 
   if (backofficePage === 'catalog') {
     return (
-      <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent }}>
+      <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent, navigateToBOCreateEventPage: backofficePageProps.navigateToBOCreateEventPage }}>
         <Catalog navigateToCatalogPage={backofficePageProps.navigateToBOCatalogPage} navigateToEventPage={backofficePageProps.navigateToBOEventPage}/>
       </BOContext.Provider>
     )
   }
   if (backofficePage === 'eventPage') {
     return (
-      <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent }}>
+      <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent, navigateToBOCreateEventPage: backofficePageProps.navigateToBOCreateEventPage  }}>
         <BOEventPage {...backofficePageProps}/>
       </BOContext.Provider>
     )
   }
   //createEvent
   return (
-    <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent }}>
+    <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent, navigateToBOCreateEventPage: backofficePageProps.navigateToBOCreateEventPage  }}>
       <BOCreateEvent />
     </BOContext.Provider>
   )

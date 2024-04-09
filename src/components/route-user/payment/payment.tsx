@@ -34,7 +34,7 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
     const purchaseTickets = async (paymentReq: PaymentReq) => {
         try {
             const res = await EventApi.purchaseTickets(paymentReq);
-            console.log("seccess!");
+            console.log("success!");
         }
         catch (e) {
             console.log("fail!")
@@ -59,7 +59,6 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
                 charge: userContext?.reservation?.totalPrice!
             };
 
-            console.log("nade req")
             purchaseTickets(paymentReq);
         }
     };

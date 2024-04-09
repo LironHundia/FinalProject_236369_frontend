@@ -12,6 +12,7 @@ import Logout from '@mui/icons-material/Logout';
 import Button from '@mui/material/Button';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import { BOContext } from '../route-backoffice/route-backoffice';
 import { UserContext } from '../route-user/route-user'
 import { GeneralContext } from '../main/main-page';
 import {hasPermission} from '../../utilities';
@@ -23,6 +24,7 @@ interface UserBarProps {
 }
 
 export const UserBar: React.FC<UserBarProps> = ({onGoBack}) => {
+    const boContext = React.useContext(BOContext);
     const userContext = React.useContext(UserContext);
     const generalContext = React.useContext(GeneralContext);
 
@@ -57,7 +59,7 @@ export const UserBar: React.FC<UserBarProps> = ({onGoBack}) => {
                 {generalContext?.route === "backoffice" &&
                     <Button
                         variant='contained'
-                        onClick={() => window.history.back()}
+                        onClick={() => boContext?.navigateToBOCreateEventPage()}
                     > Add New Event
                     </Button>
                 }
