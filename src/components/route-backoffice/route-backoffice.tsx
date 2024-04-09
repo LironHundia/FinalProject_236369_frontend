@@ -53,7 +53,7 @@ export const BackofficeRoute: React.FC = () => {
   //createEvent
   return (
     <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent, navigateToBOCreateEventPage: backofficePageProps.navigateToBOCreateEventPage  }}>
-      <BOCreateEvent />
+      <BOCreateEvent navigateToBOCatalogPage={backofficePageProps.navigateToBOCatalogPage}/>
     </BOContext.Provider>
   )
 };

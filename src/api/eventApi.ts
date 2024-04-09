@@ -1,4 +1,4 @@
-import { APIStatus, CommentProps, Event, TicketToPurchase, PaymentReq } from "../types";
+import { APIStatus, CommentProps, Event, CreatedEvent, TicketToPurchase, PaymentReq } from "../types";
 import { BackendServer } from "../consts";
 import axios, {AxiosError} from "axios";
 import { dateAndTimeToString } from "../utilities";
@@ -99,7 +99,17 @@ export const EventApi = {
         } catch (e) {
             throw handleError(e);
         }
-    }
+    },
+
+    addNewEvent: async (newEvent: CreatedEvent): Promise<APIStatus> => {
+        try {
+            await axios.post(BackendServer.concat('api/event'), 
+            { newEvent },{ withCredentials: true});
+            return APIStatus.Success;
+        } catch (e) {
+            throw handleError(e);
+        }
+    },
 };
 
 const handleError = async (e: unknown): Promise<APIStatus> => {

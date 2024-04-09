@@ -1,6 +1,10 @@
+.user-bar{
+  display: flex;
+  justify-content: center;
+}
+
 .catalog {
     margin: 100px 50px;
-
   }
 
 .events-grid {
