@@ -71,4 +71,17 @@ export interface Event {
 }
 
 
+export interface CreatedEvent {
+    name: string;
+    category: string;
+    description: string;
+    organizer: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+    imageUrl?: string;
+    tickets: TicketStruct[];
+    totalAvailableTickets?: number;
+}
+
 export const categories = ['Charity Event', 'Concert', 'Conference', 'Convention', 'Exhibition', 'Festival', 'Product Launch', 'Sport Event'];

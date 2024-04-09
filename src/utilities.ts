@@ -1,5 +1,5 @@
 import * as constants from './consts';
-import { Event, TicketStruct } from './types';
+import { CreatedEvent, TicketStruct } from './types';
 
 export function dateToString(date: Date): string {
     return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
@@ -33,6 +33,24 @@ export function formatDate(date: Date) {
 }
 
 
+
+const requiredCheck = (event: CreatedEvent): boolean => {
+    const requiredFields = ['name', 'category', 'description', 'organizer', 'location', 'startDate', 'endDate'];
+    const missingFields: string[] = [];
+
+    for (const field of requiredFields) {
+        if (event[field as keyof CreatedEvent] === '') {
+            missingFields.push(field);
+        }
+    }
+
+    if (missingFields.length > 0) {
+        alert(`Missing required fields: ${missingFields.join(', ')}`);
+        return false;
+    }
+
+    return true;
+};
 
 
 const dateCheck = (startDate: string, endDate: string) => {
@@ -80,15 +98,18 @@ const sameType = (tickets: TicketStruct[]): boolean => {
         return false;
     }
     return true;
-
 };
 
-export function createValidation(event: Event) : boolean {
-    if (!dateCheck(event.startDate, event.endDate)) 
-        return false;
-    if (!ticketsCheck(event.tickets))
-        return false;
 
+
+export function createValidation(event: CreatedEvent) : boolean {
+    let check  =true;
+    if (!requiredCheck(event)) 
+        check = false;
+    if (!dateCheck(event.startDate, event.endDate)) 
+        check = false;
+    if (!ticketsCheck(event.tickets))
+        check = false;
 
     return true;
 }

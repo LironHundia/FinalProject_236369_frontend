@@ -5,9 +5,10 @@ import './ticket-type.css';
 interface TicketTypeProps {
     index: number;
     onTicketUpdate: (index: number, newTicket: TicketStruct) => void;  
+    onQuanChange: () => void;
 }
 
-const TicketType: React.FC<TicketTypeProps> = ({ index, onTicketUpdate }) => {
+const TicketType: React.FC<TicketTypeProps> = ({ index, onTicketUpdate, onQuanChange }) => {
      const place = useRef(index);
     useEffect(() => {
       if (place.current === null) {
@@ -24,7 +25,8 @@ const TicketType: React.FC<TicketTypeProps> = ({ index, onTicketUpdate }) => {
       if ( Number(value) < 0) return;
     let updatedTicket = {...ticket};
     if (name === 'initialQuantity') {
-      updatedTicket = { ...updatedTicket, [name]: Number(value), availableQuantity: Number(value) };} 
+      updatedTicket = { ...updatedTicket, [name]: Number(value), availableQuantity: Number(value) };
+      onQuanChange();} 
     else if (name === 'price') {
         updatedTicket = { ...updatedTicket, [name]: Number(value) };} 
     else {

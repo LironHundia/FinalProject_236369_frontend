@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import {  Select, MenuItem, TextField, Button, Container, FormControl, InputLabel, Grid, Box} from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import {UserBar} from '../../user-bar/user-bar';
-import {categories, TicketStruct, Event} from '../../../types';
+import {categories, TicketStruct, CreatedEvent} from '../../../types';
 import TicketType from './ticket-type/ticket-type';
 import {createValidation} from '../../../utilities';
+import {EventApi} from '../../../api/eventApi';
+import { ErrorMessage } from '../../error/error';
 import './BO-create-event.css';
 
 const defaultTicket: TicketStruct = { type: '', price: 0, initialQuantity: 0, availableQuantity: 0 };
@@ -13,7 +15,7 @@ interface CreateEventProps {
     navigateToBOCatalogPage: () => void;
   }
 
-  const defaultEvent: Event = {
+  const defaultEvent: CreatedEvent = {
     name: '',
     category: '',
     description: '',
@@ -28,8 +30,13 @@ interface CreateEventProps {
   
 
 export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPage}) => {
-    const [formData, setFormData] = useState<Event>(defaultEvent);
+    const [formData, setFormData] = useState<CreatedEvent>(defaultEvent);
   const [index, setIndex] = useState(0);
+  const [quantityChange, setQuantityChange] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+
+    const triggerQuantityChange = () => setQuantityChange(prevState => !prevState);
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -63,22 +70,25 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
   };
 
 
-// only for debugging
-//   useEffect(() => {
-//     console.log(formData);
-//   }, [formData.tickets]);
+  useEffect(() => {
+    const total = formData.tickets.reduce((sum, ticket) => sum + ticket.initialQuantity, 0);
+    setFormData(prevState => ({ ...prevState, totalAvailableTickets: total }));
+    console.log(formData);
+  }, [quantityChange]);
 
 
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // TODO: Add logic to submit the form data to your database
     if (!createValidation(formData)) {
         return;
     }
-
-
-
+    try{
+    await EventApi.addNewEvent(formData);}
+    catch(e){
+        setErrorMessage("error in adding event");
+    }
+    navigateToBOCatalogPage();
   };
 
 
@@ -88,6 +98,7 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
     <div className="user-bar">
     <UserBar onGoBack={navigateToBOCatalogPage}/>
     </div>
+    <br />{errorMessage && <ErrorMessage message={errorMessage} />}
     <Container className="form" maxWidth="xl">
       <form onSubmit={handleSubmit}>
       <Grid container spacing={4} justifyContent="center">
@@ -116,11 +127,14 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
         </form>
         <div className='tickets'>
         {formData.tickets.map((ticket, i) => (
-        <TicketType key={i} index={i} onTicketUpdate={handleTicketUpdate} />))}        
+        <TicketType key={i} index={i} onTicketUpdate={handleTicketUpdate} onQuanChange={triggerQuantityChange}/>))}        
         <button className="addButton" onClick={handleAddTicket}>+<br />add new type</button>
         </div>
+        <Box className="total"  mt={2}>
+          Total Tickets: {formData.totalAvailableTickets ? formData.totalAvailableTickets.toLocaleString() : '0'}
+        </Box>
         <Box display="flex" justifyContent="center" mt={2}>
-          <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>Create Event</Button>
+          <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>Publish Event</Button>
         </Box>
     </Container>
 

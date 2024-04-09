@@ -28,3 +28,11 @@
     color: #007BFF; 
     font-size: 20px;
 }
+
+.total
+{
+    display: flex;
+    justify-Content: center;
+    font-size: 20px;
+    color: #FF0000;
+}
