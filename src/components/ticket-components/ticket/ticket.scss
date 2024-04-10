@@ -37,6 +37,7 @@
         justify-content: space-between;
         align-items: center;
         margin-top: 5px;
+        width: 250px;
 
         .chooseTicketAmount {
             display: flex;
@@ -67,10 +68,15 @@
             font-size: 1.5em;
             margin-top: 10px;
         }
+
+        .soldOutImg {
+            width: 70%; // or whatever size you want
+            height: 46px;
+        }
     }
 }
 
-.ticketType {
+.ticketType_eventPate {
     font-size: 1.7em;
     font-weight: bold;
     margin: 20px

@@ -12,6 +12,7 @@ import Logout from '@mui/icons-material/Logout';
 import Button from '@mui/material/Button';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import { BOContext } from '../route-backoffice/route-backoffice';
 import { UserContext } from '../route-user/route-user'
 import { GeneralContext } from '../main/main-page';
 import {hasPermission} from '../../utilities';
@@ -19,10 +20,11 @@ import * as constants from '../../consts';
 import './user-bar.scss';
 
 interface UserBarProps {
-    onGoBack: () => void;
+    onGoBack?: () => void;
 }
 
 export const UserBar: React.FC<UserBarProps> = ({onGoBack}) => {
+    const boContext = React.useContext(BOContext);
     const userContext = React.useContext(UserContext);
     const generalContext = React.useContext(GeneralContext);
 
@@ -53,17 +55,18 @@ export const UserBar: React.FC<UserBarProps> = ({onGoBack}) => {
                     <Typography sx={{ ml: 1, fontSize: '1.2em', color: 'gray' }}>{generalContext?.username}</Typography>
                 </Box>
                 {generalContext?.route === "user" && userContext?.nextEvent &&
-                    <Typography sx={{ minWidth: 100 }}>Next Event: {userContext?.nextEvent.name} ({userContext?.nextEvent.start_date})</Typography>}
+                    <Typography sx={{ minWidth: 100 }}>Next Event: {userContext?.nextEvent.name} ({userContext?.nextEvent.startDate})</Typography>}
                 {generalContext?.route === "backoffice" &&
                     <Button
                         variant='contained'
-                        onClick={() => window.history.back()}
+                        onClick={() => boContext?.navigateToBOCreateEventPage()}
                     > Add New Event
                     </Button>
                 }
                 <Button
                     startIcon={<ArrowBack />}
-                    onClick={()=>onGoBack()}
+                    onClick={()=>onGoBack!()}
+                    disabled={onGoBack === undefined}
                 > Go Back
                 </Button>
             </Box>

@@ -35,8 +35,8 @@ export const UpdateEventTime: React.FC<DateEventFormProps> = ({ startDate, endDa
         const res = await EventApi.updateEventDate(userContext?.userEvent!._id!, currStartDate!, currEndDate!);
         if (res === APIStatus.Success) {
           let newEvent = userContext?.userEvent!;
-          newEvent!.start_date = dateAndTimeToString(currStartDate!);
-          newEvent!.end_date = dateAndTimeToString(currEndDate!);
+          newEvent!.startDate = dateAndTimeToString(currStartDate!);
+          newEvent!.endDate = dateAndTimeToString(currEndDate!);
           userContext?.setUserEvent(newEvent);
         }
       } catch (e) {

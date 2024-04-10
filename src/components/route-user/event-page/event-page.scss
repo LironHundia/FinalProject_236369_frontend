@@ -10,26 +10,25 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    width: max-content;
-    min-width: 80%;
+    width: 80%;
     margin-bottom: 1rem;
     margin-top: 1rem;
 
     .eventDetails
     {
-        width: 1300px;
+        //width: 1300px;
         max-width: 80%;
     }
 
     .ticketsDetails
     {
         margin-top: 1rem;
-        width: 1300px;
+        //width: 1300px;
         max-width: 80%;
     }
 
     .commentSection {
-        width: 1300px;
+        //width: 1300px;
         max-width: 80%;
     }
 }
