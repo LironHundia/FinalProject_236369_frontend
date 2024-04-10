@@ -49,6 +49,10 @@ export interface TicketStruct {
     availableQuantity: number;
 }
 
+export const defaultTicketStruct: TicketStruct = 
+{ type: '', price: 0, initialQuantity: 0, availableQuantity: 0 };
+
+
 export interface TicketToPurchase {
     ticketType: string;
     totalPrice: number;
@@ -88,6 +92,8 @@ export interface PaymentFormError {
     cvv: string;
 }
 
+export const categories = ['Charity Event', 'Concert', 'Conference', 
+'Convention', 'Exhibition', 'Festival', 'Product Launch', 'Sport Event'];
 
 export interface CreatedEvent {
     name: string;
@@ -95,11 +101,23 @@ export interface CreatedEvent {
     description: string;
     organizer: string;
     location: string;
-    startDate: string;
-    endDate: string;
+    startDate: Date | null;
+    endDate: Date | null;
     imageUrl?: string;
     tickets: TicketStruct[];
     totalAvailableTickets?: number;
 }
 
-export const categories = ['Charity Event', 'Concert', 'Conference', 'Convention', 'Exhibition', 'Festival', 'Product Launch', 'Sport Event'];
+export const defaultCreatedEvent: CreatedEvent = {
+    name: '',
+    category: '',
+    description: '',
+    organizer: '',
+    location: '',
+    imageUrl: '',
+    startDate: null,
+    endDate: null,
+    tickets: [defaultTicketStruct],
+    totalAvailableTickets: 0,
+};
+

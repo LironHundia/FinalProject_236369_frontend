@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TicketStruct } from '../../../../types';
+import { TicketStruct, defaultTicketStruct } from '../../../../types';
 import './ticket-type.css';
 
 interface TicketTypeProps {
@@ -16,7 +16,7 @@ const TicketType: React.FC<TicketTypeProps> = ({ index, onTicketUpdate, onQuanCh
       }
     }, []);
 
-    const [ticket, setTicket] = useState<TicketStruct>({ type: '', price: 0, initialQuantity: 0, availableQuantity: 0});
+    const [ticket, setTicket] = useState<TicketStruct>(defaultTicketStruct);
   
  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,11 +39,9 @@ const TicketType: React.FC<TicketTypeProps> = ({ index, onTicketUpdate, onQuanCh
 
   return (
     <div className="ticketType">
-        <form >
           <input name="type" value={ticket.type} onChange={handleChange} placeholder="Type" required/>
-          <input name="price" value={ticket.price === 0 ? '' : ticket.price} onChange={handleChange} placeholder="Price (USD)" type="number" min="1"/>
-        <input name="initialQuantity" value={ticket.initialQuantity === 0 ? '' : ticket.initialQuantity} onChange={handleChange} placeholder="Total tickets" type="number" min="1" />
-        </form>
+          <input name="price" value={ticket.price === 0 ? '' : ticket.price} onChange={handleChange} placeholder="Price (USD)" type="number" min="1" required/>
+        <input name="initialQuantity" value={ticket.initialQuantity === 0 ? '' : ticket.initialQuantity} onChange={handleChange} placeholder="Total tickets" type="number" min="1" required/>
     </div>
   );
 };
