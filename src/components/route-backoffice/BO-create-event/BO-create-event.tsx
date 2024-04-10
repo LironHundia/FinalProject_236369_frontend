@@ -10,7 +10,6 @@ import {UserBar} from '../../user-bar/user-bar';
 import {categories, CreatedEvent, defaultCreatedEvent, 
     TicketStruct, defaultTicketStruct} from '../../../types';
 import TicketType from './ticket-type/ticket-type';
-import {sameType} from '../../../utilities';
 import {MAX_TICKETS_CATEGORIES} from '../../../consts';
 import {EventApi} from '../../../api/eventApi';
 import { ErrorMessage } from '../../error/error';
@@ -23,12 +22,15 @@ interface CreateEventProps {
 
 export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPage}) => {
     const [formData, setFormData] = useState<CreatedEvent>(defaultCreatedEvent);
-  const [index, setIndex] = useState(0);
-  const [quantityChange, setQuantityChange] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [index, setIndex] = useState(0); // Indexes to differentiate tickets type
+  const [quantityChange, setQuantityChange] = useState(false); // To alert that the amount of tickets has changed in one of the types
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [ticketsError, setTicketsError] = useState<string | null>(null);
 
     const triggerQuantityChange = () => setQuantityChange(prevState => !prevState);
 
+
+    //If quantity changes at one of the types, update the total tickets
     useEffect(() => {
         const total = formData.tickets.reduce((sum, ticket) => sum + ticket.initialQuantity, 0);
         setFormData(prevState => ({ ...prevState, totalAvailableTickets: total }));
@@ -36,14 +38,16 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
       }, [quantityChange]);
       
 
-
+//Handle TextField changes
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
     });
   };
-  
+
+
+  //Handle DateTimePicker changes
   const handleDateChange = (dateType: 'startDate' | 'endDate', value: Dayjs | null) => {
     if (value) {
       setFormData({
@@ -53,6 +57,8 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
     }
   };
 
+
+    //Handle Select changes
   const handleSelectChange = (event:  SelectChangeEvent<string>) => {
     setFormData({
       ...formData,
@@ -60,6 +66,7 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
     });
   };
 
+  //Add one more TicketType component
   const handleAddTicket = () => {
     const newTicket: TicketStruct = defaultTicketStruct;
     setFormData({
@@ -70,25 +77,47 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
   };
   
 
+  //Update the index-ed TicketStruct in the tickets array
   const handleTicketUpdate = (index: number, ticket: TicketStruct) => {
     setFormData({
       ...formData,
       tickets: formData.tickets.map((t, i) => i === index ? ticket : t),
     });
   };
+  
+  
+  function checkForDuplicateTypes(tickets: TicketStruct[]): boolean {
+    let uniqueTypes = new Set();
+    let duplicateTypes = [];
+
+    for (let ticket of tickets) {
+        if (uniqueTypes.has(ticket.type)) {
+            duplicateTypes.push(ticket.type);
+        } else {
+            uniqueTypes.add(ticket.type);
+        }
+    }
+
+    if (duplicateTypes.length > 0) {
+        setTicketsError(`Invalid form. The next types are duplicated: ${duplicateTypes.join(', ')}`);
+        return true;
+    } else {
+        setTicketsError(null);
+        return false;
+    }
+}
 
 
 
-
+// handle the form submission
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (sameType(formData.tickets)) {
-        return;
-    }
+    if (checkForDuplicateTypes(formData.tickets))
+      return;
     try{
     await EventApi.addNewEvent(formData);}
     catch(e){
-        setErrorMessage("error in adding event");
+      setServerError("error in adding event");
     }
     navigateToBOCatalogPage();
   };
@@ -100,7 +129,7 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
     <div className="user-bar">
     <UserBar onGoBack={navigateToBOCatalogPage}/>
     </div>
-    <br />{errorMessage && <ErrorMessage message={errorMessage} />}
+    <br />{serverError && <ErrorMessage message={serverError} />}
     <Container className="form" maxWidth="xl">
       <form onSubmit={handleSubmit}>
       <Grid container spacing={4} justifyContent="center">
@@ -130,6 +159,7 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
         </LocalizationProvider>
         </Grid>
         </Grid>
+        <br />{ticketsError && <ErrorMessage message={ticketsError} />}
         <div className='tickets'>
         {formData.tickets.map((ticket, i) => (
         <TicketType key={i} index={i} onTicketUpdate={handleTicketUpdate} onQuanChange={triggerQuantityChange}/>))}        

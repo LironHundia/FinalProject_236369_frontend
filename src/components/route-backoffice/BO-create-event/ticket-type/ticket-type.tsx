@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { TicketStruct, defaultTicketStruct } from '../../../../types';
 import './ticket-type.css';
 
+//State and functions that sent from BOCreateEvent
 interface TicketTypeProps {
     index: number;
     onTicketUpdate: (index: number, newTicket: TicketStruct) => void;  
@@ -9,6 +10,8 @@ interface TicketTypeProps {
 }
 
 const TicketType: React.FC<TicketTypeProps> = ({ index, onTicketUpdate, onQuanChange }) => {
+
+  //One-time hook, sets for the TicketType component its index
      const place = useRef(index);
     useEffect(() => {
       if (place.current === null) {
@@ -19,6 +22,7 @@ const TicketType: React.FC<TicketTypeProps> = ({ index, onTicketUpdate, onQuanCh
     const [ticket, setTicket] = useState<TicketStruct>(defaultTicketStruct);
   
  
+    //Handle the input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === 'initialQuantity' || name === 'price') 

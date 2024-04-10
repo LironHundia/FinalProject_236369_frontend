@@ -1,5 +1,5 @@
 import * as constants from './consts';
-import {TicketStruct, PaymentFormError } from './types';
+import { PaymentFormError } from './types';
 
 export function dateToString(date: Date): string {
     return `${String(date.getUTCDate()).padStart(2, '0')}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${date.getUTCFullYear()}`;
@@ -72,21 +72,3 @@ export function validatePaymentForm(cardHolder: string, cardNumber: string, expD
     return newErrors;
 }
 
-
-
-
-export const sameType = (tickets: TicketStruct[]): boolean => {
-    const duplicateTypes: string[] = [];
-
-    tickets.forEach((ticket, index) => {
-        if (tickets.slice(index + 1).some(t => t.type === ticket.type)) {
-            duplicateTypes.push(ticket.type);
-        }
-    });
-
-    if (duplicateTypes.length > 0) {
-        alert(`Duplicate types found: ${Array.from(new Set(duplicateTypes)).join(', ')}`);
-        return true;
-    }
-    return false;
-};
