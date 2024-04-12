@@ -34,7 +34,6 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
     useEffect(() => {
         const total = formData.tickets.reduce((sum, ticket) => sum + ticket.initialQuantity, 0);
         setFormData(prevState => ({ ...prevState, totalAvailableTickets: total }));
-        console.log(formData);
       }, [quantityChange]);
       
 
@@ -52,7 +51,7 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
     if (value) {
       setFormData({
         ...formData,
-        [dateType]: value.toDate(),
+        [dateType]: value.toDate().toISOString() ,  
       });
     }
   };
@@ -86,6 +85,7 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
   };
   
   
+  //Check if there are duplicated types in the tickets array
   function checkForDuplicateTypes(tickets: TicketStruct[]): boolean {
     let uniqueTypes = new Set();
     let duplicateTypes = [];
@@ -152,9 +152,9 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
         <Grid item xl={6} lg={5}>
         <Box mb={2}><TextField name="imageUrl" value={formData.imageUrl} onChange={handleTextChange} label="Img URL" fullWidth /></Box>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Box mb={2}> <DateTimePicker name="startDate" value={dayjs(formData.startDate)} onChange={(value) => handleDateChange('startDate', value)} label="Start Date"  
+        <Box mb={2}> <DateTimePicker name="startDate" value={dayjs(formData.startDate)} onAccept ={(value) => handleDateChange('startDate', value)} label="Start Date"  
         minDateTime={ dayjs(new Date())} slotProps={{ textField: { required: true, fullWidth: true }}}  /></Box>
-         <Box mb={2}> <DateTimePicker name="endDate" value={dayjs(formData.endDate)} onChange={(value) => handleDateChange('endDate', value)} label="End Date"  
+         <Box mb={2}> <DateTimePicker name="endDate" value={dayjs(formData.endDate)} onAccept ={(value) => handleDateChange('endDate', value)} label="End Date"  
         minDateTime={ dayjs(formData.startDate).add(1, 'hour')} slotProps={{ textField: { required: true, fullWidth: true }}}  /></Box>
         </LocalizationProvider>
         </Grid>
