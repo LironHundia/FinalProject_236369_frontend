@@ -82,11 +82,11 @@ export const EventApi = {
             throw handleError(e);
         }
     },
-    purchaseTickets: async (reservation: PaymentReq): Promise<APIStatus> => {
+    purchaseTickets: async (reservation: PaymentReq): Promise<string> => {
         try {
-            await axios.post(BackendServer.concat('api/user/buy'), 
+            const res = await axios.post(BackendServer.concat('api/user/buy'), 
             { ...reservation },{ withCredentials: true});
-            return APIStatus.Success;
+            return res.data;
         } catch (e) {
             throw handleError(e);
         }
@@ -115,7 +115,6 @@ export const EventApi = {
 const handleError = async (e: unknown): Promise<APIStatus> => {
     // TODO: handle errors here, check status code and return the appropriate APIStatus
     const error = e as AxiosError;
-    console.log(error);
     if (error.response && error.response.status) {
       if (error.response.status === 400)
         return APIStatus.BadRequest;
