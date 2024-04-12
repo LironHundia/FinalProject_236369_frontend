@@ -24,6 +24,7 @@ export const CatalogEvent: React.FC<CatalogEventProps> = ({ className, event, na
   const generalContext = React.useContext(GeneralContext);
   const isManager = generalContext?.route == 'backoffice' ? true : false;
 
+  //Handle click on event card (whether it is a manager or a user)
   const handleClick = async () => {
     try {
       if (isManager) {

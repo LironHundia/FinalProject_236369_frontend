@@ -21,7 +21,7 @@ interface CreateEventProps {
   }
 
 export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPage}) => {
-    const [formData, setFormData] = useState<CreatedEvent>(defaultCreatedEvent);
+    const [formData, setFormData] = useState<CreatedEvent>(defaultCreatedEvent); // State to store the form data
   const [index, setIndex] = useState(0); // Indexes to differentiate tickets type
   const [quantityChange, setQuantityChange] = useState(false); // To alert that the amount of tickets has changed in one of the types
   const [serverError, setServerError] = useState<string | null>(null);

@@ -14,9 +14,9 @@ interface CatalogProps {
 }
 
 export const Catalog: React.FC<CatalogProps> = (navigate) => {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = React.useState(1);
+  const [events, setEvents] = useState<Event[]>([]); // State to store the events fetched from the API
+  const [hasMore, setHasMore] = useState(true); // State to check if there are more events to fetch (for the infinite scroll)
+  const [page, setPage] = React.useState(1); // State to keep track of the page number for the infinite scroll
 
   const generalContext = React.useContext(GeneralContext);
   const isManager = generalContext?.route == 'backoffice' ? true : false;
@@ -42,6 +42,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
   };
 
 
+  // Fetch events for the initial page
   useEffect(() => {
     const fetchInitialEvents = async () => {
       let data: Event[] = [];
