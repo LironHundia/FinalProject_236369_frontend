@@ -4,7 +4,9 @@
     padding: 15px;
     min-width: 50%;
     width: 100%;
-    white-space: pre-wrap;
+    white-space: normal;
+    //word-wrap: break-word;
+    overflow-wrap: break-word;
     font-family: 'Clibri', sans-serif;
     margin-bottom: 10px;
     margin-top: 10px;

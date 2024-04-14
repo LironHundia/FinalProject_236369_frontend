@@ -5,7 +5,7 @@ import { EventApi } from '../../../api/eventApi';
 import { ErrorMessage } from '../../error/error';
 import { CommentProps } from '../../../types'
 import { Comment } from '../comment/comment'
-import {CommentAddNew} from '../comment-add-new/comment-add-new';
+import { CommentAddNew } from '../comment-add-new/comment-add-new';
 import './comment-section.scss';
 
 interface Props {
@@ -18,6 +18,7 @@ export const CommentSection: React.FC<Props> = ({ eventId }) => {
     const [commentPage, setCommentPage] = React.useState<number>(0);
     const [comments, setComments] = React.useState<CommentProps[]>([]);
     const [commentCount, setCommentCount] = React.useState<Number>(0);
+    const [newComment, setNewCommet] = React.useState<boolean>(true);
 
     //get the number of comments for the event
     React.useEffect(() => {
@@ -38,8 +39,11 @@ export const CommentSection: React.FC<Props> = ({ eventId }) => {
         setIsLoading(true);
         const fetchComments = async () => {
             try {
-                const comments = await EventApi.getEventComments({ eventId, page: commentPage });
-                setComments(comments);
+                if (eventId && newComment) {
+                    const comments = await EventApi.getEventComments({ eventId, page: commentPage });
+                    setComments(comments);
+                    setNewCommet(false);
+                }
             } catch (e) {
                 setErrorMessage('Failed to load comments due to server error. please try again later.');
             } finally {
@@ -47,14 +51,14 @@ export const CommentSection: React.FC<Props> = ({ eventId }) => {
             }
         };
         fetchComments();
-    }, [eventId, commentPage]);
+    }, [eventId, newComment]);
 
     return (
         <Box className="commentsSectionContainer">
-            <CommentAddNew/>
+            <CommentAddNew setNewComment={setNewCommet} />
             <Box className="commentsContainer">
-                {isLoading && <Loader/>}
-                {errorMessage && <ErrorMessage message={errorMessage}/>}
+                {isLoading && <Loader />}
+                {errorMessage && <ErrorMessage message={errorMessage} />}
                 {!errorMessage && commentCount === 0 && <h2>No comments yet</h2>}
                 {commentCount !== 0 && comments.length > 0 && comments.map((comment, index) => <Comment key={index} className="commentItem" {...comment} />)}
             </Box>

@@ -160,9 +160,8 @@ export async function getUserNextEvent(username: string): Promise<NextEvent | nu
             console.log('No next event found for user');
             return null;
         }
-        const nextEvent = await EventApi.getEventById(nextOrder.eventId);
-        const date = dateToString(new Date(nextEvent.startDate));
-        return { eventId: nextOrder.eventId, eventName: nextEvent.name, startDate: date };
+        const date = dateToString(new Date(nextOrder.startDate));
+        return { eventId: nextOrder.eventId, eventName: nextOrder.eventName, startDate: date };
     } catch (e) {
         console.error("Found error in getUserNextEvent: ", e);
         return null;

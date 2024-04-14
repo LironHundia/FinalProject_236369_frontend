@@ -4,11 +4,14 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { EventApi } from '../../../api/eventApi';
 import { ErrorMessage } from '../../error/error';
-import CancelIcon from '@mui/icons-material/Cancel';
 import { GeneralContext } from '../../main/main-page';
 import { UserContext } from '../../route-user/route-user';
 
-export const CommentAddNew: React.FC = () => {
+interface CommentAddNewProps {
+    setNewComment: (value: boolean)=>void;
+}
+
+export const CommentAddNew: React.FC<CommentAddNewProps> = ({setNewComment}) => {
     const generalContext = React.useContext(GeneralContext);
     const userContext = React.useContext(UserContext);
 
@@ -37,6 +40,7 @@ export const CommentAddNew: React.FC = () => {
             await EventApi.addNewComment(eventId, comment);
             setComment('');
             setShowInput(false);
+            setNewComment(true);
         } catch (e) {
             setErrorMessage('Failed to add comment due to server error. please try again later.');
         }
