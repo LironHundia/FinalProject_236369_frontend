@@ -1,5 +1,5 @@
 import * as constants from './consts';
-import { CreatedEvent, TicketStruct, PaymentFormError, NextEvent, Event } from './types';
+import { PaymentFormError, NextEvent, Event } from './types';
 import { EventApi } from './api/eventApi';
 
 export function dateToString(date: Date): string {
@@ -73,85 +73,6 @@ export function validatePaymentForm(cardHolder: string, cardNumber: string, expD
 }
 
 
-
-const requiredCheck = (event: CreatedEvent): boolean => {
-    const requiredFields = ['name', 'category', 'description', 'organizer', 'location', 'startDate', 'endDate'];
-    const missingFields: string[] = [];
-
-    for (const field of requiredFields) {
-        if (event[field as keyof CreatedEvent] === '') {
-            missingFields.push(field);
-        }
-    }
-
-    if (missingFields.length > 0) {
-        alert(`Missing required fields: ${missingFields.join(', ')}`);
-        return false;
-    }
-
-    return true;
-};
-
-
-const dateCheck = (startDate: string, endDate: string) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    alert('End date must be after start date');
-    return end > start;
-}
-
-const ticketsValidation = (tickets: TicketStruct[]): boolean => {
-    const illegalTickets = tickets
-        .map((ticket, index) => ({ ...ticket, index }))
-        .filter(ticket => ticket.type === '' || ticket.price <= 0 || ticket.initialQuantity <= 0);
-
-    if (illegalTickets.length > 0) {
-        const illegalIndexes = illegalTickets.map(ticket => ticket.index);
-        alert(`Illegal tickets found at indexes: ${illegalIndexes.join(', ')}`);
-        return false;
-    }
-    return true;
-};
-
-const sameType = (tickets: TicketStruct[]): boolean => {
-    const duplicateIndexes: number[] = [];
-
-    tickets.forEach((ticket, index) => {
-        if (tickets.slice(index + 1).some(t => t.type === ticket.type)) {
-            duplicateIndexes.push(index);
-        }
-    });
-
-    if (duplicateIndexes.length > 0) {
-        alert(`Duplicate types found at indexes: ${duplicateIndexes.join(', ')}`);
-        return false;
-    }
-    return true;
-};
-
-
-const ticketsCheck = (tickets: TicketStruct[]): boolean => {
-    if (!ticketsValidation(tickets)) {
-        return false;
-    }
-    if (!sameType(tickets)) {
-        return false;
-    }
-    return true;
-};
-
-
-export function createValidation(event: CreatedEvent): boolean {
-    let check = true;
-    if (!requiredCheck(event))
-        check = false;
-    if (!dateCheck(event.startDate, event.endDate))
-        check = false;
-    if (!ticketsCheck(event.tickets))
-        check = false;
-
-    return true;
-}
 
 export async function getUserNextEvent(username: string): Promise<NextEvent | null> {
     try {

@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TicketStruct } from '../../../../types';
+import { TicketStruct, defaultTicketStruct } from '../../../../types';
 import './ticket-type.css';
 
+//State and functions that sent from BOCreateEvent
 interface TicketTypeProps {
     index: number;
     onTicketUpdate: (index: number, newTicket: TicketStruct) => void;  
@@ -9,6 +10,8 @@ interface TicketTypeProps {
 }
 
 const TicketType: React.FC<TicketTypeProps> = ({ index, onTicketUpdate, onQuanChange }) => {
+
+  //One-time hook, sets for the TicketType component its index
      const place = useRef(index);
     useEffect(() => {
       if (place.current === null) {
@@ -16,9 +19,10 @@ const TicketType: React.FC<TicketTypeProps> = ({ index, onTicketUpdate, onQuanCh
       }
     }, []);
 
-    const [ticket, setTicket] = useState<TicketStruct>({ type: '', price: 0, initialQuantity: 0, availableQuantity: 0});
+    const [ticket, setTicket] = useState<TicketStruct>(defaultTicketStruct);
   
  
+    //Handle the input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === 'initialQuantity' || name === 'price') 
@@ -39,11 +43,9 @@ const TicketType: React.FC<TicketTypeProps> = ({ index, onTicketUpdate, onQuanCh
 
   return (
     <div className="ticketType">
-        <form >
           <input name="type" value={ticket.type} onChange={handleChange} placeholder="Type" required/>
-          <input name="price" value={ticket.price === 0 ? '' : ticket.price} onChange={handleChange} placeholder="Price (USD)" type="number" min="1"/>
-        <input name="initialQuantity" value={ticket.initialQuantity === 0 ? '' : ticket.initialQuantity} onChange={handleChange} placeholder="Total tickets" type="number" min="1" />
-        </form>
+          <input name="price" value={ticket.price === 0 ? '' : ticket.price} onChange={handleChange} placeholder="Price (USD)" type="number" min="1" required/>
+        <input name="initialQuantity" value={ticket.initialQuantity === 0 ? '' : ticket.initialQuantity} onChange={handleChange} placeholder="Total tickets" type="number" min="1" required/>
     </div>
   );
 };

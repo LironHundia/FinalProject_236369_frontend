@@ -104,9 +104,10 @@ export const EventApi = {
     addNewEvent: async (newEvent: CreatedEvent): Promise<APIStatus> => {
         try {
             await axios.post(BackendServer.concat('api/event'), 
-            { newEvent },{ withCredentials: true});
+             newEvent ,{ withCredentials: true});
             return APIStatus.Success;
         } catch (e) {
+            console.log(e); 
             throw handleError(e);
         }
     },
