@@ -54,12 +54,11 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
           data = await EventApi.getAllEvents(undefined, page);
         else
           data = await EventApi.getAvailableEvents(undefined, page);
+        setPage(prevPage => prevPage + 1);
         if (data.length === 0) {
           setHasMore(false);
         }
-        //TODO: Delete the multiplier
-        const result = data.flatMap(element => Array(4).fill(element));
-        setEvents(result);
+        setEvents(data);
       } catch (error) {
         console.error('Error fetching initial events:', error);
       }
@@ -68,6 +67,8 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
     fetchInitialEvents();
   }, []);
 
+
+  //TODO: Add documentation
   React.useEffect(() => {
     const setUserNextEvent = async () => {
       if (generalContext?.username) {
