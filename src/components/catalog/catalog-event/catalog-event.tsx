@@ -8,7 +8,7 @@ import { UserContext } from '../../route-user/route-user';
 import { BOContext } from '../../route-backoffice/route-backoffice';
 import { GeneralContext } from '../../main/main-page';
 import defaultEventImage from '../../../additionals/image-not-found.jpg';
-import { formatDate } from '../../../utilities';
+import {dateToString, timeToLocalString} from '../../../utilities';
 
 import './catalog-event.css';
 
@@ -23,6 +23,10 @@ export const CatalogEvent: React.FC<CatalogEventProps> = ({ className, event, na
   const BOcontext = React.useContext(BOContext);
   const generalContext = React.useContext(GeneralContext);
   const isManager = generalContext?.route == 'backoffice' ? true : false;
+
+  const showStartDate = new Date(event.startDate);
+  const startDate_date = dateToString(showStartDate);
+  const startDate_time = timeToLocalString(showStartDate);
 
   //Handle click on event card (whether it is a manager or a user)
   const handleClick = async () => {
@@ -56,7 +60,7 @@ export const CatalogEvent: React.FC<CatalogEventProps> = ({ className, event, na
             {event.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {event.startDate}
+            {startDate_date} {startDate_time}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {event.category}
