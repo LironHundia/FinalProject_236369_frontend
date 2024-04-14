@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserPageProps, Event, TicketToPurchase } from '../../types';
+import { UserPageProps, Event, TicketToPurchase, NextEvent } from '../../types';
 import { Catalog } from '../catalog/catalog';
 import { Loader } from '../loader/loader';
 import { EventPage } from './event-page/event-page';
@@ -12,7 +12,8 @@ interface UserContext {
   setUserEvent: (value: Event | null) => void;
   reservation: TicketToPurchase | null;
   setReservation: (value: TicketToPurchase | null) => void;
-  nextEvent: Event | null;
+  nextEvent: NextEvent | null;
+  setNextEvent: (event: NextEvent | null) => void;
 }
 
 export const UserContext = React.createContext<UserContext | null>(null)
@@ -33,11 +34,6 @@ export const UserRoute: React.FC = () => {
     sessionStorage.setItem('currentReservation', JSON.stringify(reservation));
   }, [reservation]);
   //////////////////////////// End Reservation ////////////////////////////////
-
-  ////////////////////////////// Next Event //////////////////////////////////
-  const [nextEvent, setNextEvent] = useState<Event | null>(null);
-
-  //////////////////////////// End Next Event ////////////////////////////////
 
   /////////////////////////////// User Page ///////////////////////////////////
   const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment' | 'userSpace'>(() => {
@@ -72,41 +68,55 @@ export const UserRoute: React.FC = () => {
   }, [userEvent]);
   //////////////////////////// End User Event ////////////////////////////////
 
-  /* User Page navigation */
-  const userPageProps: UserPageProps = {
-    navigateToCatalogPage: () => setUserPage('catalog'),
-    navigateToEventPage: () => { setUserPage('eventPage'); window.scrollTo(0, 0); },
-    navigateToPaymentPage: () => setUserPage('payment'),
-    navigateToUserSpace: () => setUserPage('userSpace'),
-  }
+  ////////////////////////////// Next Event //////////////////////////////////
+  const [nextEvent, setNextEvent] = useState<NextEvent | null>(() => {
+    // Get the current nextEvent from session storage when the component is mounted
+    const savedNextEvent = sessionStorage.getItem('currentNextEvent');
+    return savedNextEvent ? JSON.parse(savedNextEvent) : null;
+  });
+  
+  React.useEffect(() => {
+    // Save the current nextEvent to session storage whenever it changes
+    sessionStorage.setItem('currentNextEvent', JSON.stringify(nextEvent));
+  }, [nextEvent]);
+//////////////////////////// End Next Event ////////////////////////////////
 
 
-  if (userPage === 'catalog') {
-    return (
-      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
-        <Catalog navigateToCatalogPage={userPageProps.navigateToCatalogPage} navigateToEventPage={userPageProps.navigateToEventPage} />
-      </UserContext.Provider>
-    )
-  }
-  if (userPage === 'eventPage') {
-    return (
-      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
-        {userEvent !== null && <EventPage {...userPageProps} />}
-        {userEvent === null && <Loader />}
-        {isLoading && <h2>Loading event in route-user...</h2>}
-      </UserContext.Provider>
-    )
-  }
-  if (userPage === 'payment') {
-    return (
-      <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent }}>
-        {userEvent !== null &&<Payment {...userPageProps} />}
-        {userEvent === null && <Loader />}
-      </UserContext.Provider>
-    )
-  }
-  //userSpace
+/* User Page navigation */
+const userPageProps: UserPageProps = {
+  navigateToCatalogPage: () => setUserPage('catalog'),
+  navigateToEventPage: () => { setUserPage('eventPage'); window.scrollTo(0, 0); },
+  navigateToPaymentPage: () => setUserPage('payment'),
+  navigateToUserSpace: () => setUserPage('userSpace'),
+}
+
+
+if (userPage === 'catalog') {
   return (
-    <UserSpace />
+    <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent, setNextEvent }}>
+      <Catalog navigateToCatalogPage={userPageProps.navigateToCatalogPage} navigateToEventPage={userPageProps.navigateToEventPage} />
+    </UserContext.Provider>
   )
+}
+if (userPage === 'eventPage') {
+  return (
+    <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent, setNextEvent }}>
+      {userEvent !== null && <EventPage {...userPageProps} />}
+      {userEvent === null && <Loader />}
+      {isLoading && <h2>Loading event in route-user...</h2>}
+    </UserContext.Provider>
+  )
+}
+if (userPage === 'payment') {
+  return (
+    <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent, setNextEvent }}>
+      {userEvent !== null && <Payment {...userPageProps} />}
+      {userEvent === null && <Loader />}
+    </UserContext.Provider>
+  )
+}
+//userSpace
+return (
+  <UserSpace />
+)
 };

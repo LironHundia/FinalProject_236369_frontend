@@ -4,7 +4,9 @@ import { CatalogEvent } from './catalog-event/catalog-event';
 import { EventApi } from '../../api/eventApi';
 import { Loader } from '../loader/loader';
 import { Event } from '../../types';
+import { getUserNextEvent } from '../../utilities';
 import { GeneralContext } from '../main/main-page';
+import { UserContext } from '../route-user/route-user';
 import { UserBar } from '../user-bar/user-bar';
 import './catalog.css';
 
@@ -19,6 +21,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
   const [page, setPage] = React.useState(1);
 
   const generalContext = React.useContext(GeneralContext);
+  const userContext = React.useContext(UserContext);
   const isManager = generalContext?.route == 'backoffice' ? true : false;
 
 
@@ -64,8 +67,27 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
     fetchInitialEvents();
   }, []);
 
+  React.useEffect(() => {
+    const setUserNextEvent = async () => {
+      if (generalContext?.username) {
+        const nextEvent = await getUserNextEvent(generalContext?.username!);
+        userContext?.setNextEvent(nextEvent);
+        if (nextEvent !== null) {
+          const nextEventToSave = { eventId: nextEvent.eventId, eventName: nextEvent.eventName, startDate: nextEvent.startDate }
+          sessionStorage.setItem('currentNextEvent', JSON.stringify(nextEventToSave));
+        }
+        else{
+          sessionStorage.setItem('currentNextEvent', JSON.stringify(nextEvent));
+        }
+      }
+    }
+
+    setUserNextEvent();
+
+  }, [generalContext?.username]);
+
   return (
-    <div className="page">
+    <div className="catalog-page">
       <div className="user-bar">
         <UserBar onGoBack={navigate.navigateToCatalogPage} />
       </div>

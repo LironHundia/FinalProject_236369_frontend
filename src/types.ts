@@ -81,6 +81,12 @@ export interface Event {
     lowestPrice?: number;
 }
 
+export interface NextEvent {
+    eventId: string;
+    eventName: string;
+    startDate: string;
+}
+
 export interface PaymentFormError {
     cardHolder: string;
     cardNumber: string;

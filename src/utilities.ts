@@ -1,5 +1,6 @@
 import * as constants from './consts';
-import { CreatedEvent, TicketStruct, PaymentFormError } from './types';
+import { CreatedEvent, TicketStruct, PaymentFormError, NextEvent, Event } from './types';
+import { EventApi } from './api/eventApi';
 
 export function dateToString(date: Date): string {
     return `${String(date.getUTCDate()).padStart(2, '0')}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${date.getUTCFullYear()}`;
@@ -28,12 +29,11 @@ export function formatDate(date: Date) {
     const day = ("0" + date.getDate()).slice(-2);
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     const year = date.getFullYear();
-  
+
     return day + "." + month + "." + year;
 }
 
-export function validatePaymentForm(cardHolder: string, cardNumber: string, expDate: string, cvv: string) : PaymentFormError
-{
+export function validatePaymentForm(cardHolder: string, cardNumber: string, expDate: string, cvv: string): PaymentFormError {
     const newErrors: PaymentFormError = {
         cardHolder: '',
         cardNumber: '',
@@ -98,9 +98,9 @@ const dateCheck = (startDate: string, endDate: string) => {
     const end = new Date(endDate);
     alert('End date must be after start date');
     return end > start;
-  }
+}
 
-  const ticketsValidation = (tickets: TicketStruct[]): boolean => {
+const ticketsValidation = (tickets: TicketStruct[]): boolean => {
     const illegalTickets = tickets
         .map((ticket, index) => ({ ...ticket, index }))
         .filter(ticket => ticket.type === '' || ticket.price <= 0 || ticket.initialQuantity <= 0);
@@ -130,9 +130,9 @@ const sameType = (tickets: TicketStruct[]): boolean => {
 };
 
 
-  const ticketsCheck = (tickets: TicketStruct[]): boolean => {
-    if (!ticketsValidation(tickets)){
-      return false;
+const ticketsCheck = (tickets: TicketStruct[]): boolean => {
+    if (!ticketsValidation(tickets)) {
+        return false;
     }
     if (!sameType(tickets)) {
         return false;
@@ -141,15 +141,30 @@ const sameType = (tickets: TicketStruct[]): boolean => {
 };
 
 
-
-export function createValidation(event: CreatedEvent) : boolean {
-    let check  =true;
-    if (!requiredCheck(event)) 
+export function createValidation(event: CreatedEvent): boolean {
+    let check = true;
+    if (!requiredCheck(event))
         check = false;
-    if (!dateCheck(event.startDate, event.endDate)) 
+    if (!dateCheck(event.startDate, event.endDate))
         check = false;
     if (!ticketsCheck(event.tickets))
         check = false;
 
     return true;
+}
+
+export async function getUserNextEvent(username: string): Promise<NextEvent | null> {
+    try {
+        const nextOrder = await EventApi.getNextEvent(username)
+        if (!nextOrder) {
+            console.log('No next event found for user');
+            return null;
+        }
+        const nextEvent = await EventApi.getEventById(nextOrder.eventId);
+        const date = dateToString(new Date(nextEvent.startDate));
+        return { eventId: nextOrder.eventId, eventName: nextEvent.name, startDate: date };
+    } catch (e) {
+        console.error("Found error in getUserNextEvent: ", e);
+        return null;
+    }
 }

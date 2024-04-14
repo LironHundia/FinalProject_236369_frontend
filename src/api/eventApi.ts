@@ -1,4 +1,4 @@
-import { APIStatus, CommentProps, Event, CreatedEvent, TicketToPurchase, PaymentReq } from "../types";
+import { APIStatus, CommentProps, Event, CreatedEvent, TicketToPurchase, PaymentReq, NextEvent } from "../types";
 import { BackendServer } from "../consts";
 import axios, {AxiosError} from "axios";
 import { dateAndTimeToString } from "../utilities";
@@ -110,6 +110,16 @@ export const EventApi = {
             throw handleError(e);
         }
     },
+
+    getNextEvent: async (username: string): Promise<NextEvent> => {
+        try {
+            const response = await axios.get(BackendServer.concat('api/order/nextEvent/').concat(username), 
+            { withCredentials: true });
+            return response.data;
+        } catch (e) {
+            throw handleError(e);
+        }
+    }
 };
 
 const handleError = async (e: unknown): Promise<APIStatus> => {

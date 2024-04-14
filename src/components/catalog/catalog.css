@@ -4,8 +4,8 @@
 }
 
 .catalog {
-    margin: 100px 50px;
-  }
+  margin: 50px 150px;
+}
 
 .events-grid {
     display: grid;
@@ -13,4 +13,6 @@
     grid-gap: 20px 40px;
   }
 
-
+.catalog-page {
+  margin-top: 20px;
+}
