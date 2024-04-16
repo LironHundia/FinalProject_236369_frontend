@@ -12,13 +12,14 @@ interface BackofficeContext {
   backofficeEvent: Event | null;
   setBackofficeEvent: (value: Event | null) => void;
   navigateToBOCreateEventPage: () => void;
+  setPreviousBOPage: (value: 'catalog' | 'eventPage' | 'createEvent') => void;
 }
 
 export const BOContext = React.createContext<BackofficeContext | null>(null)
 
 export const BackofficeRoute: React.FC = () => {
   const [backofficeEvent, setBackofficeEvent] = useState<Event | null>(null);
-  //const [backofficePage, setBackofficePage] = useState<'catalog' | 'eventPage' | 'createEvent'>('catalog');
+  const [previousBOPage, setPreviousBOPage] = useState<'catalog' | 'eventPage' | 'createEvent'>('catalog');
   const [backofficePage, setBackofficePage] = useState<'catalog' | 'eventPage' | 'createEvent'>(() => {
     // Get the current page from session storage when the component is mounted
     const savedBOpage = sessionStorage.getItem('currentBOpage');
@@ -38,21 +39,21 @@ export const BackofficeRoute: React.FC = () => {
 
   if (backofficePage === 'catalog') {
     return (
-      <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent, navigateToBOCreateEventPage: backofficePageProps.navigateToBOCreateEventPage }}>
+      <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent, navigateToBOCreateEventPage: backofficePageProps.navigateToBOCreateEventPage, setPreviousBOPage }}>
         <Catalog navigateToCatalogPage={backofficePageProps.navigateToBOCatalogPage} navigateToEventPage={backofficePageProps.navigateToBOEventPage}/>
       </BOContext.Provider>
     )
   }
   if (backofficePage === 'eventPage') {
     return (
-      <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent, navigateToBOCreateEventPage: backofficePageProps.navigateToBOCreateEventPage  }}>
+      <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent, navigateToBOCreateEventPage: backofficePageProps.navigateToBOCreateEventPage, setPreviousBOPage  }}>
         <BOEventPage {...backofficePageProps}/>
       </BOContext.Provider>
     )
   }
   //createEvent
   return (
-    <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent, navigateToBOCreateEventPage: backofficePageProps.navigateToBOCreateEventPage  }}>
+    <BOContext.Provider value={{ setBackofficePage, backofficeEvent, setBackofficeEvent, navigateToBOCreateEventPage: backofficePageProps.navigateToBOCreateEventPage, setPreviousBOPage }}>
       <BOCreateEvent navigateToBOCatalogPage={backofficePageProps.navigateToBOCatalogPage}/>
     </BOContext.Provider>
   )

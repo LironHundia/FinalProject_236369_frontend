@@ -14,6 +14,7 @@ interface UserContext {
   setReservation: (value: TicketToPurchase | null) => void;
   nextEvent: NextEvent | null;
   setNextEvent: (event: NextEvent | null) => void;
+  setPreviousUserPage: (value: 'catalog' | 'eventPage'| 'payment') => void;
 }
 
 export const UserContext = React.createContext<UserContext | null>(null)
@@ -21,6 +22,7 @@ export const UserContext = React.createContext<UserContext | null>(null)
 export const UserRoute: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [previousUserPage, setPreviousUserPage] = useState<'catalog' | 'eventPage' | 'payment'>('catalog');
 
   /////////////////////////////// Reservation /////////////////////////////////
   const [reservation, setReservation] = useState<TicketToPurchase | null>(()=> {
@@ -39,7 +41,7 @@ export const UserRoute: React.FC = () => {
   const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment' | 'userSpace'>(() => {
     // Get the current page from session storage when the component is mounted
     const savedUserpage = sessionStorage.getItem('currentUserpage');
-    return savedUserpage ? JSON.parse(savedUserpage) : 'catalog';
+    return savedUserpage ? JSON.parse(savedUserpage) : 'userSpace';
   });
 
   React.useEffect(() => {
@@ -55,7 +57,7 @@ export const UserRoute: React.FC = () => {
   React.useEffect(() => {
     const storedCurrUserEvent = localStorage.getItem('userEvent');
 
-    if (storedCurrUserEvent != null && userPage !== 'catalog') {
+    if (storedCurrUserEvent != null) {
       setUserEvent(JSON.parse(storedCurrUserEvent));
     } else {
       setUserEvent(null);
@@ -90,17 +92,16 @@ const userPageProps: UserPageProps = {
   navigateToUserSpace: () => setUserPage('userSpace'),
 }
 
-
 if (userPage === 'catalog') {
   return (
-    <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent, setNextEvent }}>
+    <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent, setNextEvent, setPreviousUserPage }}>
       <Catalog navigateToCatalogPage={userPageProps.navigateToCatalogPage} navigateToEventPage={userPageProps.navigateToEventPage} />
     </UserContext.Provider>
   )
 }
 if (userPage === 'eventPage') {
   return (
-    <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent, setNextEvent }}>
+    <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent, setNextEvent, setPreviousUserPage }}>
       {userEvent !== null && <EventPage {...userPageProps} />}
       {userEvent === null && <Loader />}
       {isLoading && <h2>Loading event in route-user...</h2>}
@@ -109,7 +110,7 @@ if (userPage === 'eventPage') {
 }
 if (userPage === 'payment') {
   return (
-    <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent, setNextEvent }}>
+    <UserContext.Provider value={{ setUserPage, userEvent, setUserEvent, reservation, setReservation, nextEvent, setNextEvent, setPreviousUserPage }}>
       {userEvent !== null && <Payment {...userPageProps} />}
       {userEvent === null && <Loader />}
     </UserContext.Provider>
@@ -117,6 +118,6 @@ if (userPage === 'payment') {
 }
 //userSpace
 return (
-  <UserSpace />
+  <UserSpace navigation={userPageProps}/>
 )
 };

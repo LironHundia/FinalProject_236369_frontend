@@ -1,4 +1,4 @@
-import { APIStatus, CommentProps, Event, CreatedEvent, TicketToPurchase, PaymentReq, NextEvent } from "../types";
+import { APIStatus, CommentProps, Event, Order, CreatedEvent, TicketToPurchase, PaymentReq, NextEvent } from "../types";
 import { BackendServer } from "../consts";
 import axios, {AxiosError} from "axios";
 import { dateAndTimeToString } from "../utilities";
@@ -120,7 +120,18 @@ export const EventApi = {
         } catch (e) {
             throw handleError(e);
         }
-    }
+    },
+   
+    getUserOrders: async (username: string, limit?: number, page?: number): Promise<Order[]> => {
+        try {
+            const response = await axios.get(BackendServer.concat('api/order/').concat(username),
+            //const response = await axios.get("http://localhost:3003/".concat('api/order/').concat(username), 
+            {withCredentials: true });
+            return response.data.orders;
+        } catch (e) {
+            throw handleError(e);
+        }
+    },
 };
 
 const handleError = async (e: unknown): Promise<APIStatus> => {

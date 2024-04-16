@@ -1,11 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
+import {UserPageProps} from '../../../types';
+import { GeneralContext } from '../../main/main-page';
+import { Box, Typography } from '@mui/material';
+import { UserBar } from '../../user-bar/user-bar';
+import { UserOrdersSection } from '../../user-orders-components/user-orders-section/user-orders-section';
+import './user-space.scss';
 
-export const UserSpace: React.FC = () => {
+interface UserSpaceProps {
+    navigation: UserPageProps;
+    previousUserPage?: 'catalog' | 'eventPage' | 'payment';
+    previousBOPage?: 'catalog' | 'eventPage' | 'createEvent';
+}
+
+export const UserSpace: React.FC<UserSpaceProps> = (props) => {
+    const generalContext = React.useContext(GeneralContext);
 
     //userSpace
     return (
-        <div>
-            <h1>User Space</h1>
-        </div>
+        <Box className='userSpacePage'>
+            <UserBar onGoBack={props.navigation.navigateToCatalogPage} />
+            <Box className="userSpaceSection">
+                <Box className="usernameSection">
+                    <Typography className="Textheader">Username:</Typography>
+                    <Typography className="usernameText">{generalContext?.username}</Typography>
+                </Box>
+                <Box className="orderSection">
+                    <Typography className="Textheader">Your Orders:</Typography>
+                    <UserOrdersSection />
+                </Box>
+            </Box>
+        </Box>
     )
 };

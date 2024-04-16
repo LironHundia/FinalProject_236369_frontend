@@ -40,7 +40,7 @@ export interface CommentProps {
     comment: string;
     date: string;
     className?: string;
-  }
+}
 
 export interface TicketStruct {
     type: string;
@@ -49,8 +49,8 @@ export interface TicketStruct {
     availableQuantity: number;
 }
 
-export const defaultTicketStruct: TicketStruct = 
-{ type: '', price: 0, initialQuantity: 0, availableQuantity: 0 };
+export const defaultTicketStruct: TicketStruct =
+    { type: '', price: 0, initialQuantity: 0, availableQuantity: 0 };
 
 
 export interface TicketToPurchase {
@@ -67,7 +67,7 @@ export interface PaymentReq {
     cc: string;
     holder: string;
     cvv: string;
-    exp: string;    
+    exp: string;
     charge: number;
 }
 
@@ -98,8 +98,8 @@ export interface PaymentFormError {
     cvv: string;
 }
 
-export const categories = ['Charity Event', 'Concert', 'Conference', 
-'Convention', 'Exhibition', 'Festival', 'Product Launch', 'Sport Event'];
+export const categories = ['Charity Event', 'Concert', 'Conference',
+    'Convention', 'Exhibition', 'Festival', 'Product Launch', 'Sport Event'];
 
 export interface CreatedEvent {
     name: string;
@@ -127,3 +127,18 @@ export const defaultCreatedEvent: CreatedEvent = {
     totalAvailableTickets: 0,
 };
 
+
+export interface Order {
+    username: string;
+    eventId : string;
+    eventName: string;
+    description: string;
+    location: string;
+    organizer: string
+    quantity: number;
+    totalPrice: number;
+    ticketsType: string;
+    startDate: string;
+    endDate: string;
+    purchaseDate: string;
+}
