@@ -4,10 +4,9 @@ import { Catalog } from '../catalog/catalog';
 import { Loader } from '../loader/loader';
 import { EventPage } from './event-page/event-page';
 import { Payment } from './payment/payment';
-import { UserSpace } from './user-space/user-space';
 
 interface UserContext {
-  setUserPage: (value: 'catalog' | 'eventPage' | 'payment' | 'userSpace') => void;
+  setUserPage: (value: 'catalog' | 'eventPage' | 'payment') => void;
   userEvent: Event | null;
   setUserEvent: (value: Event | null) => void;
   reservation: TicketToPurchase | null;
@@ -38,10 +37,10 @@ export const UserRoute: React.FC = () => {
   //////////////////////////// End Reservation ////////////////////////////////
 
   /////////////////////////////// User Page ///////////////////////////////////
-  const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment' | 'userSpace'>(() => {
+  const [userPage, setUserPage] = useState<'catalog' | 'eventPage' | 'payment'>(() => {
     // Get the current page from session storage when the component is mounted
     const savedUserpage = sessionStorage.getItem('currentUserpage');
-    return savedUserpage ? JSON.parse(savedUserpage) : 'userSpace';
+    return savedUserpage ? JSON.parse(savedUserpage) : 'catalog';
   });
 
   React.useEffect(() => {
@@ -89,7 +88,6 @@ const userPageProps: UserPageProps = {
   navigateToCatalogPage: () => setUserPage('catalog'),
   navigateToEventPage: () => { setUserPage('eventPage'); window.scrollTo(0, 0); },
   navigateToPaymentPage: () => setUserPage('payment'),
-  navigateToUserSpace: () => setUserPage('userSpace'),
 }
 
 if (userPage === 'catalog') {
@@ -116,8 +114,4 @@ if (userPage === 'payment') {
     </UserContext.Provider>
   )
 }
-//userSpace
-return (
-  <UserSpace navigation={userPageProps}/>
-)
 };

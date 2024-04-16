@@ -5,6 +5,7 @@ import { APIStatus, PageProps } from '../../types';
 import { useEffect } from 'react';
 import { UserRoute } from '../route-user/route-user';
 import { BackofficeRoute } from '../route-backoffice/route-backoffice';
+import { UserSpace } from '../user-space/user-space';
 
 interface GeneralContext {
   route: 'user' | 'backoffice';
@@ -13,6 +14,7 @@ interface GeneralContext {
   setUsername: (username: string) => void;
   userPermission: 'A' | 'M' | 'W';
   onLogout: () => void;
+  changeUserSpace: () => void;
 }
 
 export const GeneralContext = React.createContext<GeneralContext | null>(null);
@@ -20,6 +22,11 @@ export const GeneralContext = React.createContext<GeneralContext | null>(null);
 export const MainPage: React.FC<PageProps> = (pageProps) => {
   const [username, setUsername] = useState<string>('');
   const [userPermission, setUserPermission] = useState<'A'|'M'|'W'>('W');
+  const [inUserSpace, setInUserSpace] = useState<boolean>(false);
+
+  const changeUserSpace = () => {
+    setInUserSpace(!inUserSpace);
+  }
 
   //const [currentRoute, setCurrentRoute] = useState<'user' | 'backoffice'>('user');
   const [currentRoute, setCurrentRoute] = useState<'user' | 'backoffice'>(() => {
@@ -70,17 +77,11 @@ export const MainPage: React.FC<PageProps> = (pageProps) => {
     }
   }
 
-  if (currentRoute === 'user') {
     return (
-      <GeneralContext.Provider value={{ route: currentRoute, setRoute: setCurrentRoute, username, setUsername, userPermission, onLogout }}>
-        <UserRoute/>
-      </GeneralContext.Provider>
-    )
-  }
-
-  return (
-    <GeneralContext.Provider value={{ route: currentRoute, setRoute: setCurrentRoute, username, setUsername, userPermission, onLogout }}>
-      <BackofficeRoute/>
-    </GeneralContext.Provider>
+      <GeneralContext.Provider value={{ route: currentRoute, setRoute: setCurrentRoute, username, setUsername, userPermission, onLogout, changeUserSpace}}>
+      {inUserSpace === false && currentRoute === "user" && <UserRoute/>}
+      {inUserSpace === false && currentRoute === "backoffice" && <BackofficeRoute/>}
+      {inUserSpace === true && <UserSpace/>}
+  </GeneralContext.Provider>
   )
 };

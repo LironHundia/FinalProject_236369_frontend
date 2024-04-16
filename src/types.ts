@@ -13,13 +13,6 @@ export interface PageProps {
     navigateToRouteBackoffice(): void;
 }
 
-export interface UserPageProps {
-    navigateToCatalogPage(): void;
-    navigateToEventPage(): void;
-    navigateToPaymentPage(): void;
-    navigateToUserSpace(): void;
-}
-
 export interface BackofficePageProps {
     navigateToBOCatalogPage(): void;
     navigateToBOEventPage(): void;
@@ -31,7 +24,6 @@ export interface UserPageProps {
     navigateToCatalogPage(): void;
     navigateToEventPage(): void;
     navigateToPaymentPage(): void;
-    navigateToUserSpace(): void;
 }
 
 export interface CommentProps {

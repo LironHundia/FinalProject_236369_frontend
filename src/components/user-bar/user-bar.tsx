@@ -86,7 +86,7 @@ export const UserBar: React.FC<UserBarProps> = ({ onGoBack }) => {
                 transformOrigin={{ horizontal: 'left', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
             >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={generalContext?.changeUserSpace}>
                     <Avatar /> Profile
                 </MenuItem>
                 {hasPermission(generalContext?.userPermission!, constants.MANAGER) && generalContext?.route === "user" &&
