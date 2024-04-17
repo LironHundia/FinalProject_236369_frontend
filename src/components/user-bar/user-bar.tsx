@@ -16,6 +16,7 @@ import { BOContext } from '../route-backoffice/route-backoffice';
 import { UserContext } from '../route-user/route-user'
 import { GeneralContext } from '../main/main-page';
 import { hasPermission } from '../../utilities';
+import { RatingUserBar } from '../rating/rating-user-bar/rating-user-bar';
 import * as constants from '../../consts';
 import './user-bar.scss';
 
@@ -54,9 +55,12 @@ export const UserBar: React.FC<UserBarProps> = ({ onGoBack }) => {
                     </Tooltip>
                     <Typography sx={{ ml: 1, fontSize: '1.2em', color: 'gray' }}>{generalContext?.username}</Typography>
                 </Box>
-                {generalContext?.route === "user" && userContext?.nextEvent &&
+                {generalContext?.route === "user" && generalContext?.eventsRated !== undefined &&
+                    <RatingUserBar value={generalContext?.eventsRated!} />
+                }
+                {generalContext?.route === "user" && generalContext?.nextEvent &&
                     <Typography className="nextEventPart"
-                        sx={{ fontSize: '1.1em', minWidth: 100 }}>Next Event: {userContext?.nextEvent.eventName} ({userContext?.nextEvent.startDate})
+                        sx={{ fontSize: '1.1em', minWidth: 100 }}>Next Event: {generalContext?.nextEvent.eventName} ({generalContext?.nextEvent.startDate})
                     </Typography>}
                 {generalContext?.route === "backoffice" && generalContext.userPermission === constants.ADMIN &&
                     <Button

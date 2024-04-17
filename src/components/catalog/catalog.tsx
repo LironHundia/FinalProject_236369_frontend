@@ -72,7 +72,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
     const setUserNextEvent = async () => {
       if (generalContext?.username) {
         const nextEvent = await getUserNextEvent(generalContext?.username!);
-        userContext?.setNextEvent(nextEvent);
+        generalContext?.setNextEvent(nextEvent);
         if (nextEvent !== null) {
           const nextEventToSave = { eventId: nextEvent.eventId, eventName: nextEvent.eventName, startDate: nextEvent.startDate }
           sessionStorage.setItem('currentNextEvent', JSON.stringify(nextEventToSave));
