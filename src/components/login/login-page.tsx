@@ -6,11 +6,12 @@ import { Loader } from '../loader/loader';
 import { ErrorMessage } from '../error/error';
 
 export const LoginPage: React.FC<PageProps> = ({
-  navigateToMainPage, 
-  navigateToSignUpPage
+  navigateToMainPage,
+  navigateToSignUpPage,
+  navigateToForgotPasswordPage
 }) => {
   const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('' );
+  const [password, setPassword] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -23,25 +24,25 @@ export const LoginPage: React.FC<PageProps> = ({
   };
 
   const handleLogin = async () => {
-    if(password.length === 0 || username.length === 0) {
+    if (password.length === 0 || username.length === 0) {
       setErrorMessage(LoginErrorMessages.required);
       return;
     }
     setIsLoading(true);
     const res = await AuthApi.login({ username, password });
     setIsLoading(false);
-    
-    if(res === APIStatus.Success) {
+
+    if (res === APIStatus.Success) {
       navigateToMainPage();
       return;
     }
     // TODO: handle other APIStatus - set proper error message (see LoginErrorMessages)
-    if(res === APIStatus.Unauthorized) {
+    if (res === APIStatus.Unauthorized) {
       setErrorMessage(LoginErrorMessages.invalid);
       return;
     }
 
-    if(res === APIStatus.ServerError) {
+    if (res === APIStatus.ServerError) {
       setErrorMessage(LoginErrorMessages.failed);
       return;
     }
@@ -51,6 +52,10 @@ export const LoginPage: React.FC<PageProps> = ({
     navigateToSignUpPage()
   };
 
+  const handleForgotPassword = () => {
+    navigateToForgotPasswordPage();
+  }
+
   return (
     <div className="login-container">
       <h2>Login</h2>
@@ -58,6 +63,7 @@ export const LoginPage: React.FC<PageProps> = ({
         <div className="input-group">
           <label htmlFor="username">Username:</label>
           <input
+            className='input-field'
             type="text"
             id="username"
             name="username"
@@ -68,6 +74,7 @@ export const LoginPage: React.FC<PageProps> = ({
         <div className="input-group">
           <label htmlFor="password">Password:</label>
           <input
+            className='input-field'
             type="password"
             id="password"
             name="password"
@@ -75,9 +82,10 @@ export const LoginPage: React.FC<PageProps> = ({
             onChange={handlePasswordChange}
           />
         </div>
-        {errorMessage && <ErrorMessage message={errorMessage}/>}
-        {isLoading ? <Loader /> :<button type="button" className="login-btn" onClick={handleLogin}>Login</button>}
+        {errorMessage && <ErrorMessage message={errorMessage} />}
+        {isLoading ? <Loader /> : <button type="button" className="login-btn" onClick={handleLogin}>Login</button>}
       </form>
+      <p className="forgot-password-link">Forgot password? <button type="button" onClick={handleForgotPassword}>Change Password</button></p>
       <p className="signup-link">Don't have an account? <button type="button" onClick={handleSignUp}>Sign Up</button></p>
     </div>
   );

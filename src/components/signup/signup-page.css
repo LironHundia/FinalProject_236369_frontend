@@ -10,12 +10,12 @@
     margin-bottom: 15px;
 }
 
-input {
+/* input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
+} */
 
 .signup-btn {
     width: 100%;
@@ -33,3 +33,10 @@ input {
     color: #007bff;
     cursor: pointer;
 }
+
+.input-field {
+    width: 95%; /* adjust as needed */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }

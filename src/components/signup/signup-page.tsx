@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import './signup-page.css';
 import { AuthApi } from '../../api/authApi';
-import { APIStatus, PageProps } from '../../types';
+import { APIStatus, PageProps, securityQuestions } from '../../types';
 import { Loader } from '../loader/loader';
 import { ErrorMessage } from '../error/error';
 
 export const SignUpPage: React.FC<PageProps> = ({
-    navigateToLoginPage
+  navigateToLoginPage
 }) => {
   const [username, setUsername] = useState<string>('');
+  const [securityQuestion, setSecurityQuestion] = useState<string>('');
+  const [securityAnswer, setSecurityAnswer] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -21,16 +23,24 @@ export const SignUpPage: React.FC<PageProps> = ({
     setPassword(e.target.value);
   };
 
+  const handleSecurityQuestionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSecurityQuestion(e.target.value);
+  };
+
+  const handleSecurityAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSecurityAnswer(e.target.value);
+  };
+
   const handleSignUp = async () => {
-    if(password.length === 0 || username.length === 0) {
-        setErrorMessage(SignUpErrorMessages.required);
-        return;
-      }
+    if (password.length === 0 || username.length === 0 || securityQuestion.length === 0 || securityAnswer.length === 0) {
+      setErrorMessage(SignUpErrorMessages.required);
+      return;
+    }
     setIsLoading(true);
-    const res = await AuthApi.signUp({ username, password });
+    const res = await AuthApi.signUp({ username, password, securityQuestion, securityAnswer});
     setIsLoading(false);
 
-    if(res === APIStatus.Success) {
+    if (res === APIStatus.Success) {
       navigateToLoginPage();
       return;
     }
@@ -42,7 +52,6 @@ export const SignUpPage: React.FC<PageProps> = ({
       setErrorMessage(SignUpErrorMessages.failed);
       return;
     }
-    // TODO: handle other APIStatus - set proper error message (see SignUpErrorMessages)
   };
 
   const handleLogin = () => {
@@ -56,6 +65,7 @@ export const SignUpPage: React.FC<PageProps> = ({
         <div className="input-group">
           <label htmlFor="username">Username:</label>
           <input
+            className='input-field'
             type="text"
             id="username"
             name="username"
@@ -66,6 +76,7 @@ export const SignUpPage: React.FC<PageProps> = ({
         <div className="input-group">
           <label htmlFor="password">Password:</label>
           <input
+            className='input-field'
             type="password"
             id="password"
             name="password"
@@ -73,7 +84,36 @@ export const SignUpPage: React.FC<PageProps> = ({
             onChange={handlePasswordChange}
           />
         </div>
-        {errorMessage && <ErrorMessage message={errorMessage}/>}
+        <div className="input-group">
+          <label htmlFor="securityQuestion">Security Question:</label>
+          <select
+            style = {{width: '101%'}}
+            className='input-field'
+            id="securityQuestion"
+            name="securityQuestion"
+            value={securityQuestion}
+            onChange={handleSecurityQuestionChange}
+          >
+            <option value="">Select a security question</option>
+            {securityQuestions.map((question, index) => (
+              <option key={index} value={question}>
+                {question}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="input-group">
+          <label htmlFor="securityAnswer">Security Answer:</label>
+          <input
+            className='input-field'
+            type="text"
+            id="securityAnswer"
+            name="securityAnswer"
+            value={securityAnswer}
+            onChange={handleSecurityAnswerChange}
+          />
+        </div>
+        {errorMessage && <ErrorMessage message={errorMessage} />}
         {isLoading ? <Loader /> : <button type="button" className="signup-btn" onClick={handleSignUp}>Sign Up</button>}
       </form>
       <p className="login-link">Already have an account? <button type="button" onClick={handleLogin}>Login</button></p>
@@ -82,7 +122,7 @@ export const SignUpPage: React.FC<PageProps> = ({
 };
 
 const SignUpErrorMessages = {
-    required: 'Username and password are required',
-    exists: 'Username already exists',
-    failed: 'Sign Up failed, please try again'
+  required: 'All fields are required',
+  exists: 'Username already exists',
+  failed: 'Sign Up failed, please try again'
 };

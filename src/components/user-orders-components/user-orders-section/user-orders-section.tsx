@@ -18,7 +18,6 @@ export const UserOrdersSection: React.FC = () => {
     const [orderCount, setOrderCount] = React.useState<Number>(0);
 
     //get the orders of the user
-    let firstOrder: Order | undefined;
     React.useEffect(() => {
         setIsLoading(true);
         const fetchOrders = async () => {

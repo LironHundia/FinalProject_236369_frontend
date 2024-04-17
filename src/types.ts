@@ -9,6 +9,7 @@ export interface PageProps {
     navigateToMainPage(): void;
     navigateToSignUpPage(): void;
     navigateToLoginPage(): void;
+    navigateToForgotPasswordPage(): void;
     navigateToRouteUser(): void;
     navigateToRouteBackoffice(): void;
 }
@@ -122,7 +123,7 @@ export const defaultCreatedEvent: CreatedEvent = {
 
 export interface Order {
     username: string;
-    eventId : string;
+    eventId: string;
     eventName: string;
     description: string;
     location: string;
@@ -134,3 +135,11 @@ export interface Order {
     endDate: string;
     purchaseDate: string;
 }
+
+export const securityQuestions =
+    ['What is your mother\'s maiden name?',
+        'What is the name of your first pet?',
+        'What is the name of your first school?',
+        'In which city were you born?',
+        'In which city did your parents meet?',
+        'What month did you get married?'];
