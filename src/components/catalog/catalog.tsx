@@ -71,21 +71,24 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
   React.useEffect(() => {
     const setUserNextEvent = async () => {
       if (generalContext?.username) {
-        const nextEvent = await getUserNextEvent(generalContext?.username!);
-        generalContext?.setNextEvent(nextEvent);
-        if (nextEvent !== null) {
-          const nextEventToSave = { eventId: nextEvent.eventId, eventName: nextEvent.eventName, startDate: nextEvent.startDate }
-          sessionStorage.setItem('currentNextEvent', JSON.stringify(nextEventToSave));
+        try {
+          const nextEvent = await getUserNextEvent(generalContext?.username!);
+          generalContext?.setNextEvent(nextEvent);
+          if (nextEvent !== null) {
+            const nextEventToSave = { eventId: nextEvent.eventId, eventName: nextEvent.eventName, startDate: nextEvent.startDate }
+            sessionStorage.setItem('currentNextEvent', JSON.stringify(nextEventToSave));
+          }
+          else {
+            sessionStorage.setItem('currentNextEvent', JSON.stringify(nextEvent));
+          }
         }
-        else{
-          sessionStorage.setItem('currentNextEvent', JSON.stringify(nextEvent));
+        catch (error) {
+          console.error('Error fetching next event:', error);
         }
       }
     }
-
-    setUserNextEvent();
-
-  }, [generalContext?.username]);
+      setUserNextEvent();
+    }, [generalContext?.username]);
 
   return (
     <div className="catalog-page">

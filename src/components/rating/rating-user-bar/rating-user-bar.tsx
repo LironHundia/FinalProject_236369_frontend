@@ -12,7 +12,7 @@ export const RatingUserBar: React.FC<RatingUserBarProps> = ({ value }) => {
 
   return (
     <Box className="rating-user-bar-part" display="flex" alignItems="center">
-      <StarIcon color="action" style={{ color: 'yellow',  stroke: 'black', strokeWidth: 0.5 }} />
+      <StarIcon color="action" style={{ color: 'orange',  stroke: 'black', strokeWidth: 0.5 }} />
       <Typography variant="body1" style={{ marginLeft: '8px', fontSize: '1.2em', minWidth: 100 }}>
         {value} events rated
       </Typography>

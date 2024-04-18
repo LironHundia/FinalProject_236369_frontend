@@ -2,6 +2,7 @@ export enum APIStatus {
     Success,
     BadRequest,
     Unauthorized,
+    NotFound,
     ServerError
 }
 
@@ -82,6 +83,11 @@ export interface NextEvent {
     eventId: string;
     eventName: string;
     startDate: string;
+}
+
+export interface EventRate {
+    avg: number;
+    total: number;
 }
 
 export interface PaymentFormError {

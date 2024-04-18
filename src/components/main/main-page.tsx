@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import './main-page.css';
 import { AuthApi } from '../../api/authApi';
+import { EventApi } from '../../api/eventApi';
 import { APIStatus, PageProps } from '../../types';
 import { useEffect } from 'react';
 import { UserRoute } from '../route-user/route-user';
 import { BackofficeRoute } from '../route-backoffice/route-backoffice';
 import { UserSpace } from '../user-space/user-space';
 import { NextEvent } from '../../types';
+import { INVALID_VALUE } from '../../consts';
 
 interface GeneralContext {
   route: 'user' | 'backoffice';
@@ -28,7 +30,12 @@ export const MainPage: React.FC<PageProps> = (pageProps) => {
   const [username, setUsername] = useState<string>('');
   const [userPermission, setUserPermission] = useState<'A' | 'M' | 'W'>('W');
   const [inUserSpace, setInUserSpace] = useState<boolean>(false);
-  const [eventsRated, seteventsRated] = useState<number>(0);
+
+  const [eventsRated, seteventsRated] = useState<number>(() => {
+    // Get the current page from session storage when the component is mounted
+    const savedEventsRated = sessionStorage.getItem('currentEventsRated');
+    return savedEventsRated ? JSON.parse(savedEventsRated) : INVALID_VALUE;
+  });
 
   ////////////////////////////// Next Event //////////////////////////////////
   const [nextEvent, setNextEvent] = useState<NextEvent | null>(() => {
@@ -72,6 +79,23 @@ export const MainPage: React.FC<PageProps> = (pageProps) => {
 
     fetchUsername();
   }, []);
+
+  useEffect(() => {
+    const fetchUserRating = async () => {
+      try {
+        if (username && eventsRated === INVALID_VALUE) {
+          const res = await EventApi.getUserRating(username);
+          seteventsRated(res as number);
+          sessionStorage.setItem('currentEventsRated', JSON.stringify(res));
+        }
+      } catch (error) {
+        console.log("did not get user rating, error: ", error);
+        seteventsRated(INVALID_VALUE);
+      }
+    };
+
+    fetchUserRating();
+  }, [username]);
 
   useEffect(() => {
     const fetchUserPermission = async () => {

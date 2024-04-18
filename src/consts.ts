@@ -9,3 +9,5 @@ export const BACKOFFICE = 'backoffice';
 export const USER = 'user';
 
 export const MAX_TICKETS_CATEGORIES = 10;
+
+export const INVALID_VALUE = -1;

@@ -1,6 +1,7 @@
 import * as constants from './consts';
-import { PaymentFormError, NextEvent, Event } from './types';
+import { PaymentFormError, APIStatus, NextEvent, Event } from './types';
 import { EventApi } from './api/eventApi';
+import { Axios } from 'axios';
 
 export function dateToString(date: Date): string {
     return `${String(date.getUTCDate()).padStart(2, '0')}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${date.getUTCFullYear()}`;
@@ -92,7 +93,12 @@ export async function getUserNextEvent(username: string): Promise<NextEvent | nu
         const date = dateToString(new Date(nextOrder.startDate));
         return { eventId: nextOrder.eventId, eventName: nextOrder.eventName, startDate: date };
     } catch (e) {
-        console.error("Found error in getUserNextEvent: ", e);
+        const error = await e;
+        if(error as APIStatus === APIStatus.NotFound) {
+            //'No next event found for user'
+            return null;
+        }
+        console.error('Error fetching next event:', e);
         return null;
     }
 }

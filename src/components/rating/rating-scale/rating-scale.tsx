@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 
 interface RateProps {
     currRate: number | null;
+    currUserRate: number | null;
     changeRate: (value: number | null ) => void;
 }
 
