@@ -62,9 +62,15 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
             return;
         }
         await EventApi.rateEvent(userContext?.userEvent!._id!, newRate);
-        setEventRateCount(eventRateCount + 1);
-        setEventRate(((eventRate * eventRateCount) + newRate) / (eventRateCount + 1));
-        setUserRateForEvent(newRate);
+        if (userRateForEvent === 0) {
+            setEventRateCount(eventRateCount + 1);
+            setEventRate(((eventRate * eventRateCount) + newRate) / (eventRateCount + 1));
+            setUserRateForEvent(newRate);
+        }
+        else {
+            setEventRate(((eventRate * eventRateCount) -userRateForEvent  + newRate) / (eventRateCount));
+            setUserRateForEvent(newRate);
+        }
     }
 
     const { _id, name, category, description, location, totalAvailableTickets, startDate, endDate, imageUrl, lowestPrice } = event;
@@ -126,6 +132,9 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
                         <Typography className="eventInfo_comments">Comments: {commentCount}</Typography>}
                     {generalContext?.route! === "backoffice" && isLoading && <Loader />}
                 </Box>
+            </Box>
+            <Box className="rating-scale-section">
+                {generalContext?.route! === "user" && <RatingScale currRate={userRateForEvent} changeRate={changeRating} />}
             </Box>
             <Box>
                 <Typography className="eventDescription">{description}</Typography>
