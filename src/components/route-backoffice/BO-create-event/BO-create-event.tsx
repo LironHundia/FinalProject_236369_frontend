@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {  Select, MenuItem, TextField, Button, Container, 
-    FormControl, InputLabel, Grid, Box} from '@mui/material';
+    FormControl, InputLabel, Box} from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -132,8 +132,8 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
     <br />{serverError && <ErrorMessage message={serverError} />}
     <Container className="form" maxWidth="xl">
       <form onSubmit={handleSubmit}>
-      <Grid container spacing={4} justifyContent="center">
-          <Grid item xl={6} lg={5}>
+      <div className="event-details">
+      <div className="details-column">
         <Box mb={2}><TextField name="name" value={formData.name} onChange={handleTextChange} label="Name" required fullWidth /></Box>
         <Box mb={2}>
         <FormControl fullWidth required>
@@ -148,8 +148,8 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
         <Box mb={2}><TextField name="description" value={formData.description} onChange={handleTextChange} label="Description" required fullWidth /> </Box>
         <Box mb={2}><TextField name="organizer" value={formData.organizer} onChange={handleTextChange} label="Organizer" required fullWidth /></Box>
         <Box mb={2}><TextField name="location" value={formData.location} onChange={handleTextChange} label="Location" required fullWidth /> </Box>
-        </Grid>
-        <Grid item xl={6} lg={5}>
+        </div>
+        <div className="details-column">
         <Box mb={2}><TextField name="imageUrl" value={formData.imageUrl} onChange={handleTextChange} label="Img URL" fullWidth /></Box>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box mb={2}> <DateTimePicker name="startDate" value={dayjs(formData.startDate)} onAccept ={(value) => handleDateChange('startDate', value)} label="Start Date"  
@@ -157,8 +157,8 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
          <Box mb={2}> <DateTimePicker name="endDate" value={dayjs(formData.endDate)} onAccept ={(value) => handleDateChange('endDate', value)} label="End Date"  
         minDateTime={ dayjs(formData.startDate).add(1, 'hour')} slotProps={{ textField: { required: true, fullWidth: true }}}  /></Box>
         </LocalizationProvider>
-        </Grid>
-        </Grid>
+        </div>
+        </div>
         <br />{ticketsError && <ErrorMessage message={ticketsError} />}
         <div className='tickets'>
         {formData.tickets.map((ticket, i) => (
