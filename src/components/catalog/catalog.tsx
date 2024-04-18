@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Slider, Select, MenuItem } from '@mui/material';
+import { SortFilter } from './sort-filter/sort-filter';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { CatalogEvent } from './catalog-event/catalog-event';
 import { EventApi } from '../../api/eventApi';
@@ -104,24 +104,12 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
       <div className="user-bar">
         <UserBar onGoBack={navigate.navigateToCatalogPage} />
       </div>
-      {!isManager && ( <div className= "sort-filter">
-        <div className= "filter">
-        <p>Starting from:</p>
-          <Slider defaultValue={0} getAriaValueText={value => `$${value}`} aria-labelledby="discrete-slider" 
-            valueLabelDisplay="auto" step={10} marks min={0} max={110}
-            onChange={(event, newValue) => {
-              setSliderValue(typeof newValue === 'number' ? newValue : newValue[0]);}}/>
-        </div>
-        <div className= "sort">
-        <Select value={sortOption || ''} onChange={handleSortChange} displayEmpty
-        inputProps={{ 'aria-label': 'Without label' }} renderValue={() => 'Sort by Price'}>
-      <MenuItem value="asc" selected={sortOption === 'asc'}>Ascending</MenuItem>
-      <MenuItem value="desc" selected={sortOption === 'desc'}>Descending</MenuItem>
-      <MenuItem value="Clear">Clear</MenuItem>
-        </Select>
-        </div>
-      </div>
-    )}
+      {!isManager && (
+        <SortFilter
+          sortOption={sortOption}
+          handleSortChange={handleSortChange}
+          setSliderValue={setSliderValue}
+        />)}
       <div className="catalog">
         <InfiniteScroll
           dataLength={events.length}

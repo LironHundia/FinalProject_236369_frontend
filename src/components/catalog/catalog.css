@@ -12,26 +12,6 @@
   margin-bottom: 20px;
 }
 
-.sort-filter {
-  display: flex;
-  justify-content: space-evenly;
-  width: 65%;
-}
-
-.filter {
-  flex: 3;
-}
-
-.sort {
-  display: flex;
-  justify-content: flex-end;
-  align-self: flex-end;
-  flex: 1;
-  height: 50%;
-  margin-bottom: 10px;
-}
-
-
 .catalog {
   margin: 50px 150px;
   width: 80%;
@@ -43,8 +23,3 @@
     grid-gap: 20px 40px;
   }
 
-  .filter p {
-    margin-bottom: 10px; 
-    font-size: 20px; 
-    text-align: center; 
-  }
