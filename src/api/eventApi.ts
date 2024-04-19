@@ -130,7 +130,6 @@ export const EventApi = {
         try {
             const response = await axios.get(BackendServer.concat('api/comment/eventRate/').concat(eventId),
                 { withCredentials: true });
-            console.log(response.data);
             return response.data;
         } catch (e) {
             throw handleError(e);

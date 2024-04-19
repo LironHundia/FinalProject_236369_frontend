@@ -7,6 +7,7 @@ import defaultEventImage from '../../../additionals/image-not-found.jpg';
 import { dateToString, timeToString, timeToLocalString } from '../../../utilities';
 import { GeneralContext } from '../../main/main-page';
 import { UserContext } from '../../route-user/route-user';
+import { BOContext } from '../../route-backoffice/route-backoffice';
 import { Loader } from '../../loader/loader';
 import { RatingScale } from '../../rating/rating-scale/rating-scale';
 import { EventRating } from '../../rating/event-rating/event-rating';
@@ -19,6 +20,7 @@ export interface EventProps {
 export const EventDetails: React.FC<EventProps> = ({ event }) => {
     const generalContext = React.useContext(GeneralContext);
     const userContext = React.useContext(UserContext);
+    const boContext = React.useContext(BOContext);
 
     const [commentCount, setCommentCount] = React.useState<number>(0);
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
@@ -34,8 +36,9 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
             if (!generalContext?.username) {
                 return;
             }
+            const eventId = generalContext.route === "backoffice" ? boContext?.backofficeEvent!._id! : userContext?.userEvent!._id!
             try {
-                const result = await EventApi.getEventRating(userContext?.userEvent!._id!);
+                const result = await EventApi.getEventRating(eventId);
                 setEventRate(result.avg);
                 setEventRateCount(result.total);
 
@@ -43,12 +46,14 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
                 setErrorMessage('Failed to load event rating, please try again');
             }
 
-            try {
-                const rate = await EventApi.getUserRatingForEvent(userContext?.userEvent!._id!, generalContext?.username!);
-                setUserRateForEvent(rate);
+            if (generalContext.route === "user") {
+                try {
+                    const rate = await EventApi.getUserRatingForEvent(userContext?.userEvent!._id!, generalContext?.username!);
+                    setUserRateForEvent(rate);
 
-            } catch (e) {
-                setErrorMessage('Failed to load user rating for event, please try again');
+                } catch (e) {
+                    setErrorMessage('Failed to load user rating for event, please try again');
+                }
             }
         }
 
@@ -68,7 +73,7 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
             setUserRateForEvent(newRate);
         }
         else {
-            setEventRate(((eventRate * eventRateCount) -userRateForEvent  + newRate) / (eventRateCount));
+            setEventRate(((eventRate * eventRateCount) - userRateForEvent + newRate) / (eventRateCount));
             setUserRateForEvent(newRate);
         }
     }
@@ -104,15 +109,13 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
         }
     }, [event]);
 
-    //{generalContext?.route! === "user" && <RatingScale currRate={eventRate} currUserRate={userRateForEvent} changeRate={changeRating} />}
-
     return (
         <Box className="eventContainer">
             <Box className="eventDetailsContainer">
                 <Box className="eventHeader">
                     <Box className="eventName-rating">
                         <Typography className="eventTitle">{name}</Typography>
-                        {generalContext?.route! === "user" && <EventRating rating={eventRate} count={eventRateCount} />}
+                        <EventRating rating={eventRate} count={eventRateCount} />
                     </Box>
                     <img className="eventImage" src={image} alt="event" />
                 </Box>

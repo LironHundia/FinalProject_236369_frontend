@@ -17,8 +17,9 @@ interface BackofficeContext {
 export const BOContext = React.createContext<BackofficeContext | null>(null)
 
 export const BackofficeRoute: React.FC = () => {
-  const [backofficeEvent, setBackofficeEvent] = useState<Event | null>(null);
-  const [backofficePage, setBackofficePage] = useState<'catalog' | 'eventPage' | 'createEvent'>(() => {
+
+  /////////////////////////////////////////////////////////////////////////////////
+   const [backofficePage, setBackofficePage] = useState<'catalog' | 'eventPage' | 'createEvent'>(() => {
     // Get the current page from session storage when the component is mounted
     const savedBOpage = sessionStorage.getItem('currentBOpage');
     return savedBOpage ? JSON.parse(savedBOpage) : 'catalog';
@@ -28,6 +29,26 @@ export const BackofficeRoute: React.FC = () => {
     // Save the current page to session storage whenever it changes
     sessionStorage.setItem('currentBOpage', JSON.stringify(backofficePage));
   }, [backofficePage]);
+
+    /////////////////////////////////////////////////////////////////////////////////
+    const [backofficeEvent, setBackofficeEvent] = useState<Event | null>(null);
+    // Load event from localStorage or fetch new event
+    React.useEffect(() => {
+      const storedCurrBOEvent = localStorage.getItem('backofficeEvent');
+  
+      if (storedCurrBOEvent != null) {
+        setBackofficeEvent(JSON.parse(storedCurrBOEvent));
+      } else {
+        setBackofficeEvent(null);
+      }
+    }, [backofficePage]);
+  
+    // Save event to localStorage whenever it changes
+    React.useEffect(() => {
+      localStorage.setItem('backofficeEvent', JSON.stringify(backofficeEvent));
+    }, [backofficeEvent]);
+    
+    /////////////////////////////////////////////////////////////////////////////////
 
   const backofficePageProps: BackofficePageProps = {
     navigateToBOCatalogPage: () => setBackofficePage('catalog'),
