@@ -5,7 +5,6 @@ import { ErrorMessage } from '../../error/error';
 import { Order } from '../../../types';
 import { EventApi } from '../../../api/eventApi';
 import { GeneralContext } from '../../main/main-page';
-import { UserOrderDetails } from '../user-order-details/user-order-details';
 import { UserOrderHeader } from '../user-order-header/user-order-header';
 import './user-orders-section.scss';
 
