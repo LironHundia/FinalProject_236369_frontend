@@ -67,10 +67,14 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
             return;
         }
         await EventApi.rateEvent(userContext?.userEvent!._id!, newRate);
+        //make frontend visual adjustments
         if (userRateForEvent === 0) {
             setEventRateCount(eventRateCount + 1);
             setEventRate(((eventRate * eventRateCount) + newRate) / (eventRateCount + 1));
             setUserRateForEvent(newRate);
+            //update total events rated by user
+            sessionStorage.setItem('currentEventsRated', JSON.stringify(generalContext?.eventsRated! + 1));
+            generalContext?.setEventsRated(generalContext?.eventsRated! + 1);
         }
         else {
             setEventRate(((eventRate * eventRateCount) - userRateForEvent + newRate) / (eventRateCount));

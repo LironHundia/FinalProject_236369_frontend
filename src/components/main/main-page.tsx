@@ -19,7 +19,7 @@ interface GeneralContext {
   onLogout: () => void;
   changeUserSpace: () => void;
   eventsRated: number;
-  seteventsRated: (eventsRated: number) => void;
+  setEventsRated: (eventsRated: number) => void;
   nextEvent: NextEvent | null;
   setNextEvent: (event: NextEvent | null) => void;
 }
@@ -31,7 +31,7 @@ export const MainPage: React.FC<PageProps> = (pageProps) => {
   const [userPermission, setUserPermission] = useState<'A' | 'M' | 'W'>('W');
   const [inUserSpace, setInUserSpace] = useState<boolean>(false);
 
-  const [eventsRated, seteventsRated] = useState<number>(() => {
+  const [eventsRated, setEventsRated] = useState<number>(() => {
     // Get the current page from session storage when the component is mounted
     const savedEventsRated = sessionStorage.getItem('currentEventsRated');
     return savedEventsRated ? JSON.parse(savedEventsRated) : INVALID_VALUE;
@@ -85,12 +85,12 @@ export const MainPage: React.FC<PageProps> = (pageProps) => {
       try {
         if (username && eventsRated === INVALID_VALUE) {
           const res = await EventApi.getUserRating(username);
-          seteventsRated(res as number);
+          setEventsRated(res as number);
           sessionStorage.setItem('currentEventsRated', JSON.stringify(res));
         }
       } catch (error) {
         console.log("did not get user rating, error: ", error);
-        seteventsRated(INVALID_VALUE);
+        setEventsRated(INVALID_VALUE);
       }
     };
 
@@ -125,7 +125,7 @@ export const MainPage: React.FC<PageProps> = (pageProps) => {
     <GeneralContext.Provider value={{
       route: currentRoute, setRoute: setCurrentRoute,
       username, setUsername, userPermission, onLogout,
-      changeUserSpace, eventsRated, seteventsRated, nextEvent, setNextEvent
+      changeUserSpace, eventsRated, setEventsRated: setEventsRated, nextEvent, setNextEvent
     }}>
       {inUserSpace === false && currentRoute === "user" && <UserRoute />}
       {inUserSpace === false && currentRoute === "backoffice" && <BackofficeRoute />}

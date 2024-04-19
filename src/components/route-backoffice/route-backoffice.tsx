@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { AuthApi } from '../../api/authApi';
-import { APIStatus, BackofficePageProps, PageProps } from '../../types';
+import { BackofficePageProps } from '../../types';
 import { BOEventPage } from '../route-backoffice/BO-event-page/BO-event-page';
 import { BOCreateEvent } from '../route-backoffice/BO-create-event/BO-create-event';
 import { Catalog } from '../catalog/catalog';
 import { Event } from '../../types';
-import { Typography } from '@mui/material';
 
 interface BackofficeContext {
   setBackofficePage: (value: 'catalog' | 'eventPage' | 'createEvent') => void;
