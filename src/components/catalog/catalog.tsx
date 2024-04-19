@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { SortFilter } from './sort-filter/sort-filter';
+import { SelectChangeEvent } from '@mui/material/Select';
 import { CatalogEvent } from './catalog-event/catalog-event';
 import { EventApi } from '../../api/eventApi';
 import { Loader } from '../loader/loader';
@@ -19,11 +21,20 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
   const [events, setEvents] = useState<Event[]>([]); // State to store the events fetched from the API
   const [hasMore, setHasMore] = useState(true); // State to check if there are more events to fetch (for the infinite scroll)
   const [page, setPage] = React.useState(1); // State to keep track of the page number for the infinite scroll
+  const [sliderValue, setSliderValue] = useState(0); // State to keep track of the slider value
+  const [sortOption, setSortOption] = useState<string | undefined>(undefined); // State to keep track of the sort option
+
 
   const generalContext = React.useContext(GeneralContext);
   const userContext = React.useContext(UserContext);
   const isManager = generalContext?.route == 'backoffice' ? true : false;
 
+  const handleSortChange = (event: SelectChangeEvent<string>) => {
+    const value = event.target.value;
+    setSortOption(value === "Clear" ? undefined : value);
+    setEvents([]); 
+    setPage(1);
+  };
 
   //TODO: how many events to fetch at a time?
   const fetchMoreEvents = async (): Promise<void> => {
@@ -32,7 +43,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
       if (isManager)
         data = await EventApi.getAllEvents(undefined, page);
       else
-        data = await EventApi.getAvailableEvents(undefined, page);
+        data = await EventApi.getAvailableEvents(undefined, page, sortOption);
       setPage(prevPage => prevPage + 1);
       setEvents(prevEvents => [...prevEvents, ...data]);
       if (data.length === 0) {
@@ -53,21 +64,22 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
         if (isManager)
           data = await EventApi.getAllEvents(undefined, page);
         else
-          data = await EventApi.getAvailableEvents(undefined, page);
+          data = await EventApi.getAvailableEvents(undefined, page, sortOption);
+        setPage(prevPage => prevPage + 1);
         if (data.length === 0) {
           setHasMore(false);
         }
-        //TODO: Delete the multiplier
-        const result = data.flatMap(element => Array(4).fill(element));
-        setEvents(result);
+        setEvents(data);
       } catch (error) {
         console.error('Error fetching initial events:', error);
       }
     };
 
     fetchInitialEvents();
-  }, []);
+  }, [sortOption]);
 
+
+  //TODO: Add documentation
   React.useEffect(() => {
     const setUserNextEvent = async () => {
       if (generalContext?.username) {
@@ -95,6 +107,12 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
       <div className="user-bar">
         <UserBar onGoBack={navigate.navigateToCatalogPage} />
       </div>
+      {!isManager && (
+        <SortFilter
+          sortOption={sortOption}
+          handleSortChange={handleSortChange}
+          setSliderValue={setSliderValue}
+        />)}
       <div className="catalog">
         <InfiniteScroll
           dataLength={events.length}
@@ -107,7 +125,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
             </p>
           }
           className="events-grid">
-          {events.map((event, index) => (
+          {events.filter(event => event.lowestPrice! >= sliderValue).map((event, index) => (
             <CatalogEvent key={index + 1} event={event} navigateToEventPage={navigate.navigateToEventPage} />
           ))}
         </InfiniteScroll>

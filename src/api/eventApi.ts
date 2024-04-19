@@ -10,13 +10,11 @@ interface QueryParams {
 }
 
 export const EventApi = {
-    getAvailableEvents: async (limit?: number, page?: number): Promise<Event[]> => {
+    getAvailableEvents: async (limit?: number, page?: number, sort?:string): Promise<Event[]> => {
         try {
-            const response = await axios.get(BackendServer.concat('api/event'),
-                {
-                    params: { limit, page },
-                    withCredentials: true
-                });
+            const response = await axios.get(BackendServer.concat('api/event'), 
+            { params: {limit,page,sort},
+            withCredentials: true });
             return response.data;
         } catch (e) {
             throw handleError(e);
