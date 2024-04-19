@@ -169,7 +169,7 @@ export const EventApi = {
         try {
             const response = await axios.get(BackendServer.concat('api/order/').concat(username),
                 //const response = await axios.get("http://localhost:3003/".concat('api/order/').concat(username), 
-                { withCredentials: true });
+                { params: { limit, page }, withCredentials: true });
             return response.data.orders;
         } catch (e) {
             throw handleError(e);

@@ -6,61 +6,55 @@ import { Order } from '../../../types';
 import { EventApi } from '../../../api/eventApi';
 import { GeneralContext } from '../../main/main-page';
 import { UserOrderHeader } from '../user-order-header/user-order-header';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import './user-orders-section.scss';
 
 export const UserOrdersSection: React.FC = () => {
     const generalContext = React.useContext(GeneralContext);
-    const [isLoading, setIsLoading] = React.useState<boolean>(true);
     const [errorMessage, setErrorMessage] = React.useState<string>('');
-    const [orderPage, setOrderPage] = React.useState<number>(0);
     const [orders, setOrders] = React.useState<Order[]>([]);
-    const [orderCount, setOrderCount] = React.useState<Number>(0);
+    const [hasMoreOrders, setHasMoreOrders] = React.useState(true);
+    const [page, setPage] = React.useState(1); // State to keep track of the page number for the infinite scroll
 
-    //get the orders of the user
+    const fetchOrders = async () => {
+        // replace with your actual fetch function
+        if (!generalContext?.username) {
+            console.log("Username is not set");
+            return; // return early if username is not set
+        }
+        const newItems = await EventApi.getUserOrders(generalContext?.username!, 5, page);
+        setPage(page + 1);
+        setOrders([...orders, ...newItems]);
+        if (newItems.length === 0 || newItems.length < 5) {
+            setHasMoreOrders(false);
+        }
+    };
+
     React.useEffect(() => {
-        setIsLoading(true);
-        const fetchOrders = async () => {
-            try {
-                if (!generalContext?.username) {
-                    console.log("Username is not set");
-                    return; // return early if username is not set
-                }
-                const orders = await EventApi.getUserOrders(generalContext.username, undefined, orderPage);
-                setOrders(orders);
-            } catch (e) {
-                setErrorMessage('Failed to load comments due to server error. please try again later.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchOrders();
-    }, [orderPage, generalContext?.username]); // add generalContext?.username to the dependency array
+        if (hasMoreOrders) {
+            fetchOrders();
+        }
+    }, [generalContext?.username]);
 
     return (
-        <Box>
+        <InfiniteScroll
+            dataLength={orders.length}
+            next={fetchOrders}
+            hasMore={hasMoreOrders}
+            loader={
             <Box>
-                {isLoading && <Loader />}
-                {errorMessage && <ErrorMessage message={errorMessage} />}
-                {!errorMessage && orders.length === 0 &&
-                    <Box className="no-orders">
-                        <Typography className="no-orders-text"> - No orders to present -</Typography>
-                    </Box>}
-                {orders && orders.length !== 0 && orders.map((order, index) => <UserOrderHeader key={index} {...order} />)}
-
-            </Box>
-            <Box className="navigationButtons">
-                <button
-                    className='commentPageNavigation'
-                    onClick={() => setOrderPage(Number(orderPage) - 1)}
-                    disabled={orders.length === 0 || orderPage === 0}
-                > Previous
-                </button>
-                <button
-                    className='commentPageNavigation'
-                    onClick={() => setOrderPage(Number(orderPage) + 1)}
-                > Next
-                </button>
-            </Box>
-        </Box>
+                <Loader/>
+                <h4>Loading...</h4>
+            </Box>}
+            endMessage={
+                <Box className="no-orders">
+                    <Typography className="no-orders-text"> - No orders to present -</Typography>
+                </Box>
+            }
+        >
+            {orders.map((order, index) => (
+                <UserOrderHeader key={index} {...order} />
+            ))}
+        </InfiniteScroll>
     );
 }
