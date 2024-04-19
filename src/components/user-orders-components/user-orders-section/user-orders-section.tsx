@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Box, Typography } from '@mui/material';
-import {Loader} from '../../loader/loader';
-import {ErrorMessage} from '../../error/error';
+import { Loader } from '../../loader/loader';
+import { ErrorMessage } from '../../error/error';
 import { Order } from '../../../types';
 import { EventApi } from '../../../api/eventApi';
-import {GeneralContext} from '../../main/main-page';
+import { GeneralContext } from '../../main/main-page';
 import { UserOrderDetails } from '../user-order-details/user-order-details';
 import { UserOrderHeader } from '../user-order-header/user-order-header';
 import './user-orders-section.scss';
@@ -42,9 +42,12 @@ export const UserOrdersSection: React.FC = () => {
             <Box>
                 {isLoading && <Loader />}
                 {errorMessage && <ErrorMessage message={errorMessage} />}
-                {!errorMessage && orders.length === 0 && <h2>No More Orders</h2>}
+                {!errorMessage && orders.length === 0 &&
+                    <Box className="no-orders">
+                        <Typography className="no-orders-text"> - No orders to present -</Typography>
+                    </Box>}
                 {orders && orders.length !== 0 && orders.map((order, index) => <UserOrderHeader key={index} {...order} />)}
-               
+
             </Box>
             <Box className="navigationButtons">
                 <button

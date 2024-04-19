@@ -9,14 +9,11 @@ import { Box } from '@mui/material';
 import { Order } from '../../../types';
 import { UserOrderDetails } from '../user-order-details/user-order-details';
 import './user-order-header.scss';
-import { WidthFull } from '@mui/icons-material';
 
 export const UserOrderHeader: React.FC<Order> = (order) => {
   const purchaseDate = utils.dateAndTimeToLocalString(new Date(order.purchaseDate));
   const startDate = utils.dateAndTimeToLocalString(new Date(order.startDate));
-  const timeLeft = new Date(order.startDate).getTime() - new Date().getTime();
-  const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
-  const hasPassed = new Date(order.endDate).getTime() < new Date().getTime();
+  
   return (
     <div className='orderHeaderItem'>
       <Accordion className="accordion">
