@@ -131,8 +131,9 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
       <form onSubmit={handleSubmit}>
         <NewEventDetails formData={formData} categories={categories} handleTextChange={handleTextChange} 
         handleSelectChange={handleSelectChange} handleDateChange={handleDateChange} />
+        <div className="ticketsSection">
         <br />{ticketsError && <ErrorMessage message={ticketsError} />}
-        <div className='tickets'>
+        <div className='types'>
         {formData.tickets.map((ticket, i) => (
         <TicketType key={i} index={i} onTicketUpdate={handleTicketUpdate} onQuanChange={triggerQuantityChange}/>))}        
           {formData.tickets.length < MAX_TICKETS_CATEGORIES && 
@@ -141,6 +142,7 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
         <Box className="total" mt={2}>
           Total Tickets: {formData.totalAvailableTickets ? formData.totalAvailableTickets.toLocaleString() : '0'}
         </Box>
+        </div>
         <Box display="flex" justifyContent="center" mt={2}>
           <Button type="submit" variant="contained" color="primary">Publish Event</Button>
         </Box>
