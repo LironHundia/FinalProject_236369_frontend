@@ -1,0 +1,10 @@
+.event-details {
+    display: flex;
+    justify-content: center;
+    gap: 2rem; 
+}
+
+.details-column {
+    flex: 1;
+    max-width: calc(50% - 1rem);
+}
