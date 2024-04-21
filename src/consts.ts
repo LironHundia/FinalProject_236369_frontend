@@ -1,5 +1,5 @@
-//export const BackendServer = 'http://localhost:3002/';
-export const BackendServer = 'https://finalproject-backend-userserver.onrender.com/';
+export const BackendServer = 'http://localhost:3002/';
+//export const BackendServer = 'https://finalproject-backend-userserver.onrender.com/';
 
 export const ADMIN = 'A';
 export const MANAGER = 'M';
