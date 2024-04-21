@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { EventApi } from '../../../api/eventApi';
 import { ErrorMessage } from '../../error/error';
-import { dateAndTimeToString } from '../../../utilities';
+import { dateAndTimeToLocalString } from '../../../utilities';
 import dayjs from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -40,8 +40,8 @@ export const UpdateEventTime: React.FC<DateEventFormProps> = ({ startDate, endDa
         const res = await EventApi.updateEventDate(boContext?.backofficeEvent!._id!, currStartDate!, currEndDate!);
         if (res === APIStatus.Success) {
           let newEvent = boContext?.backofficeEvent!;
-          newEvent!.startDate = dateAndTimeToString(currStartDate!);
-          newEvent!.endDate = dateAndTimeToString(currEndDate!);
+          newEvent!.startDate = dateAndTimeToLocalString(currStartDate!);
+          newEvent!.endDate = dateAndTimeToLocalString(currEndDate!);
           boContext?.setBackofficeEvent(newEvent);
         }
       } catch (e) {

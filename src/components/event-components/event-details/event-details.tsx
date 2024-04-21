@@ -4,7 +4,7 @@ import { Event } from '../../../types';
 import { UpdateEventTime } from '../date-event-form/date-event-form';
 import { EventApi } from '../../../api/eventApi';
 import defaultEventImage from '../../../additionals/image-not-found.jpg';
-import { dateToString, timeToLocalString } from '../../../utilities';
+import { dateToString, timeToLocalString, dateAndTimeToLocalString } from '../../../utilities';
 import { GeneralContext } from '../../main/main-page';
 import { UserContext } from '../../route-user/route-user';
 import { BOContext } from '../../route-backoffice/route-backoffice';
@@ -88,13 +88,15 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
 
     const timeNow = new Date();
 
-    const showStartDate = new Date(startDate);
+    let showStartDate = new Date(startDate);
     const formattedStartDate = dateToString(showStartDate);
     const formattedStartTime = timeToLocalString(showStartDate);
+    showStartDate = new Date(dateAndTimeToLocalString(showStartDate));
 
-    const showEndDate = new Date(endDate);
+    let showEndDate = new Date(endDate);
     const formattedEndDate = dateToString(showEndDate);
     const formattedEndTime = timeToLocalString(showEndDate);
+    showEndDate = new Date(dateAndTimeToLocalString(showEndDate));
 
     React.useEffect(() => {
         const fetchEvent = async () => {
