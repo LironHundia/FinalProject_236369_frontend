@@ -144,7 +144,7 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
         <div className="ticketsSection">
         <br />{ticketsError && <ErrorMessage message={ticketsError} />}
         <div className='types'>
-        {formData.tickets.map((ticket, i) => (
+        {formData.tickets.map((_, i) => (
         <TicketType key={i} index={i} onTicketUpdate={handleTicketUpdate} onQuanChange={triggerQuantityChange}/>))}        
           {formData.tickets.length < MAX_TICKETS_CATEGORIES && 
         <button className="addButton" onClick={handleAddTicket}>+<br />add new type</button>}

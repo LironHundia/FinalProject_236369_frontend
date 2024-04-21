@@ -2,7 +2,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Popper from '@mui/material/Popper';
 import Typography from '@mui/material/Typography';  
-import { GeneralContext } from '../main/main-page';
 import './invalid-action-msg.scss';
 
 

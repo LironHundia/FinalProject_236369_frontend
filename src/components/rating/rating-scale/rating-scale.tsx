@@ -18,7 +18,7 @@ export const RatingScale: React.FC<RateProps> = ({currRate, changeRate}) => {
       <Rating
         name="simple-controlled"
         value={currRate}
-        onChange={(event, newValue) => {
+        onChange={(_, newValue) => {
             changeRate(newValue);
         }}
         size="large"

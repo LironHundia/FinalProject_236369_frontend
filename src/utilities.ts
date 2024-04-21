@@ -1,7 +1,6 @@
 import * as constants from './consts';
-import { PaymentFormError, APIStatus, NextEvent, Event } from './types';
+import { PaymentFormError, APIStatus, NextEvent } from './types';
 import { EventApi } from './api/eventApi';
-import { Axios } from 'axios';
 
 export function dateToString(date: Date): string {
     return `${String(date.getUTCDate()).padStart(2, '0')}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${date.getUTCFullYear()}`;

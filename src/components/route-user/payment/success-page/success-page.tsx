@@ -1,7 +1,6 @@
 import React from 'react';
-import { UserContext } from '../../route-user';
 import { PaymentDetails } from '../../../payment/payment-details/payment-details';
-import { Button, Typography, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import './success-page.scss';
 
 interface SuccessPageProps {
@@ -10,7 +9,6 @@ interface SuccessPageProps {
 }
 
 export const SuccessPage: React.FC<SuccessPageProps> = ({ navigateToCatalogPage, orderId }) => {
-    const userContext = React.useContext(UserContext);
 
     return (
         <Box className="SuccessMsgContainer">

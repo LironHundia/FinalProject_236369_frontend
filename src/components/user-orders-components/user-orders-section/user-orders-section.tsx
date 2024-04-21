@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Box, Typography } from '@mui/material';
 import { Loader } from '../../loader/loader';
-import { ErrorMessage } from '../../error/error';
 import { Order } from '../../../types';
 import { EventApi } from '../../../api/eventApi';
 import { GeneralContext } from '../../main/main-page';
@@ -11,7 +10,6 @@ import './user-orders-section.scss';
 
 export const UserOrdersSection: React.FC = () => {
     const generalContext = React.useContext(GeneralContext);
-    const [errorMessage, setErrorMessage] = React.useState<string>('');
     const [orders, setOrders] = React.useState<Order[]>([]);
     const [hasMoreOrders, setHasMoreOrders] = React.useState(true);
     const [page, setPage] = React.useState(1); // State to keep track of the page number for the infinite scroll

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserPageProps, Event, TicketToPurchase, NextEvent } from '../../types';
+import { UserPageProps, Event, TicketToPurchase } from '../../types';
 import { Catalog } from '../catalog/catalog';
 import { Loader } from '../loader/loader';
 import { EventPage } from './event-page/event-page';
@@ -17,7 +17,6 @@ export const UserContext = React.createContext<UserContext | null>(null)
 
 export const UserRoute: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
 
   /////////////////////////////// Reservation /////////////////////////////////
   const [reservation, setReservation] = useState<TicketToPurchase | null>(() => {
@@ -55,13 +54,14 @@ export const UserRoute: React.FC = () => {
 
   // Load event from localStorage or fetch new event
   React.useEffect(() => {
+    setIsLoading(true);
     const storedCurrUserEvent = localStorage.getItem('userEvent');
-
     if (storedCurrUserEvent != null) {
       setUserEvent(JSON.parse(storedCurrUserEvent));
     } else {
       setUserEvent(null);
     }
+    setIsLoading(false);
   }, [userPage]);
 
   // Save event to localStorage whenever it changes

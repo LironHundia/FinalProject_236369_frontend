@@ -7,8 +7,8 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import {InvalidActionMsg} from '../../invalid-action-msg/invalid-action-msg';
-import {BOContext} from '../../route-backoffice/route-backoffice';
+import { InvalidActionMsg } from '../../invalid-action-msg/invalid-action-msg';
+import { BOContext } from '../../route-backoffice/route-backoffice';
 import { LoadingButton } from '@mui/lab';
 import SaveIcon from '@mui/icons-material/Save';
 import './date-event-form.scss';
@@ -34,8 +34,7 @@ export const UpdateEventTime: React.FC<DateEventFormProps> = ({ startDate, endDa
   }
 
   const onUpdateEvent = async () => {
-    if (errorMessage === '') 
-    {
+    if (errorMessage === '') {
       setIsLoading(true);
       try {
         const res = await EventApi.updateEventDate(boContext?.backofficeEvent!._id!, currStartDate!, currEndDate!);
@@ -48,10 +47,9 @@ export const UpdateEventTime: React.FC<DateEventFormProps> = ({ startDate, endDa
       } catch (e) {
         console.error(e);
         const error = await e;
-        if (error as APIStatus === APIStatus.Unauthorized)
-          {
-            setInvalidActionMsg('You are not authorized to perform this action');
-          }
+        if (error as APIStatus === APIStatus.Unauthorized) {
+          setInvalidActionMsg('You are not authorized to perform this action');
+        }
         //TODO: handle error
       } finally {
         setIsLoading(false);
@@ -62,7 +60,7 @@ export const UpdateEventTime: React.FC<DateEventFormProps> = ({ startDate, endDa
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {invalidActionMsg && <InvalidActionMsg msg={invalidActionMsg} goToCatalog={moveToUserCatalog}/>}
+      {invalidActionMsg && <InvalidActionMsg msg={invalidActionMsg} goToCatalog={moveToUserCatalog} />}
       <DemoContainer
         components={[
           'DateTimePicker',
@@ -70,6 +68,7 @@ export const UpdateEventTime: React.FC<DateEventFormProps> = ({ startDate, endDa
       >
         <DemoItem label="Select new start date & time">
           <DateTimePicker
+            sx={{ backgroundColor: 'white' }}
             minDateTime={dayjs(startDate)}
             value={dayjs(startDate)}
             onChange={(newValue) => setCurrStartDate(newValue?.toDate()!)}
@@ -77,6 +76,7 @@ export const UpdateEventTime: React.FC<DateEventFormProps> = ({ startDate, endDa
         </DemoItem>
         <DemoItem label="Select new end date & time">
           <DateTimePicker
+            sx={{ backgroundColor: 'white' }}
             minDateTime={dayjs(currStartDate).add(1, 'minute')}
             value={dayjs(currEndDate)}
             onError={(newValue) => { if (newValue) setErrorMessage("End date must be later that Start date"); else setErrorMessage(''); }}

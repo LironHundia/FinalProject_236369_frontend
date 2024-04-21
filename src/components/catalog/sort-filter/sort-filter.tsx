@@ -67,7 +67,7 @@ export const SortFilter: React.FC<SortFilterProps> = ({ sortOption, handleSortCh
         marks={marks}
         min={0} 
         max={maxPrice} 
-        onChange={(event, newValue) => {
+        onChange={(_, newValue) => {
             handleFilterChange(typeof newValue === 'number' ? newValue : newValue[0]);
           }}/>
       </div>

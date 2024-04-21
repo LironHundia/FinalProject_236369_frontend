@@ -4,6 +4,7 @@ import { UserPageProps, TicketToPurchase, APIStatus } from '../../../types';
 import { CommentSection } from '../../comment-components/comment-section/comment-section';
 import { UserContext } from '../route-user';
 import { Box } from '@mui/material';
+import { ErrorMessage } from '../../error/error';
 import { Loader } from '../../loader/loader';
 import { TicketsSection } from '../../ticket-components/tickets-section/tickets-section';
 import { EventDetails } from '../../event-components/event-details/event-details';
@@ -14,7 +15,6 @@ import './event-page.scss';
 export const EventPage: React.FC<UserPageProps> = (navigation) => {
     const userContext = React.useContext(UserContext);
 
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [chosenTicket, setChosenTicket] = useState<TicketToPurchase | null>(null);
     const [invalidActionMsg, setInvalidActionMsg] = useState<string | null>(null);
@@ -22,7 +22,7 @@ export const EventPage: React.FC<UserPageProps> = (navigation) => {
     React.useEffect(() => {
         const secureTickets = async () => {
             try {
-                const res = await EventApi.secureTickets(chosenTicket!);
+                await EventApi.secureTickets(chosenTicket!);
                 //TODO: set 2 min timer
                 await userContext?.setReservation(chosenTicket);
                 navigation.navigateToPaymentPage();
@@ -50,12 +50,13 @@ export const EventPage: React.FC<UserPageProps> = (navigation) => {
             <Box className="eventSection">
                 <Box className="eventDetails">
                     {userContext?.userEvent && <EventDetails event={userContext?.userEvent!} />}
-                    {!userContext?.userEvent && isLoading && <Loader />}
+                    {!userContext?.userEvent && <Loader />}
                 </Box>
                 <Box className="ticketsDetails">
                     <h2 className="subTitel">Buy Tickets:</h2>
+                    {errorMessage && <ErrorMessage message={errorMessage} />}
                     {userContext?.userEvent && <TicketsSection tickets={userContext?.userEvent!.tickets!} eventId={userContext?.userEvent!._id!} setChosenTicket={setChosenTicket} />}
-                    {!userContext?.userEvent && isLoading && <Loader />}
+                    {!userContext?.userEvent && <Loader />}
                 </Box>
                 <Box className="commentSection">
                     <h2 className="subTitel">Comments:</h2>

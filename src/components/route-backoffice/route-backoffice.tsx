@@ -4,7 +4,6 @@ import { BOEventPage } from '../route-backoffice/BO-event-page/BO-event-page';
 import { BOCreateEvent } from '../route-backoffice/BO-create-event/BO-create-event';
 import { Catalog } from '../catalog/catalog';
 import { Event } from '../../types';
-import { GeneralContext } from '../main/main-page';
 
 interface BackofficeContext {
   setBackofficePage: (value: 'catalog' | 'eventPage' | 'createEvent') => void;
