@@ -4,7 +4,7 @@ import { Event } from '../../../types';
 import { UpdateEventTime } from '../date-event-form/date-event-form';
 import { EventApi } from '../../../api/eventApi';
 import defaultEventImage from '../../../additionals/image-not-found.jpg';
-import { dateToString, timeToLocalString, dateAndTimeToLocalString } from '../../../utilities';
+import { dateToString, timeToLocalString } from '../../../utilities';
 import { GeneralContext } from '../../main/main-page';
 import { UserContext } from '../../route-user/route-user';
 import { BOContext } from '../../route-backoffice/route-backoffice';
