@@ -9,7 +9,6 @@ import { Loader } from '../loader/loader';
 import { Event } from '../../types';
 import { getUserNextEvent } from '../../utilities';
 import { GeneralContext } from '../main/main-page';
-import { UserContext } from '../route-user/route-user';
 import { UserBar } from '../user-bar/user-bar';
 import './catalog.css';
 
@@ -27,8 +26,8 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
 
 
   const generalContext = React.useContext(GeneralContext);
-  const userContext = React.useContext(UserContext);
   const isManager = generalContext?.route == 'backoffice' ? true : false;
+
 
   const handleSortChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value;
@@ -37,6 +36,12 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
     setPage(1);
   };
 
+  const handleFilterChange = (filter: number) => {
+    setSliderValue(filter);
+    setEvents([]);
+    setPage(1);
+  }
+
   //TODO: how many events to fetch at a time?
   const fetchMoreEvents = async (): Promise<void> => {
     let data: Event[] = [];
@@ -44,7 +49,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
       if (isManager)
         data = await EventApi.getAllEvents(undefined, page);
       else
-        data = await EventApi.getAvailableEvents(undefined, page, sortOption);
+        data = await EventApi.getAvailableEvents(undefined, page, sortOption, sliderValue);
       setPage(prevPage => prevPage + 1);
       setEvents(prevEvents => [...prevEvents, ...data]);
       if (data.length === 0) {
@@ -67,7 +72,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
         if (isManager)
           data = await EventApi.getAllEvents(undefined, page);
         else
-          data = await EventApi.getAvailableEvents(undefined, page, sortOption);
+          data = await EventApi.getAvailableEvents(undefined, page, sortOption, sliderValue);
         setPage(prevPage => prevPage + 1);
         if (data.length === 0) {
           setHasMore(false);
@@ -79,7 +84,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
     };
 
     fetchInitialEvents();
-  }, [sortOption]);
+  }, [sortOption, sliderValue]);
 
 
   //TODO: Add documentation
@@ -128,7 +133,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
         <SortFilter
           sortOption={sortOption}
           handleSortChange={handleSortChange}
-          setSliderValue={setSliderValue}
+          handleFilterChange={handleFilterChange}
         />)}
       <div className="catalog">
         <InfiniteScroll

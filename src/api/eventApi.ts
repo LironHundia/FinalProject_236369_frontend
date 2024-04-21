@@ -10,10 +10,10 @@ interface QueryParams {
 }
 
 export const EventApi = {
-    getAvailableEvents: async (limit?: number, page?: number, sort?:string): Promise<Event[]> => {
+    getAvailableEvents: async (limit?: number, page?: number, sort?:string, minPrice?: number): Promise<Event[]> => {
         try {
             const response = await axios.get(BackendServer.concat('api/event'), 
-            { params: {limit,page,sort},
+            { params: {limit,page,sort, minPrice},
             withCredentials: true });
             return response.data;
         } catch (e) {
@@ -175,6 +175,16 @@ export const EventApi = {
             throw handleError(e);
         }
     },
+
+    getMaxPrice: async (): Promise<number> => {
+        try {
+            const response = await axios.get(BackendServer.concat('api/event/maxprice/'),
+                { withCredentials: true });
+            return response.data.maxPrice;
+        } catch (e) {
+            throw handleError(e);
+        }
+    }
 };
 
 const handleError = async (e: unknown): Promise<APIStatus> => {
