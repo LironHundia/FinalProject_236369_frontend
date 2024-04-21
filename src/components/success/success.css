@@ -1,0 +1,13 @@
+.success-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #d7f8d9;
+    border: 1px solid #c8f5c6;
+    border-radius: 5px;
+}
+
+.success-message {
+    color: #008227;
+    margin: 0;
+}
