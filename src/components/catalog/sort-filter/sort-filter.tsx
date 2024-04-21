@@ -15,6 +15,19 @@ export const SortFilter: React.FC<SortFilterProps> = ({ sortOption, handleSortCh
   const [maxPrice, setMaxPrice] = useState(0);
   const [marks, setMarks] = useState<{ value: number }[]>([]);
 
+
+  const renderValue = (selected: string) => {
+    if (selected === 'asc') {
+      return 'Price low to high';
+    } else if (selected === 'desc') {
+      return 'Price high to low';
+    } else if (selected === 'date') {
+      return 'Earliest date';
+    } else {
+      return 'Sort';
+    }
+  }
+
   //Getting the maximum "lowest price" of the events
   useEffect(() => {
     const fetchMaxPrice = async () => {
@@ -64,14 +77,15 @@ export const SortFilter: React.FC<SortFilterProps> = ({ sortOption, handleSortCh
           onChange={handleSortChange}
           displayEmpty
           inputProps={{ 'aria-label': 'Without label' }}
-          renderValue={() => 'Sort by Price'}>
+          renderValue={renderValue}
+          sx={{width: 180}}>
           <MenuItem value="asc" selected={sortOption === 'asc'}>
-            Ascending
+            Price low to high
           </MenuItem>
           <MenuItem value="desc" selected={sortOption === 'desc'}>
-            Descending
+            Price high to low
           </MenuItem>
-          <MenuItem value="Clear">Clear</MenuItem>
+          <MenuItem value="date">Earliest date</MenuItem>
         </Select>
       </div>
     </div>

@@ -63,7 +63,6 @@ export const EventDetails: React.FC<EventProps> = ({ event }) => {
 
     const changeRating = async (newRate: number | null) => {
         if (newRate === null) {
-            console.log("rate is null");
             return;
         }
         await EventApi.rateEvent(userContext?.userEvent!._id!, newRate);

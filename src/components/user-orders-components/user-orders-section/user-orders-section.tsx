@@ -19,7 +19,6 @@ export const UserOrdersSection: React.FC = () => {
     const fetchOrders = async () => {
         // replace with your actual fetch function
         if (!generalContext?.username) {
-            console.log("Username is not set");
             return; // return early if username is not set
         }
         const newItems = await EventApi.getUserOrders(generalContext?.username!, 5, page);

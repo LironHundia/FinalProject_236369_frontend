@@ -65,7 +65,6 @@ export const EventApi = {
     updateEventDate: async (eventId: string, newStartDate: Date, newEndDate: Date): Promise<APIStatus> => {
         const startDate = dateAndTimeToString(newStartDate);
         const endDate = dateAndTimeToString(newEndDate);
-        console.log(startDate);
         try {
             await axios.put(BackendServer.concat('api/event/').concat(eventId)
                 , { startDate: startDate, endDate: endDate }

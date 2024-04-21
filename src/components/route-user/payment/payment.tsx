@@ -62,7 +62,6 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        console.log("made req")
 
         if (validateForm()) {
             // Save data if validation passes

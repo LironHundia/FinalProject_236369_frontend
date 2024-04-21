@@ -85,7 +85,6 @@ export async function getUserNextEvent(username: string): Promise<NextEvent | nu
     try {
         const nextOrder = await EventApi.getNextEvent(username)
         if (!nextOrder) {
-            console.log('No next event found for user');
             return null;
         }
         const date = dateToString(new Date(nextOrder.startDate));
