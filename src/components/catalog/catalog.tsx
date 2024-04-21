@@ -10,6 +10,7 @@ import { Event } from '../../types';
 import { getUserNextEvent } from '../../utilities';
 import { GeneralContext } from '../main/main-page';
 import { UserBar } from '../user-bar/user-bar';
+import { EVENT_PAGE_LIMIT} from '../../consts';
 import './catalog.css';
 
 interface CatalogProps {
@@ -47,12 +48,12 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
     let data: Event[] = [];
     try {
       if (isManager)
-        data = await EventApi.getAllEvents(undefined, page);
+        data = await EventApi.getAllEvents(EVENT_PAGE_LIMIT, page);
       else
-        data = await EventApi.getAvailableEvents(undefined, page, sortOption, sliderValue);
+        data = await EventApi.getAvailableEvents(EVENT_PAGE_LIMIT, page, sortOption, sliderValue);
       setPage(prevPage => prevPage + 1);
       setEvents(prevEvents => [...prevEvents, ...data]);
-      if (data.length === 0) {
+      if (data.length <EVENT_PAGE_LIMIT) {
         setHasMore(false);
       }
     } catch (e) {
@@ -70,11 +71,11 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
       let data: Event[] = [];
       try {
         if (isManager)
-          data = await EventApi.getAllEvents(undefined, page);
+          data = await EventApi.getAllEvents(EVENT_PAGE_LIMIT, page);
         else
-          data = await EventApi.getAvailableEvents(undefined, page, sortOption, sliderValue);
+          data = await EventApi.getAvailableEvents(EVENT_PAGE_LIMIT, page, sortOption, sliderValue);
         setPage(prevPage => prevPage + 1);
-        if (data.length === 0) {
+        if (data.length < EVENT_PAGE_LIMIT) {
           setHasMore(false);
         }
         setEvents(data);

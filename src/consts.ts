@@ -10,4 +10,6 @@ export const USER = 'user';
 
 export const MAX_TICKETS_CATEGORIES = 10;
 
+export const EVENT_PAGE_LIMIT = 9;
+
 export const INVALID_VALUE = -1;
