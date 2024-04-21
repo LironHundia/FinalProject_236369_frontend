@@ -18,5 +18,4 @@ export default defineConfig({
       },
     }),
   ],
-  base: '/final-project-236369/',
 })
