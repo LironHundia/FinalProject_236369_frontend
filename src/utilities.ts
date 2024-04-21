@@ -90,7 +90,7 @@ export async function getUserNextEvent(username: string): Promise<NextEvent | nu
         return { eventId: nextOrder.eventId, eventName: nextOrder.eventName, startDate: date };
     } catch (e) {
         const error = await e;
-        if(error as APIStatus === APIStatus.NotFound) {
+        if (error as APIStatus === APIStatus.NotFound) {
             //'No next event found for user'
             return null;
         }
@@ -99,7 +99,10 @@ export async function getUserNextEvent(username: string): Promise<NextEvent | nu
     }
 }
 
-export function canAccessBO(userPermission:string)
-{
+export function canAccessBO(userPermission: string) {
     return (userPermission === constants.ADMIN || userPermission === constants.MANAGER)
+}
+
+export function roundMaxPrice(max: number) {
+    return Math.ceil(max / 10) * 10;
 }

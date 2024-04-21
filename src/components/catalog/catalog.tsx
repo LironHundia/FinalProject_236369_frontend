@@ -32,7 +32,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
 
   const handleSortChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value;
-    setSortOption(value === "Clear" ? undefined : value);
+    setSortOption(value === "date" ? undefined : value);
     setEvents([]);
     setPage(1);
   };
