@@ -4,6 +4,7 @@ import { SortFilter } from './sort-filter/sort-filter';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { CatalogEvent } from './catalog-event/catalog-event';
 import { EventApi } from '../../api/eventApi';
+import { AuthApi } from '../../api/authApi';
 import { Loader } from '../loader/loader';
 import { Event } from '../../types';
 import { getUserNextEvent } from '../../utilities';
@@ -32,7 +33,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
   const handleSortChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value;
     setSortOption(value === "Clear" ? undefined : value);
-    setEvents([]); 
+    setEvents([]);
     setPage(1);
   };
 
@@ -59,6 +60,8 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
   // Fetch events for the initial page
   useEffect(() => {
     const fetchInitialEvents = async () => {
+      await setEvents([]);
+      await setPage(1);
       let data: Event[] = [];
       try {
         if (isManager)
@@ -99,8 +102,22 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
         }
       }
     }
-      setUserNextEvent();
-    }, [generalContext?.username]);
+    setUserNextEvent();
+  }, [generalContext?.username]);
+
+  useEffect(() => {
+    const fetchUserPermission = async () => {
+      try {
+        const permission = await AuthApi.getUserPermission();
+        generalContext?.setUserPermission(permission as 'A' | 'M' | 'W');
+      }
+      catch (e) {
+        generalContext?.onLogout();
+      }
+    };
+
+    fetchUserPermission();
+  }, []);
 
   return (
     <div className="catalog-page">

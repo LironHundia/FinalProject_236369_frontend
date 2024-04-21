@@ -81,8 +81,6 @@ export function validatePaymentForm(cardHolder: string, cardNumber: string, expD
     return newErrors;
 }
 
-
-
 export async function getUserNextEvent(username: string): Promise<NextEvent | null> {
     try {
         const nextOrder = await EventApi.getNextEvent(username)
@@ -101,4 +99,9 @@ export async function getUserNextEvent(username: string): Promise<NextEvent | nu
         console.error('Error fetching next event:', e);
         return null;
     }
+}
+
+export function canAccessBO(userPermission:string)
+{
+    return (userPermission === constants.ADMIN || userPermission === constants.MANAGER)
 }

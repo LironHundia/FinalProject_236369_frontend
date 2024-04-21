@@ -8,11 +8,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
 import {UserBar} from '../../user-bar/user-bar';
 import {categories, CreatedEvent, defaultCreatedEvent, 
-    TicketStruct, defaultTicketStruct} from '../../../types';
+    TicketStruct, defaultTicketStruct,
+    APIStatus} from '../../../types';
 import TicketType from './ticket-type/ticket-type';
 import {MAX_TICKETS_CATEGORIES} from '../../../consts';
 import {EventApi} from '../../../api/eventApi';
 import { ErrorMessage } from '../../error/error';
+import { InvalidActionMsg } from '../../invalid-action-msg/invalid-action-msg';
 import './BO-create-event.css';
 
   
@@ -26,6 +28,7 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
   const [quantityChange, setQuantityChange] = useState(false); // To alert that the amount of tickets has changed in one of the types
   const [serverError, setServerError] = useState<string | null>(null);
   const [ticketsError, setTicketsError] = useState<string | null>(null);
+  const [invalidActionMsg, setInvalidActionMsg] = useState<string | null>(null);
 
     const triggerQuantityChange = () => setQuantityChange(prevState => !prevState);
 
@@ -115,17 +118,24 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
     if (checkForDuplicateTypes(formData.tickets))
       return;
     try{
-    await EventApi.addNewEvent(formData);}
+      await EventApi.addNewEvent(formData);
+      navigateToBOCatalogPage();
+    }  
     catch(e){
+      const error = await e;
       setServerError("error in adding event");
+      if(error as APIStatus === APIStatus.Unauthorized)
+        {
+          setInvalidActionMsg("You are not authorized to perform this action");
+        }
     }
-    navigateToBOCatalogPage();
   };
 
 
 
   return (
     <div className="page">
+    {invalidActionMsg && <InvalidActionMsg msg={invalidActionMsg} goToCatalog={navigateToBOCatalogPage} />}
     <div className="user-bar">
     <UserBar onGoBack={navigateToBOCatalogPage}/>
     </div>

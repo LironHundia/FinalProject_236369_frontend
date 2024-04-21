@@ -8,6 +8,7 @@ import { Loader } from '../../loader/loader';
 import { TicketsSection } from '../../ticket-components/tickets-section/tickets-section';
 import { EventDetails } from '../../event-components/event-details/event-details';
 import { UserBar } from '../../user-bar/user-bar';
+import { InvalidActionMsg } from '../../invalid-action-msg/invalid-action-msg';
 import './event-page.scss';
 
 export const EventPage: React.FC<UserPageProps> = (navigation) => {
@@ -16,6 +17,7 @@ export const EventPage: React.FC<UserPageProps> = (navigation) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [chosenTicket, setChosenTicket] = useState<TicketToPurchase | null>(null);
+    const [invalidActionMsg, setInvalidActionMsg] = useState<string | null>(null);
 
     React.useEffect(() => {
         const secureTickets = async () => {
@@ -26,8 +28,10 @@ export const EventPage: React.FC<UserPageProps> = (navigation) => {
                 navigation.navigateToPaymentPage();
             }
             catch (e) {
-                if(e as APIStatus === APIStatus.BadRequest) {
+                const error = await e;
+                if(error as APIStatus === APIStatus.BadRequest) {
                     setErrorMessage('Bad order: Not enough tickets available in this category');
+                    setInvalidActionMsg('Bad order: Not enough tickets available in this category. Please choose a different ticket category or try again later');
                 }
                 setErrorMessage('Failed to secure tickets, please try again');
 
@@ -41,6 +45,7 @@ export const EventPage: React.FC<UserPageProps> = (navigation) => {
 
     return (
         <Box className='eventPageSection'>
+            {invalidActionMsg && <InvalidActionMsg msg={invalidActionMsg} goToCatalog={navigation.navigateToCatalogPage} />}
             <UserBar onGoBack={navigation.navigateToCatalogPage} />
             <Box className="eventSection">
                 <Box className="eventDetails">

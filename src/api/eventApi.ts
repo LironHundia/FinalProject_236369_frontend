@@ -68,7 +68,7 @@ export const EventApi = {
         console.log(startDate);
         try {
             await axios.put(BackendServer.concat('api/event/').concat(eventId)
-                , { start_date: startDate, end_date: endDate }
+                , { startDate: startDate, endDate: endDate }
                 , { withCredentials: true });
             return APIStatus.Success;
         } catch (e) {

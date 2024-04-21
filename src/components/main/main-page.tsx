@@ -15,7 +15,8 @@ interface GeneralContext {
   setRoute: (route: 'user' | 'backoffice') => void;
   username: string;
   setUsername: (username: string) => void;
-  userPermission: 'A' | 'M' | 'W';
+  userPermission: 'A' | 'M' | 'W' | null;
+  setUserPermission: (permission: 'A' | 'M' | 'W' | null) => void;
   onLogout: () => void;
   changeUserSpace: () => void;
   eventsRated: number;
@@ -28,7 +29,7 @@ export const GeneralContext = React.createContext<GeneralContext | null>(null);
 
 export const MainPage: React.FC<PageProps> = (pageProps) => {
   const [username, setUsername] = useState<string>('');
-  const [userPermission, setUserPermission] = useState<'A' | 'M' | 'W'>('W');
+  const [userPermission, setUserPermission] = useState<'A' | 'M' | 'W'| null>(null);
   const [inUserSpace, setInUserSpace] = useState<boolean>(false);
 
   const [eventsRated, setEventsRated] = useState<number>(() => {
@@ -61,7 +62,7 @@ export const MainPage: React.FC<PageProps> = (pageProps) => {
     setInUserSpace(!inUserSpace);
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Save the current page to session storage whenever it changes
     sessionStorage.setItem('currentRoute', JSON.stringify(currentRoute));
   }, [currentRoute]);
@@ -89,7 +90,6 @@ export const MainPage: React.FC<PageProps> = (pageProps) => {
           sessionStorage.setItem('currentEventsRated', JSON.stringify(res));
         }
       } catch (error) {
-        console.log("did not get user rating, error: ", error);
         setEventsRated(INVALID_VALUE);
       }
     };
@@ -124,7 +124,7 @@ export const MainPage: React.FC<PageProps> = (pageProps) => {
   return (
     <GeneralContext.Provider value={{
       route: currentRoute, setRoute: setCurrentRoute,
-      username, setUsername, userPermission, onLogout,
+      username, setUsername, userPermission, setUserPermission, onLogout,
       changeUserSpace, eventsRated, setEventsRated: setEventsRated, nextEvent, setNextEvent
     }}>
       {inUserSpace === false && currentRoute === "user" && <UserRoute />}

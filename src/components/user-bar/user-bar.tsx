@@ -28,7 +28,6 @@ export const UserBar: React.FC<UserBarProps> = ({ onGoBack }) => {
     const boContext = React.useContext(BOContext);
     const userContext = React.useContext(UserContext);
     const generalContext = React.useContext(GeneralContext);
-
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -37,6 +36,14 @@ export const UserBar: React.FC<UserBarProps> = ({ onGoBack }) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    React.useEffect(() => {
+        if (generalContext?.route === "backoffice" && generalContext?.userPermission === constants.WORKER) {
+            generalContext?.setRoute(constants.USER);
+        }
+    
+    }, [generalContext?.userPermission]);
+
     return (
         <React.Fragment>
             <Box className="userBar" sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
