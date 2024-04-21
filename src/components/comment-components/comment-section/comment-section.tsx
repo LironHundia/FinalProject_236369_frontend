@@ -36,9 +36,9 @@ export const CommentSection: React.FC<Props> = ({ eventId }) => {
 
     //get the comments for the event
     React.useEffect(() => {
-        setIsLoading(true);
         const fetchComments = async () => {
             try {
+                setIsLoading(true);
                 if (eventId && newComment) {
                     const comments = await EventApi.getEventComments({ eventId, page: commentPage });
                     setComments(comments);

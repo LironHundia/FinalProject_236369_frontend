@@ -8,6 +8,7 @@ import { validatePaymentForm } from '../../../utilities'
 import { UserBar } from '../../user-bar/user-bar';
 import { ErrorMessage } from '../../error/error';
 import { UserContext } from '../route-user';
+import { CountdownMsg } from '../../countdown-msg/countdown-msg';
 import Box from '@mui/material/Box';
 import './payment.scss';
 
@@ -87,6 +88,7 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
             {orderId && <SuccessPage navigateToCatalogPage={navigation.navigateToCatalogPage} orderId={orderId} />}
             {!orderId &&
                 <form className="payment-form" onSubmit={handleSubmit}>
+                    <CountdownMsg />
                     <Box className="left-col">
                         <Box className="payment-form-container">
                             <Typography className="payment-form-header" gutterBottom>

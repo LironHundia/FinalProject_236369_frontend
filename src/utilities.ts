@@ -103,3 +103,19 @@ export function canAccessBO(userPermission:string)
 {
     return (userPermission === constants.ADMIN || userPermission === constants.MANAGER)
 }
+
+// Get the value of the 'paymentToken' cookie
+export function getPaymentTokenExpiration() {
+    const cookies = document.cookie.split(';');
+    console.log(document.cookie)
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'paymentToken') {
+        // Parse the JWT token to extract the expiration timestamp
+        const decodedToken = JSON.parse(atob(value.split('.')[1]));
+        const expirationTimestamp = decodedToken.exp * 1000; // Convert to milliseconds
+        return expirationTimestamp;
+      }
+    }
+    return null; // Return null if 'paymentToken' cookie is not found
+  }
