@@ -30,17 +30,17 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
   const isManager = generalContext?.route == 'backoffice' ? true : false;
 
 
-  const handleSortChange = (event: SelectChangeEvent<string>) => {
+  const handleSortChange =  (event: SelectChangeEvent<string>) => {
     const value = event.target.value;
-    setSortOption(value === "date" ? undefined : value);
     setEvents([]);
     setPage(1);
+    setSortOption(value === "date" ? undefined : value);
   };
 
   const handleFilterChange = (filter: number) => {
-    setSliderValue(filter);
     setEvents([]);
     setPage(1);
+    setSliderValue(filter);
   }
 
   //TODO: how many events to fetch at a time?
@@ -66,26 +66,29 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
   // Fetch events for the initial page
   useEffect(() => {
     const fetchInitialEvents = async () => {
-      await setEvents([]);
-      await setPage(1);
       let data: Event[] = [];
       try {
         if (isManager)
           data = await EventApi.getAllEvents(EVENT_PAGE_LIMIT, page);
         else
           data = await EventApi.getAvailableEvents(EVENT_PAGE_LIMIT, page, sortOption, sliderValue);
-        setPage(prevPage => prevPage + 1);
+        setPage(2);
+        setEvents(data);
         if (data.length < EVENT_PAGE_LIMIT) {
           setHasMore(false);
         }
-        setEvents(data);
+        else
+          setHasMore(true);
       } catch (error) {
         console.error('Error fetching initial events:', error);
       }
-    };
-
+    }; 
+    
     fetchInitialEvents();
+
   }, [sortOption, sliderValue]);
+
+ 
 
 
   //TODO: Add documentation
@@ -125,6 +128,8 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
     fetchUserPermission();
   }, []);
 
+  
+
   return (
     <div className="catalog-page">
       <div className="user-bar">
@@ -148,7 +153,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
             </p>
           }
           className="events-grid">
-          {events.filter(event => event.lowestPrice! >= sliderValue).map((event, index) => (
+          {events.map((event, index) => (
             <CatalogEvent key={index + 1} event={event} navigateToEventPage={navigate.navigateToEventPage} />
           ))}
         </InfiniteScroll>
