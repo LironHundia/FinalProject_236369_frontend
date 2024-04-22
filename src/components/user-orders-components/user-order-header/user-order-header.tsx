@@ -11,8 +11,8 @@ import { UserOrderDetails } from '../user-order-details/user-order-details';
 import './user-order-header.scss';
 
 export const UserOrderHeader: React.FC<Order> = (order) => {
-  const purchaseDate = utils.dateAndTimeToLocalString(new Date(order.purchaseDate));
-  const startDate = utils.dateAndTimeToLocalString(new Date(order.startDate));
+  const purchaseDate = utils.dateToString(new Date(order.purchaseDate)) + " " + utils.timeToString(new Date(order.purchaseDate)); // "2021-10-10 12:00:00
+  const startDate = utils.dateToLocalString(new Date(order.startDate)) + " " + utils.timeToLocalString(new Date(order.startDate)); // "2021-10-10 12:00:00
   
   return (
     <div className='orderHeaderItem'>

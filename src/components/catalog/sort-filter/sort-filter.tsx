@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Select, MenuItem, Slider } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { EventApi } from '../../../api/eventApi';
+import { roundMaxPrice } from '../../../utilities';
 import './sort-filter.css';
 
 
@@ -33,7 +34,8 @@ export const SortFilter: React.FC<SortFilterProps> = ({ sortOption, handleSortCh
     const fetchMaxPrice = async () => {
       try {
         const data = await EventApi.getMaxPrice();
-        setMaxPrice(data);
+        const roundMax = roundMaxPrice(data);
+        setMaxPrice(roundMax);
       } catch (e) {
         console.error(e);
       }

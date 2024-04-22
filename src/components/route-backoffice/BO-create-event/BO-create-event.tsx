@@ -12,6 +12,7 @@ import {EventApi} from '../../../api/eventApi';
 import { ErrorMessage } from '../../error/error';
 import NewEventDetails from './new-event-details/new-event-details';
 import { InvalidActionMsg } from '../../invalid-action-msg/invalid-action-msg';
+import * as utils from '../../../utilities';
 import './BO-create-event.css';
 
   
@@ -51,7 +52,7 @@ export const BOCreateEvent: React.FC<CreateEventProps> = ({navigateToBOCatalogPa
     if (value) {
       setFormData({
         ...formData,
-        [dateType]: value.toDate().toISOString() ,  
+        [dateType]: utils.dateAndTimeToString(value.toDate()) ,  
       });
     }
   };

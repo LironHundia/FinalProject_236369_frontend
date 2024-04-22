@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { EventApi } from '../../../api/eventApi';
 import { ErrorMessage } from '../../error/error';
-import { dateAndTimeToString } from '../../../utilities';
+import { SuccessMessage} from '../../success/success';
+import { dateAndTimeToLocalString } from '../../../utilities';
 import dayjs from 'dayjs';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -28,6 +29,7 @@ export const UpdateEventTime: React.FC<DateEventFormProps> = ({ startDate, endDa
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [errorMessage, setErrorMessage] = React.useState<string>('');
   const [invalidActionMsg, setInvalidActionMsg] = React.useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
 
   const moveToUserCatalog = () => {
     boContext?.setBackofficePage('catalog');
@@ -40,15 +42,17 @@ export const UpdateEventTime: React.FC<DateEventFormProps> = ({ startDate, endDa
         const res = await EventApi.updateEventDate(boContext?.backofficeEvent!._id!, currStartDate!, currEndDate!);
         if (res === APIStatus.Success) {
           let newEvent = boContext?.backofficeEvent!;
-          newEvent!.startDate = dateAndTimeToString(currStartDate!);
-          newEvent!.endDate = dateAndTimeToString(currEndDate!);
+          newEvent!.startDate = dateAndTimeToLocalString(currStartDate!);
+          newEvent!.endDate = dateAndTimeToLocalString(currEndDate!);
           boContext?.setBackofficeEvent(newEvent);
+          setIsSuccess(true);
         }
       } catch (e) {
         console.error(e);
         const error = await e;
         if (error as APIStatus === APIStatus.Unauthorized) {
           setInvalidActionMsg('You are not authorized to perform this action');
+          setIsSuccess(false);
         }
         //TODO: handle error
       } finally {
@@ -71,7 +75,7 @@ export const UpdateEventTime: React.FC<DateEventFormProps> = ({ startDate, endDa
             sx={{ backgroundColor: 'white' }}
             minDateTime={dayjs(startDate)}
             value={dayjs(startDate)}
-            onChange={(newValue) => setCurrStartDate(newValue?.toDate()!)}
+            onChange={(newValue) => {setCurrStartDate(newValue?.toDate()!); setIsSuccess(false);}}
             onAccept={(newValue) => setCurrStartDate(newValue?.toDate()!)} />
         </DemoItem>
         <DemoItem label="Select new end date & time">
@@ -80,10 +84,11 @@ export const UpdateEventTime: React.FC<DateEventFormProps> = ({ startDate, endDa
             minDateTime={dayjs(currStartDate).add(1, 'minute')}
             value={dayjs(currEndDate)}
             onError={(newValue) => { if (newValue) setErrorMessage("End date must be later that Start date"); else setErrorMessage(''); }}
-            onChange={(newValue) => setCurrEndDate(newValue?.toDate()!)} />
+            onChange={(newValue) => {setCurrEndDate(newValue?.toDate()!); setIsSuccess(false);}} />
         </DemoItem>
       </DemoContainer>
       {errorMessage && <ErrorMessage message={errorMessage} />}
+      {isSuccess && <SuccessMessage message='Event date updated successfully' />}
       <LoadingButton
         className="saveChangesButton"
         size="small"

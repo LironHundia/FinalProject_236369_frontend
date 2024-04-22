@@ -18,8 +18,12 @@ export function timeToLocalString(date: Date): string {
     return `${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
 }
 
+export function dateToLocalString(date: Date): string {
+    return `${String(date.getUTCDate()).padStart(2, '0')}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${date.getUTCFullYear()}`;
+}
+
 export function dateAndTimeToLocalString(date: Date): string {
-    return `${String(date.getUTCDate()).padStart(2, '0')}.${String(date.getUTCMonth() + 1).padStart(2, '0')}.${date.getUTCFullYear()} ${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
+    return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}T${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
 }
 
 export function hasPermission(permission: string, requiredPermission: string): boolean {
@@ -90,7 +94,7 @@ export async function getUserNextEvent(username: string): Promise<NextEvent | nu
         return { eventId: nextOrder.eventId, eventName: nextOrder.eventName, startDate: date };
     } catch (e) {
         const error = await e;
-        if(error as APIStatus === APIStatus.NotFound) {
+        if (error as APIStatus === APIStatus.NotFound) {
             //'No next event found for user'
             return null;
         }
@@ -99,8 +103,7 @@ export async function getUserNextEvent(username: string): Promise<NextEvent | nu
     }
 }
 
-export function canAccessBO(userPermission:string)
-{
+export function canAccessBO(userPermission: string) {
     return (userPermission === constants.ADMIN || userPermission === constants.MANAGER)
 }
 
@@ -119,3 +122,7 @@ export function getPaymentTokenExpiration() {
     }
     return null; // Return null if 'paymentToken' cookie is not found
   }
+
+export function roundMaxPrice(max: number) {
+    return Math.ceil(max / 10) * 10;
+}
