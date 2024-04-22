@@ -17,11 +17,11 @@ export const UserOrderDetails: React.FC<Order> = (order) => {
             </Typography>
 
             <Typography className="order-details-field" gutterBottom>
-                Total price: {order.totalPrice}$
+                Total price paid: {order.totalPrice}$
             </Typography>
 
             <Typography className="order-details-field" gutterBottom>
-                {order.description}
+                Event Details: {order.description}
             </Typography>
 
         </Box>
