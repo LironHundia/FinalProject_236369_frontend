@@ -117,3 +117,24 @@
         }
     }
 }
+
+.countdown-timer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #312e34;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+
+    .countdown-timer-header{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}

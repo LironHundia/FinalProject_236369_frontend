@@ -26,10 +26,14 @@ export const EventPage: React.FC<UserPageProps> = (navigation) => {
                 //TODO: set 2 min timer
                 await userContext?.setReservation(chosenTicket);
                 navigation.navigateToPaymentPage();
+                const expirationTimestamp = Date.now() + 2 * 60 * 1000;
+
+                // Store the expiration timestamp in localStorage
+                localStorage.setItem('expirationTimestamp', expirationTimestamp.toString());
             }
             catch (e) {
                 const error = await e;
-                if(error as APIStatus === APIStatus.BadRequest) {
+                if (error as APIStatus === APIStatus.BadRequest) {
                     setErrorMessage('Bad order: Not enough tickets available in this category');
                     setInvalidActionMsg('Bad order: Not enough tickets available in this category. Please choose a different ticket category or try again later');
                 }

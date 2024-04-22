@@ -8,7 +8,8 @@ import { validatePaymentForm } from '../../../utilities'
 import { UserBar } from '../../user-bar/user-bar';
 import { ErrorMessage } from '../../error/error';
 import { UserContext } from '../route-user';
-import { CountdownMsg } from '../../countdown-msg/countdown-msg';
+import { CountdownTimer } from '../../countdown-timer/countdown-timer';
+import { InvalidActionMsg } from '../../invalid-action-msg/invalid-action-msg';
 import Box from '@mui/material/Box';
 import './payment.scss';
 
@@ -22,6 +23,7 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
     const [cardNumber, setCardNumber] = useState('');
     const [expDate, setExpDate] = useState('');
     const [cvv, setCvv] = useState('');
+    const [timesUp, setTimesUp] = useState<boolean>(false);
     const [paymentError, setPaymentError] = useState<string>(''); // Error message for the payment apicall
     const [errors, setErrors] = useState<PaymentFormError>({
         cardHolder: '',
@@ -88,7 +90,6 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
             {orderId && <SuccessPage navigateToCatalogPage={navigation.navigateToCatalogPage} orderId={orderId} />}
             {!orderId &&
                 <form className="payment-form" onSubmit={handleSubmit}>
-                    <CountdownMsg />
                     <Box className="left-col">
                         <Box className="payment-form-container">
                             <Typography className="payment-form-header" gutterBottom>
@@ -99,7 +100,7 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
                                 label="Card Holder Name"
                                 value={cardHolder}
                                 onChange={(e) => setCardHolder(e.target.value)}
-                                disabled={backToCatalogButton}
+                                disabled={backToCatalogButton || timesUp}
                                 fullWidth
                                 required
                                 error={!!errors.cardHolder}
@@ -110,7 +111,7 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
                                 label="Credit Card Number"
                                 value={cardNumber}
                                 onChange={(e) => setCardNumber(e.target.value)}
-                                disabled={backToCatalogButton}
+                                disabled={backToCatalogButton || timesUp}
                                 fullWidth
                                 required
                                 inputProps={{ maxLength: 16 }}
@@ -123,7 +124,7 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
                                     label="Expiration Date (MM/YY)"
                                     value={expDate}
                                     onChange={(e) => setExpDate(e.target.value)}
-                                    disabled={backToCatalogButton}
+                                    disabled={backToCatalogButton || timesUp}
                                     fullWidth
                                     required
                                     inputProps={{ maxLength: 5 }}
@@ -135,7 +136,7 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
                                     label="CVV"
                                     value={cvv}
                                     onChange={(e) => setCvv(e.target.value)}
-                                    disabled={backToCatalogButton}
+                                    disabled={backToCatalogButton || timesUp}
                                     fullWidth
                                     required
                                     inputProps={{ maxLength: 3 }}
@@ -144,6 +145,18 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
                                 />
                             </Box>
                         </Box>
+                        <Box className="countdown-timer">
+                            <Box className="countdown-timer-header">
+                                <Typography gutterBottom>
+                                    Your tickets are reserved for 2 minutes.
+                                </Typography>
+                                <Typography gutterBottom>
+                                    Please complete your payment within this time.
+                                </Typography>
+                            </Box>
+                            <CountdownTimer setTimesUp={setTimesUp} />
+                            {timesUp && <InvalidActionMsg msg={"Time's up! Please try again"} goToCatalog={navigation.navigateToCatalogPage}/>}
+                        </Box>
                         <Box className="payment-processing-msg">
                             {isLoading && <Typography>Processing your payment...</Typography>}
                         </Box>
@@ -151,7 +164,7 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
                             {paymentError && <ErrorMessage message={paymentError} />}
                         </Box>
                         <Box className="back-to-catalog">
-                            {backToCatalogButton && <Button variant="contained" onClick={navigation.navigateToCatalogPage}>Back to Catalog</Button>}
+                            {(backToCatalogButton) && <Button variant="contained" onClick={navigation.navigateToCatalogPage}>Back to Catalog</Button>}
                         </Box>
                     </Box>
                     <Box className="payment-details">
@@ -160,7 +173,7 @@ export const Payment: React.FC<UserPageProps> = (navigation) => {
                         </Typography>
                         <Box className="payment-summary-container">
                             <PaymentDetails />
-                            <Button className="form-submit-button" type="submit" disabled={backToCatalogButton} variant="contained" color="primary">
+                            <Button className="form-submit-button" type="submit" disabled={backToCatalogButton || timesUp} variant="contained" color="primary">
                                 Buy Now!
                             </Button>
                         </Box>

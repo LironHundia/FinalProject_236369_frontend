@@ -1,32 +1,35 @@
 // CountdownTimer.tsx
 import React, { useState, useEffect } from 'react';
+import Typography from '@mui/material/Typography';
 
 interface CountdownTimerProps {
-  expirationTimestamp: number; // Expiration timestamp in milliseconds
+  setTimesUp: (value: boolean) => void;
 }
 
-const CountdownTimer: React.FC<CountdownTimerProps> = ({ expirationTimestamp }) => {
-  const [remainingTime, setRemainingTime] = useState<number>(0);
+export const CountdownTimer: React.FC<CountdownTimerProps> = ({ setTimesUp }) => {
+  const expirationTimestamp = parseInt(localStorage.getItem('expirationTimestamp') || '0', 10);
+  const [remainingTime, setRemainingTime] = useState<number>(Math.max(0, Math.floor((expirationTimestamp - Date.now()) / 1000)));
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const currentTime = Date.now();
-      const timeDifference = expirationTimestamp - currentTime;
-      setRemainingTime(Math.max(0, Math.floor(timeDifference / 1000))); // Convert to seconds
+      setRemainingTime((prevTime) => Math.max(0, prevTime - 1));
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [expirationTimestamp]);
+  }, []);
+
+  useEffect(() => {
+    if (remainingTime === 0) {
+      setTimesUp(true);
+    }
+  },[remainingTime]);
 
   return (
-    <div>
-      {remainingTime > 0 ? (
-        <p>Time remaining: {remainingTime} seconds</p>
-      ) : (
-        <p>Token has expired.</p>
-      )}
-    </div>
+    <Typography
+      variant="h5"
+      sx={{ color: remainingTime === 0 ? 'red' : 'inherit' }}
+    >
+      Time remaining: {remainingTime} seconds
+    </Typography>
   );
 };
-
-export default CountdownTimer;
