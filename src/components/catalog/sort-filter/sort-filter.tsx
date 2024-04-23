@@ -22,12 +22,10 @@ export const SortFilter: React.FC<SortFilterProps> = ({ sortOption, handleSortCh
       return 'Price low to high';
     } else if (selected === 'desc') {
       return 'Price high to low';
-    } else if (selected === 'date') {
-      return 'Earliest date';
-    } else {
-      return 'Sort';
     }
+    return 'Earliest date';
   }
+
 
   //Getting the maximum "lowest price" of the events
   useEffect(() => {
@@ -54,40 +52,42 @@ export const SortFilter: React.FC<SortFilterProps> = ({ sortOption, handleSortCh
     setMarks(newMarks);
   }, [maxPrice]);
 
-  
+
   return (
     <div className="sort-filter">
       <div className="filter">
         <p>Starting from:</p>
-        <Slider 
-        defaultValue={0} 
-        valueLabelFormat={(value) => `$${value}`}
-        getAriaValueText={value => `Price: $${value}`}
-        aria-labelledby="discrete-slider" 
-        valueLabelDisplay="auto" 
-        step={null} 
-        marks={marks}
-        min={0} 
-        max={maxPrice} 
-        onChange={(_, newValue) => {
+        <Slider
+          defaultValue={0}
+          valueLabelFormat={(value) => `$${value}`}
+          getAriaValueText={value => `Price: $${value}`}
+          aria-labelledby="discrete-slider"
+          valueLabelDisplay="auto"
+          step={null}
+          marks={marks}
+          min={0}
+          max={maxPrice}
+          onChange={(_, newValue) => {
             handleFilterChange(typeof newValue === 'number' ? newValue : newValue[0]);
-          }}/>
+          }} />
       </div>
       <div className="sort">
         <Select
-          value={sortOption || ''}
+          value={sortOption || 'date'}
           onChange={handleSortChange}
           displayEmpty
           inputProps={{ 'aria-label': 'Without label' }}
           renderValue={renderValue}
-          sx={{width: 180}}>
+          sx={{ width: 180 }}>
           <MenuItem value="asc" selected={sortOption === 'asc'}>
             Price low to high
           </MenuItem>
           <MenuItem value="desc" selected={sortOption === 'desc'}>
             Price high to low
           </MenuItem>
-          <MenuItem value="date">Earliest date</MenuItem>
+          <MenuItem value="date" selected={sortOption === 'date'}>
+            Earliest date
+            </MenuItem>
         </Select>
       </div>
     </div>
