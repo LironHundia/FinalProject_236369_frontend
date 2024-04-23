@@ -133,7 +133,7 @@ export const Catalog: React.FC<CatalogProps> = (navigate) => {
   return (
     <div className="catalog-page">
       <div className="user-bar">
-        <UserBar onGoBack={navigate.navigateToCatalogPage} />
+        <UserBar />
       </div>
       {!isManager && (
         <SortFilter
